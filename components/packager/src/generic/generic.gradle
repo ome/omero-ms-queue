@@ -1,0 +1,72 @@
+import static util.Filez.*
+import packager.*
+import util.*
+
+
+def serverJarFile() { toFile(project(':server').jar) }
+def cliJarFile() { toFile(project(':cli').jar) }
+def windowsCli() {
+    [ '@server.args@' : ServerGenericCliBuilder
+            .buildWindowsArgs(dirs, serverJarFile().name)
+    ] as ReplacementMap
+}
+def unixCli() {
+    [ '@server.args@' : ServerGenericCliBuilder
+            .buildUnixArgs(dirs, serverJarFile().name)
+    ] as ReplacementMap
+}
+
+
+task copyGenericReadme(type: Copy, dependsOn: makeBuildDirs) {
+    from 'src/README.md'
+    into dirs.staging.generic.baseDir
+}
+
+task copyGenericLicense(type: Copy, dependsOn: makeBuildDirs) {
+    from toFile(rootProject.projectDir, 'LICENSE.md')
+    into dirs.staging.generic.baseDir
+}
+
+task copyGenericJars(dependsOn:
+        [makeBuildDirs, ':server:bootRepackage', ':cli:bootRepackage']) {
+    doLast {
+        copy {
+            from serverJarFile()
+            from cliJarFile()
+            into dirs.staging.generic.libDir
+        }
+    }
+}
+
+task copyGenericScripts(dependsOn: makeBuildDirs) {
+    doLast {
+        copy {
+            from 'src/generic/'
+            include '*.bat.template'
+            into dirs.staging.generic.binDir
+            rename { it - ~/\.template$/ }
+            filter windowsCli().&replaceAll
+        }
+        copy {
+            from 'src/generic/'
+            include '*.sh.template'
+            into dirs.staging.generic.binDir
+            rename { it - ~/\.template$/ }
+            filter unixCli().&replaceAll
+            fileMode 0755
+        }
+    }
+}
+
+task makeGenericZip(type: Zip) {
+    bundle.configureGeneric(makeGenericZip)
+}
+
+task makeGenericTar(type: Tar) {
+    bundle.configureGeneric(makeGenericTar)
+    compression = Compression.GZIP
+}
+
+task releaseGeneric(dependsOn:
+        [copyGenericReadme, copyGenericLicense, copyGenericJars,
+         copyGenericScripts, makeGenericTar, makeGenericZip])

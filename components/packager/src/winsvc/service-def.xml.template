@@ -1,0 +1,25 @@
+<!--
+    Winsw configuration. See:
+    - https://github.com/kohsuke/winsw#environment-variable-expansion-in-configuration-file
+-->
+<service>
+    <id>smuggler</id>
+    <name>OME Smuggler</name>
+    <description>This service provides OMERO background import functionality.</description>
+    <env name="APP_HOME" value="%BASE%\.."/>
+    <executable>java</executable>
+    <arguments>@server.args@</arguments>
+    <priority>normal</priority>
+    <logmode>rotate</logmode>
+    <!-- uncomment this to specify server account or use /p option when
+         installing (e.g. ome-smuggler.exe install /p) to specify all the
+         below parameters interactively.
+
+    <serviceaccount>
+       <domain>YOURDOMAIN</domain>
+       <user>useraccount</user>
+       <password>Pa55w0rd</password>
+       <allowservicelogon>true</allowservicelogon>
+    </serviceaccount>
+    -->
+</service>

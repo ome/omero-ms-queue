@@ -1,0 +1,19 @@
+#
+# This file is sourced by the Spring Boot launch script which is embedded into
+# the server jar file. (Script starts at byte 0, then follows the actual jar.)
+#
+
+# Suggested layout.
+
+#export @suggested.data.dir@
+#export @suggested.config.dir@
+#JAVA_OPTS=@suggested.logging.path@
+
+# NOTE: relative paths.
+# The embedded Spring Boot launch script will change the working directory to
+# be that of the server jar that embeds it. So relative paths will be resolved
+# against the directory containing the server jar.
+#
+export @server.data.dir@
+export @server.config.dir@
+JAVA_OPTS=@server.logging.path@

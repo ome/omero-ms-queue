@@ -1,0 +1,76 @@
+apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply plugin: 'spring-boot'
+
+apply plugin: 'jacoco'
+
+
+repositories {
+    maven {
+        url "http://repository.jboss.org/nexus/content/groups/public"
+    }
+}
+
+dependencies {
+    compile project(":util")
+
+    compile("org.springframework.boot:spring-boot-starter")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("com.google.code.gson:gson:2.4")
+    compile("org.springframework.boot:spring-boot-starter-hornetq")
+    compile("org.hornetq:hornetq-jms-server")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-mail")
+    
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
+
+ext.mainClassName = 'ome.smuggler.Main'
+ext.jarBaseName = 'ome-smuggler'
+
+jar {
+    baseName = jarBaseName
+}
+
+task exeJar(type: Jar) {  // must have same 'from', 'include', etc as jar task!
+    baseName = jarBaseName
+    extension = 'exe.jar'
+    from sourceSets.main.output
+}
+
+task unixFullyExecJar(type: BootRepackage, dependsOn: exeJar) {
+    withJarTask = exeJar
+    executable = true
+}
+
+test {  // added by java plugin, but says 'Runs the unit tests.'
+    description 'Runs all available tests.'
+}
+
+task test1(type: Test) {
+    group 'verification'
+    description 'Runs the unit tests only.'
+    exclude '**/end2end/**'
+    exclude '**/integration/**'
+}
+
+task test2(type: Test) {
+    group 'verification'
+    description 'Runs the unit and integration tests but leaves end to end tests out.'
+    exclude '**/end2end/**'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+

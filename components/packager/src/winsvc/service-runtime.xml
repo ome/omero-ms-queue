@@ -1,0 +1,17 @@
+<configuration>
+    <!--
+    Enable running the service with .NET 4 too. See:
+    - https://github.com/kohsuke/winsw#net-runtime-40
+    -->
+    <startup>
+        <supportedRuntime version="v2.0.50727" />
+        <supportedRuntime version="v4.0" />
+    </startup>
+    <runtime>
+        <!--
+        Skip signature check. See:
+        - https://github.com/kohsuke/winsw#offline-environment-and-authenticode
+        -->
+        <generatePublisherEvidence enabled="false"/>
+    </runtime>
+</configuration>

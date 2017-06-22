@@ -1,0 +1,7 @@
+[{
+    "experimenterEmail": "x@y",
+    "targetUri":"my/file",
+    "omeroHost":"h",
+    "omeroPort":"1",
+    "sessionKey":"k"
+}]

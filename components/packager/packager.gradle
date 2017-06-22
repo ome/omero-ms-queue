@@ -1,0 +1,47 @@
+import packager.*
+
+ext.dirs = new BuildDir(buildDir)
+ext.bundle = new ReleaseBundle(dirs, new ReleaseInfo(
+                                [ baseName:   'ome-smuggler'
+                                , version:    version
+                                , classifier: '' // or 'beta' when appropriate
+                                ]))
+
+def serverJarFile() { toFile(project(':server').jar) }
+def serverExeJarFile () { toFile(project(':server').exeJar) }
+def cliJarFile() { toFile(project(':cli').jar) }
+
+
+repositories {
+    jcenter()
+}
+configurations {
+    fetch
+}
+dependencies {
+    fetch 'com.sun.winsw:winsw:1.16:bin@exe'
+}
+
+
+task makeBuildDirs {
+    doLast {
+        dirs.subdirs().each { d -> mkdir(d) }
+    }
+}
+
+apply from: 'src/generic/generic.gradle'
+apply from: 'src/linux-daemon/linux-daemon.gradle'
+apply from: 'src/winsvc/winsvc.gradle'
+
+task release(dependsOn: [releaseGeneric, releaseWinService, releaseLinuxDaemon]) {
+    group 'distribution'
+    description 'Releases generic and platform-specific server deployment bundles.'
+}
+
+task clean {
+    group 'build'
+    description 'Deletes the build directory.'
+    doLast {
+        delete(buildDir)
+    }
+}

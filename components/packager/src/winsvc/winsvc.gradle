@@ -1,0 +1,73 @@
+import static util.Filez.*
+import packager.*
+import util.*
+
+
+def serverJarFile() { toFile(project(':server').jar) }
+def cliJarFile() { toFile(project(':cli').jar) }
+def windowsCli() {
+    [ '@server.args@' : ServerGenericCliBuilder
+            .buildWindowsArgs(dirs, serverJarFile().name)
+    ] as ReplacementMap
+}
+
+
+task copyWinsvcReadme(type: Copy, dependsOn: makeBuildDirs) {
+    from 'src/README.md'
+    into dirs.staging.winsvc.baseDir
+}
+
+task copyWinsvcLicense(type: Copy, dependsOn: makeBuildDirs) {
+    from toFile(rootProject.projectDir, 'LICENSE.md')
+    into dirs.staging.winsvc.baseDir
+}
+
+task copyWinsvcJars(dependsOn:
+        [makeBuildDirs, ':server:bootRepackage', ':cli:bootRepackage']) {
+    doLast {
+        copy {
+            from serverJarFile()
+            from cliJarFile()
+            into dirs.staging.winsvc.libDir
+        }
+    }
+}
+
+task copyWinService(dependsOn: makeBuildDirs) {
+    doLast {
+        def svcName = bundle.info.baseName
+        copy {
+            from configurations.fetch
+            include '*.exe'
+            into dirs.staging.winsvc.binDir
+            rename { svcName + '.exe' }
+        }
+        copy {
+            from 'src/winsvc/'
+            include 'service-def.xml.template'
+            into dirs.staging.winsvc.binDir
+            rename { svcName + '.xml' }
+            filter windowsCli().&replaceAll
+        }
+        copy {
+            from 'src/winsvc/'
+            include 'service-runtime.xml'
+            into dirs.staging.winsvc.binDir
+            rename { svcName + '.exe.config' }
+        }
+        copy {
+            from 'src/winsvc/'
+            include 'winice*.exe'
+            into dirs.staging.winsvc.binDir
+            rename { 'nice.exe' }
+        }
+    }
+}
+
+task makeWinServiceZip(type: Zip) {
+    bundle.configureWinService(makeWinServiceZip)
+}
+
+task releaseWinService(dependsOn:
+        [copyWinsvcReadme, copyWinsvcLicense, copyWinsvcJars, copyWinService,
+         makeWinServiceZip])

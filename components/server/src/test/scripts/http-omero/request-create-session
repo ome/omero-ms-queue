@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+sessionData=@$1
+createUrl=http://localhost:8000//omero/session/create
+curl -v -H 'Accept: application/json' -H 'Content-Type: application/json' -d $sessionData $createUrl

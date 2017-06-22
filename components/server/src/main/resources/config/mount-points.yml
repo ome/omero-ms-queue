@@ -1,0 +1,5 @@
+!!ome.smuggler.config.items.MountPointsConfig
+enableTranslation: false
+remoteToLocalMap:
+- {localBasePath: /mnt/d1, remoteBaseUri: 'file://host1/data'}
+- {localBasePath: /mnt/d2, remoteBaseUri: 'file://host2/data'}
