@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Use OpenSSL to print the Web server's certificate to stdout.
+
+hostAndPort=localhost:8000
+echo QUIT | openssl s_client -showcerts -connect $hostAndPort

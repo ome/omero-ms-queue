@@ -1,0 +1,18 @@
+/* Using the same kind of multi-project set up that the Gradle guys use:
+ * - https://github.com/gradle/gradle/blob/master/settings.gradle
+ * This way avoid Gradle creating an empty 'components' project for the
+ * components directory and adding it to the project hierarchy---e.g.
+ * instead of ':components:server' we get just ':server'.
+ */
+rootProject.name = 'ome-smuggler'
+
+include 'cli', 'jclient', 'packager', 'server', 'util'
+
+rootProject.children.each { project ->
+    String fileBaseName = project.name.replaceAll("\\p{Upper}") { "-${it.toLowerCase()}" }
+    String projectDirName = "components/$fileBaseName"
+    project.projectDir = new File(settingsDir, projectDirName)
+    project.buildFileName = "${fileBaseName}.gradle"
+    assert project.projectDir.isDirectory()
+    assert project.buildFile.isFile()
+}

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+importData=@$1
+importUrl=http://localhost:8000/ome/import
+curl -v -H 'Accept: application/json' -H 'Content-Type: application/json' -d $importData $importUrl 
+

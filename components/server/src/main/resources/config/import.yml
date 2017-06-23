@@ -1,0 +1,8 @@
+!!ome.smuggler.config.items.ImportConfig
+batchStatusDbDir: import/db/batch-status
+batchStatusDbLockStripes: null
+failedImportLogDir: import/failed-log
+importLogDir: import/log
+logRetentionMinutes: 21600
+niceCommand: null
+retryIntervals: [10, 10, 120, 1440, 1440, 1440]

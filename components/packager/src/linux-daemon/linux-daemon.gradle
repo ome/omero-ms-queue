@@ -1,0 +1,65 @@
+import static util.Filez.*
+import packager.*
+import util.*
+
+
+def serverExeJarFile () { toFile(project(':server').exeJar) }
+def cliJarFile() { toFile(project(':cli').jar) }
+def linuxDaemonCli() {
+    def builder = new LinuxDaemonCliBuilder(bundle.info)
+    [ '@suggested.data.dir@'     : builder.suggestedData()
+    , '@server.data.dir@'        : builder.data()
+    , '@suggested.config.dir@'   : builder.suggestedConfig()
+    , '@server.config.dir@'      : builder.config()
+    , '@suggested.logging.path@' : builder.suggestedLog()
+    , '@server.logging.path@'    : builder.log()
+    ] as ReplacementMap
+}
+
+task copyLinuxDaemonReadme(type: Copy, dependsOn: makeBuildDirs) {
+    from 'src/README.md'
+    into dirs.staging.linuxDaemonDir
+}
+
+task copyLinuxDaemonLicense(type: Copy, dependsOn: makeBuildDirs) {
+    from toFile(rootProject.projectDir, 'LICENSE.md')
+    into dirs.staging.linuxDaemonDir
+}
+
+task copyLinuxDaemonJars(dependsOn:
+        [makeBuildDirs, ':server:unixFullyExecJar', ':cli:bootRepackage']) {
+    doLast {
+        copy {
+            from serverExeJarFile()
+            into dirs.staging.linuxDaemonDir
+            fileMode 0755
+        }
+        copy {
+            from cliJarFile()
+            into dirs.staging.linuxDaemonDir
+        }
+    }
+}
+
+task copyLinuxDaemonConf(dependsOn: makeBuildDirs) {
+    doLast {
+        copy {
+            from 'src/linux-daemon/'
+            include '*.template'
+            into dirs.staging.linuxDaemonDir
+            rename {
+                nameWithoutExtension(serverExeJarFile()) + '.conf'
+            }
+            filter linuxDaemonCli().&replaceAll
+        }
+    }
+}
+
+task makeLinuxDaemonTar(type: Tar) {
+    bundle.configureLinuxDaemon(makeLinuxDaemonTar)
+    compression = Compression.GZIP
+}
+
+task releaseLinuxDaemon(dependsOn:
+        [copyLinuxDaemonReadme, copyLinuxDaemonLicense, copyLinuxDaemonJars,
+         copyLinuxDaemonConf, makeLinuxDaemonTar])
