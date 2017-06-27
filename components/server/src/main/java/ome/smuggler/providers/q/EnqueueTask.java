@@ -5,11 +5,11 @@ import static java.util.Objects.requireNonNull;
 import java.io.OutputStream;
 import java.util.function.Function;
 
-import ome.smuggler.core.convert.SinkWriter;
-import org.hornetq.api.core.HornetQException;
-import org.hornetq.api.core.client.ClientMessage;
-import org.hornetq.api.core.client.ClientProducer;
+import org.apache.activemq.artemis.api.core.ActiveMQException;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.api.core.client.ClientProducer;
 
+import ome.smuggler.core.convert.SinkWriter;
 import ome.smuggler.core.msg.ChannelMessage;
 import ome.smuggler.core.msg.MessageSource;
 
@@ -29,12 +29,12 @@ public class EnqueueTask<T>
      * Creates a new instance.
      * @param queue provides access to the queue on which to put messages.
      * @param serializer serialises the message data, a {@code T}-value.
-     * @throws HornetQException if a queue producer could not be created.
+     * @throws ActiveMQException if a queue producer could not be created.
      * @throws NullPointerException if any argument is {@code null}.
      */
     public EnqueueTask(QueueConnector queue,
                        SinkWriter<T, OutputStream> serializer)
-            throws HornetQException {
+            throws ActiveMQException {
         requireNonNull(queue, "queue");
         
         this.queue = queue;

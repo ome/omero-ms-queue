@@ -3,18 +3,18 @@ package ome.smuggler.config.wiring;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import ome.smuggler.config.items.HornetQPersistenceConfig;
+import ome.smuggler.config.items.ArtemisPersistenceConfig;
 import util.config.ConfigProvider;
 
 /**
  * Spring bean wiring of configuration items.
  */
 @Configuration
-public class HornetQConfigBeans {
+public class ArtemisConfigBeans {
 
     @Bean
-    public HornetQPersistenceConfig hornetQPersistenceConfig(
-            ConfigProvider<HornetQPersistenceConfig> src) {
+    public ArtemisPersistenceConfig artemisPersistenceConfig(
+            ConfigProvider<ArtemisPersistenceConfig> src) {
         return src.first();
     }
     

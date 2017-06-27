@@ -3,9 +3,9 @@ package ome.smuggler.config.items;
 import java.util.Objects;
 
 /**
- * Specifies operational parameters for the embedded HornetQ server. 
+ * Specifies operational parameters for the embedded Artemis server.
  */
-public class HornetQPersistenceConfig {
+public class ArtemisPersistenceConfig {
     /* NB this has to be a Java Bean (i.e. getters/setters, no args ctor) to
      * be (de-)serialized painlessly by SnakeYaml.  
      */ 
@@ -66,7 +66,7 @@ public class HornetQPersistenceConfig {
         if (this == other) {
             return true;
         }
-        if (other instanceof HornetQPersistenceConfig) {
+        if (other instanceof ArtemisPersistenceConfig) {
             return Objects.equals(other.toString(), this.toString());
         }
         return false;

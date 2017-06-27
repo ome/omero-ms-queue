@@ -2,8 +2,8 @@ package ome.smuggler.providers.q;
 
 import static org.mockito.Mockito.*;
 
-import org.hornetq.api.core.HornetQBuffer;
-import org.hornetq.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
 
@@ -15,7 +15,7 @@ public abstract class BaseMessageBodyTest<T> {
     @Before
     public void setup() {
         msgMock = mock(ClientMessage.class);
-        HornetQBuffer buf = mock(HornetQBuffer.class);
+        ActiveMQBuffer buf = mock(ActiveMQBuffer.class);
         when(msgMock.getBodyBuffer()).thenReturn(buf);
     }
 
@@ -30,7 +30,7 @@ public abstract class BaseMessageBodyTest<T> {
     }
 
     private void mockMsgToRead(int serializedValueLen, byte[] serializedValue) {
-        HornetQBuffer buf = msgMock.getBodyBuffer();
+        ActiveMQBuffer buf = msgMock.getBodyBuffer();
         when(buf.readInt()).thenReturn(serializedValueLen);
         doAnswer(invocation -> {
             byte[] passedInBuffer = (byte[])invocation.getArguments()[0];

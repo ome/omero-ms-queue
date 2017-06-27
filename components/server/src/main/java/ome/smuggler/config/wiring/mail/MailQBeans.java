@@ -4,7 +4,7 @@ import ome.smuggler.core.convert.SinkWriter;
 import ome.smuggler.core.convert.SourceReader;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
-import org.hornetq.api.core.HornetQException;
+import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,14 +40,13 @@ public class MailQBeans {
 
     @Bean
     public QChannelFactory<QueuedMail> mailChannelFactory(
-            ServerConnector connector, MailQConfig qConfig) 
-                    throws HornetQException {
+            ServerConnector connector, MailQConfig qConfig) {
         return new QChannelFactory<>(connector, qConfig);
     }
     
     @Bean
     public ChannelSource<QueuedMail> mailSourceChannel(
-            QChannelFactory<QueuedMail> factory) throws HornetQException {
+            QChannelFactory<QueuedMail> factory) throws ActiveMQException {
         return factory.buildSource(serializer());
     }
     
@@ -56,7 +55,7 @@ public class MailQBeans {
             QChannelFactory<QueuedMail> factory,
             MailConfigSource mailConfig,
             MailProcessor processor,
-            FailedMailHandler failureHandler) throws HornetQException {
+            FailedMailHandler failureHandler) throws ActiveMQException {
         Reschedulable<QueuedMail> consumer = 
                 ReschedulableFactory.buildForRepeatConsumer(processor, 
                         mailConfig.retryIntervals(), failureHandler);

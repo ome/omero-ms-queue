@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.function.Function;
 
+import org.apache.activemq.artemis.api.core.ActiveMQException;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
+
 import ome.smuggler.core.convert.SinkWriter;
 import ome.smuggler.core.convert.SourceReader;
-import org.hornetq.api.core.HornetQException;
-import org.hornetq.api.core.client.ClientMessage;
-import org.hornetq.core.config.CoreQueueConfiguration;
-
 import ome.smuggler.core.msg.ChannelSink;
 import ome.smuggler.core.msg.ChannelSource;
 import ome.smuggler.core.msg.CountedSchedule;
@@ -47,7 +47,7 @@ public class QChannelFactory<T> {
     }
     
     public ChannelSource<T> buildSource(SinkWriter<T, OutputStream> serializer)
-            throws HornetQException {
+            throws ActiveMQException {
         MessageSource<Function<QueueConnector, ClientMessage>, T> task = // (*) 
                 new EnqueueTask<>(queue(), serializer);
         return task.asDataSource();  
@@ -66,26 +66,26 @@ public class QChannelFactory<T> {
      */
     
     public SchedulingSource<T> buildSchedulingSource(
-            SinkWriter<T, OutputStream> serializer) throws HornetQException {
+            SinkWriter<T, OutputStream> serializer) throws ActiveMQException {
         return new ScheduleTask<>(queue(), serializer);
     }
     
     public MessageSource<CountedSchedule, T> buildCountedScheduleSource(
             SinkWriter<T, OutputStream> serializer)
-            throws HornetQException {
+            throws ActiveMQException {
         return new CountedScheduleTask<>(queue(), serializer);
     }
     
     public DequeueTask<T> buildSink(ChannelSink<T> consumer,
                                     SourceReader<InputStream, T> deserializer)
-            throws HornetQException {
+            throws ActiveMQException {
         return new DequeueTask<>(queue(), consumer, deserializer, true);
     }
     
     public DequeueTask<T> buildSink(ChannelSink<T> consumer,
                                     SourceReader<InputStream, T> deserializer,
                                     boolean redeliverOnCrash)
-                    throws HornetQException {
+                    throws ActiveMQException {
         return new DequeueTask<>(queue(), consumer, deserializer,
                                  redeliverOnCrash);
     }
@@ -93,7 +93,7 @@ public class QChannelFactory<T> {
     public DequeueTask<T> buildCountedScheduleSink(
             MessageSink<CountedSchedule, T> consumer,
             SourceReader<InputStream, T> deserializer)
-                    throws HornetQException {
+                    throws ActiveMQException {
         CountedScheduleSink<T> sink = new CountedScheduleSink<>(consumer);
         return new DequeueTask<>(queue(), sink, deserializer, true);
     }
@@ -102,7 +102,7 @@ public class QChannelFactory<T> {
             MessageSink<CountedSchedule, T> consumer,
             SourceReader<InputStream, T> deserializer,
             boolean redeliverOnCrash) 
-                    throws HornetQException {
+                    throws ActiveMQException {
         CountedScheduleSink<T> sink = new CountedScheduleSink<>(consumer);
         return new DequeueTask<>(queue(), sink, deserializer, redeliverOnCrash);
     }
@@ -110,7 +110,7 @@ public class QChannelFactory<T> {
     public DequeueTask<T> buildReschedulableSink(
             Reschedulable<T> consumer,
             SinkWriter<T, OutputStream> serializer,
-            SourceReader<InputStream, T> deserializer) throws HornetQException {
+            SourceReader<InputStream, T> deserializer) throws ActiveMQException {
         return buildReschedulableSink(consumer, serializer, deserializer, true);
     }
     
@@ -119,7 +119,7 @@ public class QChannelFactory<T> {
             SinkWriter<T, OutputStream> serializer,
             SourceReader<InputStream, T> deserializer,
             boolean redeliverOnCrash)
-                    throws HornetQException {
+                    throws ActiveMQException {
         MessageSource<CountedSchedule, T> loopback = 
                 buildCountedScheduleSource(serializer);
         ReschedulingSink<T> sink = new ReschedulingSink<>(consumer, loopback);

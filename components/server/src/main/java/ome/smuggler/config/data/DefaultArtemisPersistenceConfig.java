@@ -6,22 +6,22 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import ome.smuggler.config.BaseDataDir;
-import ome.smuggler.config.items.HornetQPersistenceConfig;
+import ome.smuggler.config.items.ArtemisPersistenceConfig;
 import util.config.ConfigProvider;
 
 /**
- * Hard-coded operational parameters for the embedded HornetQ server.
+ * Hard-coded operational parameters for the embedded Artemis server.
  */
-public class DefaultHornetQPersistenceConfig 
-    implements ConfigProvider<HornetQPersistenceConfig> {
+public class DefaultArtemisPersistenceConfig
+    implements ConfigProvider<ArtemisPersistenceConfig> {
 
-    public static final String RootDir = "hornetq";
+    public static final String RootDir = "artemis";
 
-    private static HornetQPersistenceConfig build(BaseDataDir baseDir) {
+    private static ArtemisPersistenceConfig build(BaseDataDir baseDir) {
         requireNonNull(baseDir, "baseDir");
         
         Path d = baseDir.resolve(RootDir);
-        HornetQPersistenceConfig cfg = new HornetQPersistenceConfig();
+        ArtemisPersistenceConfig cfg = new ArtemisPersistenceConfig();
         
         cfg.setPersistenceEnabled(true);
         cfg.setBindingsDirPath(d.resolve("bindings").toString());
@@ -33,7 +33,7 @@ public class DefaultHornetQPersistenceConfig
     }
 
     @Override
-    public Stream<HornetQPersistenceConfig> readConfig() {
+    public Stream<ArtemisPersistenceConfig> readConfig() {
         BaseDataDir baseDir = new BaseDataDir();
         return Stream.of(build(baseDir));
     }

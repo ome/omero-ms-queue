@@ -1,6 +1,6 @@
 package ome.smuggler.config.items;
 
-import org.hornetq.core.config.CoreQueueConfiguration;
+import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 
 /**
  * Holds the configuration for the import garbage collection queue.
@@ -14,12 +14,15 @@ public class ImportGcQConfig extends CoreQueueConfiguration {
     private static final long serialVersionUID = 1L;
 
     public ImportGcQConfig() { 
-        super("", "", "", false);
+        this("", "", "", false);
     }
     
     public ImportGcQConfig(String address, String name, String filterString,
             boolean durable) {
-        super(address, name, filterString, durable);
+        setAddress(address);
+        setName(name);
+        setFilterString(filterString);
+        setDurable(durable);
     }
 
 }

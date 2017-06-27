@@ -2,14 +2,16 @@ package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
 
-import ome.smuggler.core.convert.SourceReader;
-import org.hornetq.api.core.client.ClientMessage;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
+
+import ome.smuggler.core.convert.SourceReader;
+
+
 /**
- * Reads the body of a message from the underlying HornetQ buffer.
+ * Reads the body of a message from the underlying Artemis buffer.
  * It uses a de-serializer to convert the underlying byte buffer into the body
  * value.
  * @see MessageBodyWriter

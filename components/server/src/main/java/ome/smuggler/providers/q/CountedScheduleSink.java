@@ -7,7 +7,7 @@ import static ome.smuggler.providers.q.Messages.getScheduleCount;
 
 import java.util.Optional;
 
-import org.hornetq.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
 import ome.smuggler.core.msg.ChannelMessage;
 import ome.smuggler.core.msg.CountedSchedule;
@@ -15,7 +15,7 @@ import ome.smuggler.core.msg.MessageSink;
 
 
 /**
- * {@link DequeueTask} consumer to convert raw HornetQ metadata into a
+ * {@link DequeueTask} consumer to convert raw Artemis metadata into a
  * {@link CountedSchedule} and forward it, along with the received data
  * {@code T} to a target message sink.
  * @see CountedScheduleTask

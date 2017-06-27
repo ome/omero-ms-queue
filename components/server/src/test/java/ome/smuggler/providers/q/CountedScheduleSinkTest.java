@@ -8,7 +8,7 @@ import static ome.smuggler.core.types.FutureTimepoint.now;
 
 import java.time.Duration;
 
-import org.hornetq.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.junit.Before;
 import org.junit.Test;
 
