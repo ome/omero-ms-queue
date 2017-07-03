@@ -2,7 +2,7 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 
 apply plugin: 'jacoco'
 
@@ -19,9 +19,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-undertow")
-    compile("com.google.code.gson:gson:2.4")
-    compile("org.springframework.boot:spring-boot-starter-hornetq")
-    compile("org.hornetq:hornetq-jms-server")
+    compile("com.google.code.gson:gson:2.8.1")
+    compile("org.springframework.boot:spring-boot-starter-artemis")
+    compile("org.apache.activemq:artemis-jms-server")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-mail")
     

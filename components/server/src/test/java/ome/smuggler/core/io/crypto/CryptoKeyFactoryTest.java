@@ -39,8 +39,8 @@ public class CryptoKeyFactoryTest {
         encryptionFilter.uncheckedWrite(sink, input);
         byte[] encrypted = sink.toByteArray();
 
-        assertThat(encrypted.length, greaterThan(0));
-        assertThat(encrypted[0], is(not(input[0])));
+        assertThat(input, not(equalTo(encrypted)));
+        // compares array lengths and elements
     }
 
     @Theory

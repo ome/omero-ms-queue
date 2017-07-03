@@ -6,8 +6,8 @@ import static util.string.Strings.requireString;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.hornetq.api.core.Message;
-import org.hornetq.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.api.core.Message;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
 import ome.smuggler.core.msg.CountedSchedule;
 import ome.smuggler.core.types.FutureTimepoint;

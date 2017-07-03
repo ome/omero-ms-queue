@@ -2,14 +2,16 @@ package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
 
-import ome.smuggler.core.convert.SinkWriter;
-import org.hornetq.api.core.client.ClientMessage;
-
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
+
+import ome.smuggler.core.convert.SinkWriter;
+
+
 /**
- * Writes the body of a message to the underlying HornetQ buffer.
+ * Writes the body of a message to the underlying Artemis buffer.
  * It uses a serializer to convert the body into a byte stream.
  * @see MessageBodyReader
  */

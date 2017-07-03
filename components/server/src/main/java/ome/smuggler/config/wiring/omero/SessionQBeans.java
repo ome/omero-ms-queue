@@ -3,7 +3,7 @@ package ome.smuggler.config.wiring.omero;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.hornetq.api.core.HornetQException;
+import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,15 +40,14 @@ public class SessionQBeans {
 
     @Bean
     public QChannelFactory<QueuedOmeroKeepAlive> sessionChannelFactory(
-            ServerConnector connector, OmeroSessionQConfig qConfig)
-            throws HornetQException {
+            ServerConnector connector, OmeroSessionQConfig qConfig) {
         return new QChannelFactory<>(connector, qConfig);
     }
 
     @Bean
     public ChannelSource<QueuedOmeroKeepAlive> sessionSourceChannel(
             QChannelFactory<QueuedOmeroKeepAlive> factory)
-            throws HornetQException {
+            throws ActiveMQException {
         return factory.buildSource(serializer());
     }
 
@@ -57,7 +56,7 @@ public class SessionQBeans {
                 QChannelFactory<QueuedOmeroKeepAlive> factory,
                 OmeroEnv env,
                 SessionService service)
-            throws HornetQException {
+            throws ActiveMQException {
         Reschedulable<QueuedOmeroKeepAlive> consumer =
                 new SessionKeepAliveHandler(env, service);
         return factory.buildReschedulableSink(consumer,

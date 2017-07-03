@@ -1,6 +1,6 @@
 package ome.smuggler.config.items;
 
-import org.hornetq.core.config.CoreQueueConfiguration;
+import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 
 /**
  * Holds the import queue configuration.
@@ -14,12 +14,15 @@ public class ImportQConfig extends CoreQueueConfiguration {
     private static final long serialVersionUID = 1L;
 
     public ImportQConfig() { 
-        super("", "", "", false);
+        this("", "", "", false);
     }
     
     public ImportQConfig(String address, String name, String filterString,
             boolean durable) {
-        super(address, name, filterString, durable);
+        setAddress(address);
+        setName(name);
+        setFilterString(filterString);
+        setDurable(durable);
     }
 
 }

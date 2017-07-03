@@ -4,16 +4,16 @@ import static java.util.Objects.requireNonNull;
 import static ome.smuggler.core.msg.ChannelMessage.message;
 import static util.error.Exceptions.throwAsIfUnchecked;
 
-import ome.smuggler.core.convert.SourceReader;
-import org.hornetq.api.core.HornetQException;
-import org.hornetq.api.core.client.ClientConsumer;
-import org.hornetq.api.core.client.ClientMessage;
-import org.hornetq.api.core.client.MessageHandler;
+import java.io.InputStream;
 
+import org.apache.activemq.artemis.api.core.ActiveMQException;
+import org.apache.activemq.artemis.api.core.client.ClientConsumer;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.api.core.client.MessageHandler;
+
+import ome.smuggler.core.convert.SourceReader;
 import ome.smuggler.core.msg.ChannelSink;
 import ome.smuggler.core.msg.MessageSink;
-
-import java.io.InputStream;
 
 /**
  * Receives messages asynchronously from a queue and dispatches them to a 
@@ -36,7 +36,7 @@ public class DequeueTask<T> implements MessageHandler {
      * processing a message, the message will be delivered again once the
      * process is rebooted. If {@code false}, a message will only ever be 
      * delivered once to the consumer.
-     * @throws HornetQException if an error occurs while setting up HornetQ to
+     * @throws ActiveMQException if an error occurs while setting up Artemis to
      * receive messages on the specified queue.
      * @throws NullPointerException if any argument is {@code null}.
      */
@@ -44,7 +44,7 @@ public class DequeueTask<T> implements MessageHandler {
                        ChannelSink<T> consumer,
                        SourceReader<InputStream, T> deserializer,
                        boolean redeliverOnCrash)
-                    throws HornetQException {
+            throws ActiveMQException {
         this(queue, MessageSink.forwardDataTo(consumer), deserializer,
              redeliverOnCrash);
     }
@@ -59,7 +59,7 @@ public class DequeueTask<T> implements MessageHandler {
      * process is rebooted. If {@code false}, a message will only ever be 
      * delivered once to the consumer.
      * @param deserializer de-serialises the message data, a {@code T}-value.
-     * @throws HornetQException if an error occurs while setting up HornetQ to
+     * @throws ActiveMQException if an error occurs while setting up Artemis to
      * receive messages on the specified queue.
      * @throws NullPointerException if any argument is {@code null}.
      */
@@ -67,7 +67,7 @@ public class DequeueTask<T> implements MessageHandler {
                        MessageSink<ClientMessage, T> consumer,
                        SourceReader<InputStream, T> deserializer,
                        boolean redeliverOnCrash)
-            throws HornetQException {
+            throws ActiveMQException {
         requireNonNull(queue, "queue");
         requireNonNull(consumer, "consumer");
 
@@ -81,7 +81,7 @@ public class DequeueTask<T> implements MessageHandler {
     private void removeFromQueue(ClientMessage msg) {
         try {
             msg.acknowledge();
-        } catch (HornetQException e) {
+        } catch (ActiveMQException e) {
             throwAsIfUnchecked(e);
         }
     }
@@ -94,7 +94,8 @@ public class DequeueTask<T> implements MessageHandler {
         }
     }
     /* NOTE. If the process dies here, the message is still in the queue as it
-     * hasn't been acknowledged yet. HornetQ will deliver it again on reboot.
+     * hasn't been acknowledged yet. Artemis will deliver it again on reboot.
+     * In fact, this works exactly the same as it used to in HornetQ.
      * See:
      * - http://stackoverflow.com/questions/15243991/what-happen-if-client-acknowledgment-not-done
      */

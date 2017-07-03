@@ -13,7 +13,7 @@
 # (only ignore config files in the server's directory)
 
 /components/server/*.yml
-/components/server/hornetq
+/components/server/artemis
 /components/server/import
 /components/server/mail
 

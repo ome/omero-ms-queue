@@ -1,6 +1,6 @@
 package ome.smuggler.config.wiring.imports;
 
-import org.hornetq.api.core.HornetQException;
+import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,14 +30,13 @@ public class ImportQBeans {
 
     @Bean
     public QChannelFactory<QueuedImport> importChannelFactory(
-            ServerConnector connector, ImportQConfig qConfig) 
-                    throws HornetQException {
+            ServerConnector connector, ImportQConfig qConfig) {
         return new QChannelFactory<>(connector, qConfig);
     }
     
     @Bean
     public ChannelSource<QueuedImport> importSourceChannel(
-            QChannelFactory<QueuedImport> factory) throws HornetQException {
+            QChannelFactory<QueuedImport> factory) throws ActiveMQException {
         return factory.buildSource(sf.serializer());
     }
     
@@ -46,7 +45,7 @@ public class ImportQBeans {
             QChannelFactory<QueuedImport> factory,
             ImportConfigSource importConfig,
             ImportProcessor processor,
-            FailedImportHandler failureHandler) throws HornetQException {
+            FailedImportHandler failureHandler) throws ActiveMQException {
         Reschedulable<QueuedImport> consumer = 
                 ReschedulableFactory.buildForRepeatConsumer(processor, 
                         importConfig.retryIntervals(), failureHandler);

@@ -13,7 +13,7 @@ import ome.smuggler.run.ImportServer;
 import util.sequence.Arrayz;
 
 import org.junit.BeforeClass;
-import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -53,7 +53,7 @@ public class BaseWebTest {
     protected final RestTemplate httpClient;
     
     public BaseWebTest() {
-        httpClient = new TestRestTemplate();
+        httpClient = new TestRestTemplate().getRestTemplate();
     }
     
     protected <X, Y> ResponseEntity<Y> post(URI url, X body, 

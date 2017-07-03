@@ -4,7 +4,7 @@ ext.dirs = new BuildDir(buildDir)
 ext.bundle = new ReleaseBundle(dirs, new ReleaseInfo(
                                 [ baseName:   'ome-smuggler'
                                 , version:    version
-                                , classifier: '' // or 'beta' when appropriate
+                                , classifier: 'beta' // or '' when appropriate
                                 ]))
 
 def serverJarFile() { toFile(project(':server').jar) }

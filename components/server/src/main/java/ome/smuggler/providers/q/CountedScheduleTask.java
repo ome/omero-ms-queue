@@ -6,14 +6,14 @@ import static ome.smuggler.providers.q.Messages.durableMessage;
 import static ome.smuggler.providers.q.Messages.setScheduleCount;
 import static ome.smuggler.providers.q.Messages.setScheduledDeliveryTime;
 
-import ome.smuggler.core.convert.SinkWriter;
-import org.hornetq.api.core.HornetQException;
+import java.io.OutputStream;
 
+import org.apache.activemq.artemis.api.core.ActiveMQException;
+
+import ome.smuggler.core.convert.SinkWriter;
 import ome.smuggler.core.msg.ChannelMessage;
 import ome.smuggler.core.msg.CountedSchedule;
 import ome.smuggler.core.msg.MessageSource;
-
-import java.io.OutputStream;
 
 /**
  * Enqueues a message that will only be delivered to consumers at a specified
@@ -29,12 +29,12 @@ public class CountedScheduleTask<T> implements MessageSource<CountedSchedule, T>
      * Creates a new instance.
      * @param queue provides access to the queue on which to put messages.
      * @param serializer serialises the message data, a {@code T}-value.
-     * @throws HornetQException if a queue producer could not be created.
+     * @throws ActiveMQException if a queue producer could not be created.
      * @throws NullPointerException if any argument is {@code null}.
      */
     public CountedScheduleTask(QueueConnector queue,
                                SinkWriter<T, OutputStream> serializer)
-            throws HornetQException {
+            throws ActiveMQException {
         this.channel = new EnqueueTask<>(queue, serializer);
     }
     

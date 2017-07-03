@@ -5,11 +5,11 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import ome.smuggler.core.convert.SourceReader;
-import org.hornetq.api.core.HornetQBuffer;
-import org.hornetq.api.core.HornetQException;
-import org.hornetq.api.core.client.ClientConsumer;
-import org.hornetq.api.core.client.ClientMessage;
-import org.hornetq.api.core.client.ClientSession;
+import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
+import org.apache.activemq.artemis.api.core.ActiveMQException;
+import org.apache.activemq.artemis.api.core.client.ClientConsumer;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.api.core.client.ClientSession;
 import org.junit.Test;
 
 import ome.smuggler.config.items.ImportQConfig;
@@ -28,7 +28,7 @@ public class DequeueTaskTest implements MessageSink<ClientMessage, String> {
     private ClientMessage receivedMsg;
     private String receivedData;
     
-    private DequeueTask<String> newTask(String sentData) throws HornetQException {
+    private DequeueTask<String> newTask(String sentData) throws ActiveMQException {
         ImportQConfig q = new ImportQConfig();
         q.setName("q");
         ClientSession sesh = mock(ClientSession.class);
@@ -50,11 +50,11 @@ public class DequeueTaskTest implements MessageSink<ClientMessage, String> {
     }
 
     @Test
-    public void receiveMessage() throws HornetQException {
+    public void receiveMessage() throws ActiveMQException {
         String msgData = "msg";
         DequeueTask<String> task = newTask(msgData);
         ClientMessage qMsg = mock(ClientMessage.class);
-        HornetQBuffer buf = mock(HornetQBuffer.class);
+        ActiveMQBuffer buf = mock(ActiveMQBuffer.class);
         when(qMsg.getBodyBuffer()).thenReturn(buf);
 
         task.onMessage(qMsg);
@@ -64,38 +64,38 @@ public class DequeueTaskTest implements MessageSink<ClientMessage, String> {
     }
     
     @Test (expected = NullPointerException.class)
-    public void ctor1ThrowsIfArg1Null() throws HornetQException {
+    public void ctor1ThrowsIfArg1Null() throws ActiveMQException {
         new DequeueTask<>(null, (ChannelSink<String>) d -> {},
                           deserializer(""), true);
     }
     
     @Test (expected = NullPointerException.class)
-    public void ctor1ThrowsIfArg2Null() throws HornetQException {
+    public void ctor1ThrowsIfArg2Null() throws ActiveMQException {
         new DequeueTask<>(mock(QueueConnector.class), 
                           (ChannelSink<String>)null, deserializer(""), true);
     }
 
     @Test (expected = NullPointerException.class)
-    public void ctor1ThrowsIfArg4Null() throws HornetQException {
+    public void ctor1ThrowsIfArg4Null() throws ActiveMQException {
         new DequeueTask<>(mock(QueueConnector.class),
                           (ChannelSink<String>) d -> {}, null, true);
     }
 
     @Test (expected = NullPointerException.class)
-    public void ctor2ThrowsIfArg1Null() throws HornetQException {
+    public void ctor2ThrowsIfArg1Null() throws ActiveMQException {
         new DequeueTask<>(null, (MessageSink<ClientMessage, String>) msg -> {}, 
                           deserializer(""), true);
     }
     
     @Test (expected = NullPointerException.class)
-    public void ctor2ThrowsIfArg2Null() throws HornetQException {
+    public void ctor2ThrowsIfArg2Null() throws ActiveMQException {
         new DequeueTask<>(mock(QueueConnector.class), 
                           (MessageSink<ClientMessage, String>)null,
                           deserializer(""), true);
     }
 
     @Test (expected = NullPointerException.class)
-    public void ctor2ThrowsIfArg4Null() throws HornetQException {
+    public void ctor2ThrowsIfArg4Null() throws ActiveMQException {
         new DequeueTask<>(mock(QueueConnector.class),
                 (MessageSink<ClientMessage, String>) msg -> {},
                 (SourceReader<InputStream, String>) null,

@@ -3,7 +3,7 @@ package ome.smuggler.providers.q;
 import static org.mockito.Mockito.*;
 
 import ome.smuggler.core.convert.SinkWriter;
-import org.hornetq.api.core.HornetQException;
+import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.junit.Test;
 
 import ome.smuggler.core.msg.ChannelSource;
@@ -17,13 +17,13 @@ public class EnqueueTaskTest extends BaseSendTest {
         return (v, s) -> {};
     }
 
-    private ChannelSource<String> newTask() throws HornetQException {
+    private ChannelSource<String> newTask() throws ActiveMQException {
         initMocks();
         return new EnqueueTask<>(connector, serializer()).asDataSource();
     }
     
     @Test
-    public void sendMessage() throws HornetQException {
+    public void sendMessage() throws ActiveMQException {
         newTask().uncheckedSend("msg");
 
         verify(msgBody).writeBytes((byte[]) any());
@@ -31,12 +31,12 @@ public class EnqueueTaskTest extends BaseSendTest {
     }
     
     @Test (expected = NullPointerException.class)
-    public void ctorThrowsIfNullQ() throws HornetQException {
+    public void ctorThrowsIfNullQ() throws ActiveMQException {
         new EnqueueTask<>(null, serializer());
     }
 
     @Test (expected = NullPointerException.class)
-    public void ctorThrowsIfNullWriter() throws HornetQException {
+    public void ctorThrowsIfNullWriter() throws ActiveMQException {
         new EnqueueTask<>(connector, null);
     }
 }

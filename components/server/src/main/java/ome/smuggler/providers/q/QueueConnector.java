@@ -2,15 +2,15 @@ package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
 
-import org.hornetq.api.core.HornetQException;
-import org.hornetq.api.core.client.ClientConsumer;
-import org.hornetq.api.core.client.ClientMessage;
-import org.hornetq.api.core.client.ClientProducer;
-import org.hornetq.api.core.client.ClientSession;
-import org.hornetq.core.config.CoreQueueConfiguration;
+import org.apache.activemq.artemis.api.core.ActiveMQException;
+import org.apache.activemq.artemis.api.core.client.ClientConsumer;
+import org.apache.activemq.artemis.api.core.client.ClientMessage;
+import org.apache.activemq.artemis.api.core.client.ClientProducer;
+import org.apache.activemq.artemis.api.core.client.ClientSession;
+import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 
 /**
- * Provides access to a HornetQ queue.
+ * Provides access to an Artemis queue.
  */
 public class QueueConnector {
 
@@ -34,9 +34,9 @@ public class QueueConnector {
     /**
      * Creates a new consumer to fetch messages from the queue.
      * @return the consumer.
-     * @throws HornetQException if the consumer could not be created.
+     * @throws ActiveMQException if the consumer could not be created.
      */
-    public ClientConsumer newConsumer() throws HornetQException {
+    public ClientConsumer newConsumer() throws ActiveMQException {
         return session.createConsumer(config.getName(), false);
     }
     
@@ -44,18 +44,18 @@ public class QueueConnector {
      * Creates a new consumer to receive messages from the queue without 
      * removing them.
      * @return the consumer.
-     * @throws HornetQException if the consumer could not be created.
+     * @throws ActiveMQException if the consumer could not be created.
      */
-    public ClientConsumer newBrowser() throws HornetQException {
+    public ClientConsumer newBrowser() throws ActiveMQException {
         return session.createConsumer(config.getName(), true);
     }
     
     /**
      * Creates a new producer to put messages on the queue.
      * @return the producer.
-     * @throws HornetQException if the producer could not be created.
+     * @throws ActiveMQException if the producer could not be created.
      */
-    public ClientProducer newProducer() throws HornetQException {
+    public ClientProducer newProducer() throws ActiveMQException {
         return session.createProducer(config.getAddress());
     }
     

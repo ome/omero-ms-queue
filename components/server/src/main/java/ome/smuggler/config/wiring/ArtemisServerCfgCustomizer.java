@@ -4,22 +4,23 @@ import static util.sequence.Arrayz.asMutableList;
 
 import ome.smuggler.config.items.*;
 
-import org.hornetq.core.config.Configuration;
-import org.hornetq.core.server.JournalType;
+import org.apache.activemq.artemis.core.config.Configuration;
+import org.apache.activemq.artemis.core.server.JournalType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jms.hornetq.HornetQConfigurationCustomizer;
+import org.springframework.boot.autoconfigure.jms.artemis.ArtemisConfigurationCustomizer;
 import org.springframework.stereotype.Component;
 
 
 /**
- * Implements the Spring Boot auto-configuration hook to customize the HornetQ
+ * Implements the Spring Boot auto-configuration hook to customize the Artemis
  * server configuration created by Spring Boot.
  */
 @Component
-public class HornetQServerCfgCustomizer implements HornetQConfigurationCustomizer {
+public class ArtemisServerCfgCustomizer
+        implements ArtemisConfigurationCustomizer {
 
     @Autowired
-    private HornetQPersistenceConfig params;
+    private ArtemisPersistenceConfig params;
     
     @Autowired
     private ImportQConfig importQ;
@@ -55,18 +56,21 @@ public class HornetQServerCfgCustomizer implements HornetQConfigurationCustomize
 
 }
 /* NOTES.
- * 1. HornetQ server configuration. 
- * The customize method is passed a HornetQ Configuration instance created with 
- * the values in HornetQProperties. For the details, see the source code of:
+ * 1. Artemis server configuration.
+ * The customize method is passed an Artemis Configuration instance created with
+ * the values in ArtemisProperties. For the details, see the source code of:
  * 
- *  - HornetQEmbeddedServerConfiguration
- *  - HornetQEmbeddedConfigurationFactory
- * 
- * HornetQ Configuration is created by Spring Boot pretty much as shown in the
- * HornetQ EmbeddedExample class.
+ *  - ArtemisEmbeddedServerConfiguration
+ *  - ArtemisEmbeddedConfigurationFactory
+ *
+ * (package: org.springframework.boot.autoconfigure.jms.artemis)
+ *
+ * Artemis Configuration is created by Spring Boot pretty much as shown in the
+ * Artemis EmbeddedExample class.
  * 
  * 2. Performance.
- * The HornetQ docs (49.6. Avoiding Anti-Patterns) state that connections, 
- * sessions, consumers, and producers are supposed to be shared, but the
- * Spring JMS template does not. So you shouldn't use it with HornetQ...
+ * The Artemis docs (Troubleshooting and Performance Tuning / Avoiding
+ * Anti-Patterns) state that connections, sessions, consumers, and producers
+ * are supposed to be shared, but the Spring JMS template does not. So you
+ * shouldn't use it with Artemis...
  */

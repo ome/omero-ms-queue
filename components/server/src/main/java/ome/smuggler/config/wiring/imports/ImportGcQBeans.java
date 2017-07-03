@@ -1,6 +1,6 @@
 package ome.smuggler.config.wiring.imports;
 
-import org.hornetq.api.core.HornetQException;
+import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,14 +30,13 @@ public class ImportGcQBeans {
 
     @Bean
     public QChannelFactory<ProcessedImport> importGcChannelFactory(
-            ServerConnector connector, ImportGcQConfig qConfig) 
-                    throws HornetQException {
+            ServerConnector connector, ImportGcQConfig qConfig) {
         return new QChannelFactory<>(connector, qConfig);
     }
     
     @Bean
     public SchedulingSource<ProcessedImport> importGcSourceChannel(
-            QChannelFactory<ProcessedImport> factory) throws HornetQException {
+            QChannelFactory<ProcessedImport> factory) throws ActiveMQException {
         return factory.buildSchedulingSource(sf.serializer());
     }
     
@@ -46,7 +45,7 @@ public class ImportGcQBeans {
             QChannelFactory<ProcessedImport> factory,
             ImportConfigSource importConfig,
             ImportFinaliser finaliser,
-            FailedFinalisationHandler failureHandler) throws HornetQException {
+            FailedFinalisationHandler failureHandler) throws ActiveMQException {
         Reschedulable<ProcessedImport> consumer =
                 ReschedulableFactory.buildForRepeatConsumer(
                         finaliser,
