@@ -9,8 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import ome.smuggler.core.convert.SinkWriter;
-import ome.smuggler.core.convert.SourceReader;
+import util.io.SinkWriter;
+import util.io.SourceReader;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

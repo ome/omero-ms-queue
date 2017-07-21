@@ -7,7 +7,7 @@ import java.io.OutputStream;
 
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
-import ome.smuggler.core.convert.SinkWriter;
+import util.io.SinkWriter;
 
 
 /**

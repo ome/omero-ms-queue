@@ -9,8 +9,8 @@ import java.io.StringWriter;
 
 import com.google.gson.reflect.TypeToken;
 
-import ome.smuggler.core.convert.SinkWriter;
-import ome.smuggler.core.convert.SourceReader;
+import util.io.SinkWriter;
+import util.io.SourceReader;
 import ome.smuggler.providers.json.JsonSinkWriter;
 import ome.smuggler.providers.json.JsonSourceReader;
 

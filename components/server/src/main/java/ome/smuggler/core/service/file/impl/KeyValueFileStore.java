@@ -6,11 +6,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.function.Function;
 
-import ome.smuggler.core.convert.SinkWriter;
-import ome.smuggler.core.convert.SourceReader;
 import ome.smuggler.core.io.ValueFilter;
 import ome.smuggler.core.service.file.TaskFileStore;
 import ome.smuggler.core.service.file.KeyValueStore;
+import util.io.SinkWriter;
+import util.io.SourceReader;
 import util.object.Identifiable;
 
 

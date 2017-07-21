@@ -1,9 +1,8 @@
 package ome.smuggler.config.wiring.mail;
 
-import ome.smuggler.core.convert.SinkWriter;
-import ome.smuggler.core.convert.SourceReader;
-import ome.smuggler.providers.json.JsonInputStreamReader;
-import ome.smuggler.providers.json.JsonOutputStreamWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +15,14 @@ import ome.smuggler.core.service.mail.FailedMailHandler;
 import ome.smuggler.core.service.mail.MailProcessor;
 import ome.smuggler.core.types.MailConfigSource;
 import ome.smuggler.core.types.QueuedMail;
+import ome.smuggler.providers.json.JsonInputStreamReader;
+import ome.smuggler.providers.json.JsonOutputStreamWriter;
 import ome.smuggler.providers.q.DequeueTask;
 import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
+import util.io.SinkWriter;
+import util.io.SourceReader;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Singleton beans for HornetQ client resources that have to be shared and

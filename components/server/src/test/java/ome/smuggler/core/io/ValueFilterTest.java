@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import static java.util.function.Function.identity;
 import static util.sequence.Arrayz.array;
 
-import ome.smuggler.core.convert.SourceReader;
+import util.io.SourceReader;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;

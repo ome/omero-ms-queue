@@ -1,10 +1,11 @@
 package ome.smuggler.core.io.crypto;
 
 import static java.util.Objects.requireNonNull;
-import ome.smuggler.core.convert.SinkWriter;
 
-import javax.crypto.CipherOutputStream;
 import java.io.OutputStream;
+import javax.crypto.CipherOutputStream;
+
+import util.io.SinkWriter;
 
 /**
  * An encryption filter that wraps an underlying {@link SinkWriter} {@code w}

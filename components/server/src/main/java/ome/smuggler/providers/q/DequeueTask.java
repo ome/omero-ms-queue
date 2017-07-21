@@ -11,9 +11,9 @@ import org.apache.activemq.artemis.api.core.client.ClientConsumer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.MessageHandler;
 
-import ome.smuggler.core.convert.SourceReader;
 import ome.smuggler.core.msg.ChannelSink;
 import ome.smuggler.core.msg.MessageSink;
+import util.io.SourceReader;
 
 /**
  * Receives messages asynchronously from a queue and dispatches them to a 

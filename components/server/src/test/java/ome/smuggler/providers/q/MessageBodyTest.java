@@ -2,8 +2,8 @@ package ome.smuggler.providers.q;
 
 import static org.junit.Assert.*;
 
-import ome.smuggler.core.convert.SinkWriter;
-import ome.smuggler.core.convert.SourceReader;
+import util.io.SinkWriter;
+import util.io.SourceReader;
 
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;

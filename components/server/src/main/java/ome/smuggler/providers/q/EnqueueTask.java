@@ -9,9 +9,9 @@ import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientProducer;
 
-import ome.smuggler.core.convert.SinkWriter;
 import ome.smuggler.core.msg.ChannelMessage;
 import ome.smuggler.core.msg.MessageSource;
+import util.io.SinkWriter;
 
 /**
  * Puts messages on a queue, asynchronously.

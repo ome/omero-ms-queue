@@ -1,4 +1,4 @@
-package ome.smuggler.core.convert;
+package util.io;
 
 import static util.error.Exceptions.unchecked;
 

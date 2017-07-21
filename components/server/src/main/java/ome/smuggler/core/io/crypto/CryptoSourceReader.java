@@ -1,12 +1,11 @@
 package ome.smuggler.core.io.crypto;
 
-
-import ome.smuggler.core.convert.SourceReader;
-
-import javax.crypto.CipherInputStream;
-import java.io.InputStream;
-
 import static java.util.Objects.requireNonNull;
+
+import java.io.InputStream;
+import javax.crypto.CipherInputStream;
+
+import util.io.SourceReader;
 
 /**
  * An encryption filter that wraps an underlying {@link SourceReader} {@code r}

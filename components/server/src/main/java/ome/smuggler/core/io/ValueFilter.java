@@ -1,14 +1,13 @@
 package ome.smuggler.core.io;
 
-import ome.smuggler.core.convert.SinkWriter;
-import ome.smuggler.core.convert.SourceReader;
-
 import static java.util.Objects.requireNonNull;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.function.Function;
 
+import util.io.SinkWriter;
+import util.io.SourceReader;
 
 /**
  * A {@link StreamFilter} that reads and writes {@code T}-values.
