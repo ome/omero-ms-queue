@@ -9,7 +9,7 @@ import java.time.Duration;
 import org.junit.Test;
 
 import ome.smuggler.core.types.FutureTimepoint;
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 
 public class CountedScheduleTest {
 

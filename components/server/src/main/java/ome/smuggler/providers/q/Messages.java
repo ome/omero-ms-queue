@@ -11,7 +11,7 @@ import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
 import ome.smuggler.core.msg.CountedSchedule;
 import ome.smuggler.core.types.FutureTimepoint;
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 
 public class Messages {
 

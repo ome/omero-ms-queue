@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 
 import ome.smuggler.core.service.file.KeyValueStore;
 import ome.smuggler.core.types.BaseStringId;
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 
 
 @RunWith(Theories.class)

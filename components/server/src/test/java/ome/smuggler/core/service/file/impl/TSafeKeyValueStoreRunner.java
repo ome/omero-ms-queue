@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static java.util.Objects.requireNonNull;
 
 import ome.smuggler.core.types.BaseStringId;
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;

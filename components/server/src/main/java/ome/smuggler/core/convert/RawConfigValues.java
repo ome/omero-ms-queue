@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import ome.smuggler.core.types.PositiveN;
 import util.runtime.CommandBuilder;
 import util.runtime.ListProgramArgument;
+import util.types.PositiveN;
 import util.types.Nat;
 
 /**

@@ -1,5 +1,7 @@
 package ome.smuggler.core.types;
 
+import util.types.PositiveN;
+
 /**
  * An OME screen ID.
  * An instance of this object can only be obtained through a parser so that it

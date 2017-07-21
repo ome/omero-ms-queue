@@ -3,7 +3,7 @@ package ome.smuggler.core.msg;
 import static ome.smuggler.core.types.FutureTimepoint.now;
 
 import ome.smuggler.core.types.FutureTimepoint;
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 import ome.smuggler.core.types.Schedule;
 
 /**

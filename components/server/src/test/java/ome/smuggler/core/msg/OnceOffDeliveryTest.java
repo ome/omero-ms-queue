@@ -15,7 +15,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 import ome.smuggler.core.types.Schedule;
 
 @RunWith(Theories.class)

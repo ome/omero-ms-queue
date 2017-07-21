@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import util.types.PositiveN;
 
 /**
  * Details what an import task must do.

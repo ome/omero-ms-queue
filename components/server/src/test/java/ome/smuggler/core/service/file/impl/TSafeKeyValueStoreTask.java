@@ -7,7 +7,7 @@ import static util.error.Exceptions.runUnchecked;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 
 
 public class TSafeKeyValueStoreTask implements Runnable {
