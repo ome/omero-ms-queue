@@ -1,4 +1,4 @@
-package ome.smuggler.core.types;
+package util.types;
 
 import static util.sequence.Arrayz.array;
 

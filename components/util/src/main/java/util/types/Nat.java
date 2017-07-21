@@ -1,4 +1,4 @@
-package ome.smuggler.core.types;
+package util.types;
 
 import java.util.Optional;
 import java.util.function.Predicate;

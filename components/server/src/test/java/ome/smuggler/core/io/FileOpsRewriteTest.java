@@ -3,7 +3,7 @@ package ome.smuggler.core.io;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import ome.smuggler.core.types.Nat;
+import util.types.Nat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

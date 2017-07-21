@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import ome.smuggler.core.types.Nat;
 import ome.smuggler.core.types.PositiveN;
 import util.runtime.CommandBuilder;
 import util.runtime.ListProgramArgument;
+import util.types.Nat;
 
 /**
  * Utility methods to convert raw config values to values of more suitable 

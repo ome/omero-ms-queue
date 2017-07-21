@@ -15,9 +15,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ome.smuggler.core.types.Nat;
 import util.lambda.ConsumerE;
-
+import util.types.Nat;
 
 /**
  * Utility methods for file operations.
