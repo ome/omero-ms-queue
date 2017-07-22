@@ -3,7 +3,7 @@ package ome.smuggler.core.msg;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static ome.smuggler.core.msg.ChannelMessage.message;
-import static ome.smuggler.core.types.FutureTimepoint.now;
+import static util.types.FutureTimepoint.now;
 
 import java.time.Duration;
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
-import ome.smuggler.core.types.FutureTimepoint;
+import util.types.FutureTimepoint;
 import util.types.PositiveN;
-import ome.smuggler.core.types.Schedule;
+import util.types.Schedule;
 
 
 public class ReschedulingSinkTest implements Reschedulable<CountedSchedule> {

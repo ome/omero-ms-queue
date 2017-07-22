@@ -2,13 +2,13 @@ package ome.smuggler.core.msg;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static ome.smuggler.core.types.FutureTimepoint.now;
+import static util.types.FutureTimepoint.now;
 
 import java.time.Duration;
 
 import org.junit.Test;
 
-import ome.smuggler.core.types.FutureTimepoint;
+import util.types.FutureTimepoint;
 import util.types.PositiveN;
 
 public class CountedScheduleTest {

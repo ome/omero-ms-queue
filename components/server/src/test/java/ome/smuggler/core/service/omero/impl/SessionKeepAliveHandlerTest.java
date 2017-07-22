@@ -13,10 +13,10 @@ import ome.smuggler.core.msg.ChannelSource;
 import ome.smuggler.core.msg.CountedSchedule;
 import ome.smuggler.core.service.file.RemotePathResolver;
 import ome.smuggler.core.service.omero.SessionService;
-import ome.smuggler.core.types.FutureTimepoint;
+import util.types.FutureTimepoint;
 import ome.smuggler.core.types.OmeCliConfigReader;
 import ome.smuggler.core.types.QueuedOmeroKeepAlive;
-import ome.smuggler.core.types.Schedule;
+import util.types.Schedule;
 import org.junit.Test;
 
 

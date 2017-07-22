@@ -14,6 +14,7 @@ import ome.smuggler.core.service.mail.MailRequestor;
 import ome.smuggler.core.service.omero.ImportService;
 import ome.smuggler.core.service.omero.SessionService;
 import ome.smuggler.core.types.*;
+import util.types.FutureTimepoint;
 
 /**
  * Provides access to import configuration and queues.

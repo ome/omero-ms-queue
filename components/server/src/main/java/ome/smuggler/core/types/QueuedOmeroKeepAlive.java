@@ -6,6 +6,8 @@ import static util.string.Strings.requireString;
 import java.net.URI;
 import java.util.Objects;
 
+import util.types.FutureTimepoint;
+
 /**
  * Represents an OMERO session keep-alive request that has been queued and is
  * waiting to be serviced.

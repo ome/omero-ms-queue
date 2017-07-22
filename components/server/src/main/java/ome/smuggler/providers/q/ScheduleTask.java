@@ -2,9 +2,9 @@ package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
 import static ome.smuggler.core.msg.ChannelMessage.message;
-import static ome.smuggler.core.types.FutureTimepoint.now;
 import static ome.smuggler.providers.q.Messages.durableMessage;
 import static ome.smuggler.providers.q.Messages.setScheduledDeliveryTime;
+import static util.types.FutureTimepoint.now;
 
 import java.io.OutputStream;
 
@@ -12,7 +12,7 @@ import org.apache.activemq.artemis.api.core.ActiveMQException;
 
 import ome.smuggler.core.msg.ChannelMessage;
 import ome.smuggler.core.msg.SchedulingSource;
-import ome.smuggler.core.types.FutureTimepoint;
+import util.types.FutureTimepoint;
 import util.io.SinkWriter;
 
 /**

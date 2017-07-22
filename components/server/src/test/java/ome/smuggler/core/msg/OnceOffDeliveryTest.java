@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static ome.smuggler.core.msg.RepeatAction.Repeat;
 import static ome.smuggler.core.msg.RepeatAction.Stop;
-import static ome.smuggler.core.types.FutureTimepoint.now;
+import static util.types.FutureTimepoint.now;
 import static util.sequence.Arrayz.array;
 
 import java.util.Optional;
@@ -16,7 +16,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import util.types.PositiveN;
-import ome.smuggler.core.types.Schedule;
+import util.types.Schedule;
 
 @RunWith(Theories.class)
 public class OnceOffDeliveryTest {

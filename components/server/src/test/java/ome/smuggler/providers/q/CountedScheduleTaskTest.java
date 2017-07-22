@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import ome.smuggler.core.msg.CountedSchedule;
 import ome.smuggler.core.msg.MessageSource;
-import ome.smuggler.core.types.FutureTimepoint;
+import util.types.FutureTimepoint;
 import util.types.PositiveN;
 
 

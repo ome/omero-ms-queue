@@ -1,6 +1,6 @@
 package integration.serialization;
 
-import static ome.smuggler.core.types.FutureTimepoint.now;
+import static util.types.FutureTimepoint.now;
 
 import com.google.gson.reflect.TypeToken;
 import org.junit.Test;
