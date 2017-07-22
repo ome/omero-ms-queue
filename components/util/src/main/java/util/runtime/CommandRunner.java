@@ -1,4 +1,4 @@
-package ome.smuggler.core.io;
+package util.runtime;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import util.object.Pair;
-import util.runtime.CommandBuilder;
 
 /**
  * Utility to run an external process redirecting both its error and output
