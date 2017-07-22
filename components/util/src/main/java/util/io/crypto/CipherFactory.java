@@ -1,14 +1,13 @@
-package ome.smuggler.core.io.crypto;
+package util.io.crypto;
 
 import static java.util.Objects.requireNonNull;
 import static util.error.Exceptions.unchecked;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  * Factory to instantiate fresh {@link Cipher}s for a given algorithm and key.

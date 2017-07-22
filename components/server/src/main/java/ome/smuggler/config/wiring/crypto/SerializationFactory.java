@@ -5,13 +5,16 @@ import static java.util.Objects.requireNonNull;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import ome.smuggler.core.io.crypto.*;
 import ome.smuggler.core.types.CryptoConfigSource;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
 
 import util.io.SinkWriter;
 import util.io.SourceReader;
+import util.io.crypto.CipherFactory;
+import util.io.crypto.CryptoAlgoSpec;
+import util.io.crypto.CryptoSinkWriter;
+import util.io.crypto.CryptoSourceReader;
 
 /**
  * Builds serializers depending on the current crypto configuration.

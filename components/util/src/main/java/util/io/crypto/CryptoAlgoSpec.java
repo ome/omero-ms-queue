@@ -1,4 +1,4 @@
-package ome.smuggler.core.io.crypto;
+package util.io.crypto;
 
 /**
  * Enumerates the JCA algorithms we use.

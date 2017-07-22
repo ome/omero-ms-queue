@@ -1,4 +1,4 @@
-package ome.smuggler.core.io.crypto;
+package util.io.crypto;
 
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.*;

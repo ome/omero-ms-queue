@@ -1,9 +1,9 @@
-package ome.smuggler.core.io.crypto;
+package util.io.crypto;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.junit.Assert.*;
-import static ome.smuggler.core.io.crypto.CryptoKeyFactory.*;
+import static util.io.crypto.CryptoKeyFactory.*;
 
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;

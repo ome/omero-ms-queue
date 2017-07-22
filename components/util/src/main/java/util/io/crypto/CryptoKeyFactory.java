@@ -1,4 +1,4 @@
-package ome.smuggler.core.io.crypto;
+package util.io.crypto;
 
 import static java.util.Objects.requireNonNull;
 import static util.error.Exceptions.runUnchecked;
@@ -6,11 +6,11 @@ import static util.error.Exceptions.unchecked;
 import static util.string.Strings.readAsString;
 import static util.string.Strings.requireString;
 
-import javax.crypto.KeyGenerator;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
+import javax.crypto.KeyGenerator;
 
 /**
  * Factory methods for security {@link Key}s.

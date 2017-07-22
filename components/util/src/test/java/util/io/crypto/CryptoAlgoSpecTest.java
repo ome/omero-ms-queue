@@ -1,8 +1,8 @@
-package ome.smuggler.core.io.crypto;
+package util.io.crypto;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static ome.smuggler.core.io.crypto.CryptoAlgoSpec.*;
+import static util.io.crypto.CryptoAlgoSpec.*;
 
 import org.junit.Test;
 
