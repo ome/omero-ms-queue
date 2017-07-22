@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static java.util.Objects.requireNonNull;
 
-import ome.smuggler.core.types.BaseStringId;
+import ome.smuggler.core.types.UuidString;
 import util.types.PositiveN;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,8 +16,8 @@ public class TSafeKeyValueStoreRunner {
 
     private final PositiveN nThreads;
     private final PositiveN sleepInterval;
-    private final TSafeKeyValueStore<BaseStringId, Integer> store;
-    private final BaseStringId key;
+    private final TSafeKeyValueStore<UuidString, Integer> store;
+    private final UuidString key;
     private final AtomicInteger sharedState;
 
 
@@ -26,7 +26,7 @@ public class TSafeKeyValueStoreRunner {
 
         this.nThreads = nThreads;
         this.sleepInterval = PositiveN.of(500);
-        this.key = new BaseStringId();
+        this.key = new UuidString();
         this.sharedState = new AtomicInteger();
         this.store = new TSafeKeyValueStore<>(
                 mock(TSafeKeyValueStoreTest.TestStore.class),

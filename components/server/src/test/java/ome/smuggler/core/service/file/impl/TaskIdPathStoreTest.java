@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import ome.smuggler.core.service.file.TaskFileStore;
-import ome.smuggler.core.types.BaseStringId;
+import ome.smuggler.core.types.UuidString;
 import util.lambda.ConsumerE;
 
 public class TaskIdPathStoreTest {
@@ -23,10 +23,10 @@ public class TaskIdPathStoreTest {
     @Rule
     public final TemporaryFolder storeDir = new TemporaryFolder();
 
-    private TaskFileStore<BaseStringId> target;
+    private TaskFileStore<UuidString> target;
     
-    private BaseStringId addNewTaskIdFileToStore() throws IOException {
-        BaseStringId taskId = new BaseStringId();
+    private UuidString addNewTaskIdFileToStore() throws IOException {
+        UuidString taskId = new UuidString();
         target.add(taskId, taskId.toString());
         
         return taskId;
@@ -35,12 +35,12 @@ public class TaskIdPathStoreTest {
     @Before
     public void setup() {
         Path p = Paths.get(storeDir.getRoot().getPath());
-        target = new TaskIdPathStore<>(p, BaseStringId::new);
+        target = new TaskIdPathStore<>(p, UuidString::new);
     }
     
     @Test(expected = NullPointerException.class)
     public void ctorThrowsIfFirstArgNull() {
-        new TaskIdPathStore<>(null, BaseStringId::new);
+        new TaskIdPathStore<>(null, UuidString::new);
     }
     
     @Test(expected = NullPointerException.class)
@@ -65,7 +65,7 @@ public class TaskIdPathStoreTest {
     
     @Test(expected = NullPointerException.class)
     public void addThrowsIfSecondArgNull() {
-        target.add(new BaseStringId(), (ConsumerE<OutputStream>)null);
+        target.add(new UuidString(), (ConsumerE<OutputStream>)null);
     }
     
     @Test
@@ -75,14 +75,14 @@ public class TaskIdPathStoreTest {
 
     @Test
     public void requestingPathDoesntCreateFile() {
-        Path p = target.pathFor(new BaseStringId());
+        Path p = target.pathFor(new UuidString());
         assertFalse(Files.exists(p));
         assertThat(target.listTaskIds().count(), is(0L));
     }
     
     @Test
     public void taskIdListedAfterCreatingFile() throws IOException {
-        BaseStringId taskId = addNewTaskIdFileToStore();
+        UuidString taskId = addNewTaskIdFileToStore();
         Path taskIdPath = target.pathFor(taskId);
         
         assertTrue(Files.exists(taskIdPath));
@@ -100,8 +100,8 @@ public class TaskIdPathStoreTest {
     
     @Test
     public void removeDoesNothingIfFileDoesntExist() throws IOException {
-        BaseStringId existingTaskId = addNewTaskIdFileToStore();
-        BaseStringId nonExistentTaskId = new BaseStringId();
+        UuidString existingTaskId = addNewTaskIdFileToStore();
+        UuidString nonExistentTaskId = new UuidString();
         
         target.remove(nonExistentTaskId);
         
@@ -111,8 +111,8 @@ public class TaskIdPathStoreTest {
     
     @Test
     public void removeTaskIdFile() throws IOException {
-        BaseStringId taskId1 = addNewTaskIdFileToStore();
-        BaseStringId taskId2 = addNewTaskIdFileToStore();
+        UuidString taskId1 = addNewTaskIdFileToStore();
+        UuidString taskId2 = addNewTaskIdFileToStore();
         
         assertThat(target.listTaskIds().count(), is(2L));
         
@@ -124,7 +124,7 @@ public class TaskIdPathStoreTest {
 
     @Test
     public void replaceFileContent() throws IOException {
-        BaseStringId taskId = addNewTaskIdFileToStore();
+        UuidString taskId = addNewTaskIdFileToStore();
         String replacement = "new";
         target.replace(taskId, currentValue -> {
             assertThat(currentValue, is(taskId.get()));

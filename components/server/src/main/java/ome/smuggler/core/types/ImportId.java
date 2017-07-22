@@ -25,7 +25,7 @@ public class ImportId
     public ImportId(ImportBatchId batchId) {
         requireNonNull(batchId, "batchId");
         this.compositeId = String.format("%s%s%s",
-                batchId, separator, new BaseStringId());
+                batchId, separator, new UuidString());
     }
 
     public ImportBatchId batchId() {

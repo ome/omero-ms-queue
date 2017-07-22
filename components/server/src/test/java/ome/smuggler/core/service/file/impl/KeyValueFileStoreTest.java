@@ -18,7 +18,7 @@ import org.junit.rules.TemporaryFolder;
 
 import ome.smuggler.core.service.file.KeyValueStore;
 import ome.smuggler.core.service.file.TaskFileStore;
-import ome.smuggler.core.types.BaseStringId;
+import ome.smuggler.core.types.UuidString;
 
 
 public class KeyValueFileStoreTest {
@@ -26,8 +26,8 @@ public class KeyValueFileStoreTest {
     @Rule
     public final TemporaryFolder storeDir = new TemporaryFolder();
 
-    private TaskFileStore<BaseStringId> store;
-    private KeyValueStore<BaseStringId, Integer> target;
+    private TaskFileStore<UuidString> store;
+    private KeyValueStore<UuidString, Integer> target;
 
 
     private SourceReader<InputStream, Integer> reader() {
@@ -41,13 +41,13 @@ public class KeyValueFileStoreTest {
     @Before
     public void setup() {
         Path p = Paths.get(storeDir.getRoot().getPath());
-        store = new TaskIdPathStore<>(p, BaseStringId::new);
+        store = new TaskIdPathStore<>(p, UuidString::new);
         target = new KeyValueFileStore<>(store, reader(), writer());
     }
 
     @Test
     public void putValue() throws Exception {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         int value = 123;
         target.put(key, value);
 
@@ -58,7 +58,7 @@ public class KeyValueFileStoreTest {
 
     @Test
     public void modifyValue() throws Exception {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         int value = 123;
         target.put(key, value);
         target.modify(key, x -> x + 1);
@@ -70,7 +70,7 @@ public class KeyValueFileStoreTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void modifyThrowsIfNoValueAssociatedToKey() {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         Path storedValue = store.pathFor(key);
         assertFalse(Files.exists(storedValue));
 
@@ -79,7 +79,7 @@ public class KeyValueFileStoreTest {
 
     @Test
     public void getValue() throws Exception {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         int value = 123;
         target.put(key, value);
 
@@ -89,7 +89,7 @@ public class KeyValueFileStoreTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void getThrowsIfNoValueAssociatedToKey() {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         Path storedValue = store.pathFor(key);
         assertFalse(Files.exists(storedValue));
 
@@ -98,7 +98,7 @@ public class KeyValueFileStoreTest {
 
     @Test
     public void removeValue() throws Exception {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         target.put(key, 123);
         target.remove(key);
 
@@ -108,7 +108,7 @@ public class KeyValueFileStoreTest {
 
     @Test
     public void removeDoesNothingIfNoValueAssociatedToKey() {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         Path storedValue = store.pathFor(key);
         assertFalse(Files.exists(storedValue));
 
@@ -137,7 +137,7 @@ public class KeyValueFileStoreTest {
 
     @Test (expected = NullPointerException.class)
     public void putThrowsIfNullValue() {
-        target.put(new BaseStringId(), null);
+        target.put(new UuidString(), null);
     }
 
     @Test (expected = NullPointerException.class)
@@ -147,7 +147,7 @@ public class KeyValueFileStoreTest {
 
     @Test (expected = NullPointerException.class)
     public void modifyThrowsIfNullOperation() {
-        target.modify(new BaseStringId(), null);
+        target.modify(new UuidString(), null);
     }
 
     @Test (expected = NullPointerException.class)

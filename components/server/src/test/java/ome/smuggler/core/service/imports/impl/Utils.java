@@ -79,7 +79,7 @@ public class Utils {
     }
 
     public static ImportInput newImportInput(String sessionKey) {
-        String uniqueTargetUri = "target/file/" + new BaseStringId().id();
+        String uniqueTargetUri = "target/file/" + new UuidString().id();
         return new ImportInput(email("user@some.edu").getRight(),
                                uri(uniqueTargetUri).getRight(),
                                uri("omero:1234").getRight(),
