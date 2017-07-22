@@ -1,9 +1,8 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import util.io.StreamOps;
 import util.types.Nat;
 import org.junit.After;
 import org.junit.Before;

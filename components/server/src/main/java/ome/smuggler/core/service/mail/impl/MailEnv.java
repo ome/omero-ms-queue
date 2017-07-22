@@ -1,7 +1,7 @@
 package ome.smuggler.core.service.mail.impl;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.io.FileOps.ensureDirectory;
+import static util.io.FileOps.ensureDirectory;
 
 import ome.smuggler.core.msg.ChannelSource;
 import ome.smuggler.core.service.file.TaskFileStore;

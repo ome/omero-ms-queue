@@ -1,7 +1,7 @@
 package ome.smuggler.core.service.imports.impl;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.io.FileOps.ensureDirectory;
+import static util.io.FileOps.ensureDirectory;
 
 import java.util.Optional;
 

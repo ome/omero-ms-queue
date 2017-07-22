@@ -1,4 +1,4 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import static java.util.Objects.requireNonNull;
 import static util.error.Exceptions.runUnchecked;
@@ -15,8 +15,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import util.io.StreamFilter;
-import util.io.StreamOps;
 import util.lambda.ConsumerE;
 import util.types.Nat;
 
