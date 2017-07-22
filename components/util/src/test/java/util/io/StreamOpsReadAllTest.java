@@ -1,7 +1,7 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import static org.junit.Assert.*;
-import static ome.smuggler.core.io.StreamOps.readAll;
+import static util.io.StreamOps.readAll;
 
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;

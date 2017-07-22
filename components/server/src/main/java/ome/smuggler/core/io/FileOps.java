@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import util.io.StreamOps;
 import util.lambda.ConsumerE;
 import util.types.Nat;
 

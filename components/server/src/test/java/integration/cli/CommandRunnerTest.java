@@ -3,7 +3,7 @@ package integration.cli;
 import static org.junit.Assert.*;
 
 import ome.smuggler.core.io.CommandRunner;
-import ome.smuggler.core.io.StreamOps;
+import util.io.StreamOps;
 import org.junit.Test;
 import util.object.Pair;
 import util.runtime.BaseProgramArgument;

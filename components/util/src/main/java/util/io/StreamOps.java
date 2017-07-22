@@ -1,4 +1,4 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;

@@ -1,8 +1,8 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import org.junit.Test;
 
-import static ome.smuggler.core.io.StreamOps.close;
+import static util.io.StreamOps.close;
 
 import java.io.IOException;
 

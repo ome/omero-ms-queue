@@ -1,10 +1,10 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import static java.util.stream.Collectors.joining;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static util.sequence.Arrayz.array;
-import static ome.smuggler.core.io.StreamOps.readLinesIntoString;
+import static util.io.StreamOps.readLinesIntoString;
 
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;

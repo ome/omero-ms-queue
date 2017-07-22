@@ -2,7 +2,7 @@ package ome.smuggler.core.io.crypto;
 
 import static org.junit.Assert.*;
 
-import ome.smuggler.core.io.StreamOps;
+import util.io.StreamOps;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
