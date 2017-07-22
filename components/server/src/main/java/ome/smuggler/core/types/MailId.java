@@ -1,5 +1,7 @@
 package ome.smuggler.core.types;
 
+import util.types.UuidString;
+
 /**
  * Identifies a mail delivery.
  */

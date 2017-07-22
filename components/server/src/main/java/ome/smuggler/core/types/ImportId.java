@@ -5,6 +5,7 @@ import static util.string.Strings.requireString;
 
 import util.object.AbstractWrapper;
 import util.object.Identifiable;
+import util.types.UuidString;
 
 
 /**

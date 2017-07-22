@@ -11,6 +11,7 @@ import ome.smuggler.core.service.omero.ImportService;
 import ome.smuggler.core.service.omero.SessionService;
 import ome.smuggler.core.types.*;
 import util.lambda.Functions;
+import util.types.UuidString;
 
 import java.util.Map;
 import java.util.Optional;

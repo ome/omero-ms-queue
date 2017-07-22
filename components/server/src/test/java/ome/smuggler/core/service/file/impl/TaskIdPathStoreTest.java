@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import ome.smuggler.core.service.file.TaskFileStore;
-import ome.smuggler.core.types.UuidString;
+import util.types.UuidString;
 import util.lambda.ConsumerE;
 
 public class TaskIdPathStoreTest {

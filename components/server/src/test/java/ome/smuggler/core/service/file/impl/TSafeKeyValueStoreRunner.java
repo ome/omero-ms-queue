@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static java.util.Objects.requireNonNull;
 
-import ome.smuggler.core.types.UuidString;
+import util.types.UuidString;
 import util.types.PositiveN;
 
 import java.util.concurrent.atomic.AtomicInteger;

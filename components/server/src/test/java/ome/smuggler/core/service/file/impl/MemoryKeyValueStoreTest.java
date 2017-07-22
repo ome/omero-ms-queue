@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import ome.smuggler.core.service.file.KeyValueStore;
-import ome.smuggler.core.types.UuidString;
+import util.types.UuidString;
 import org.junit.Before;
 import org.junit.Test;
 

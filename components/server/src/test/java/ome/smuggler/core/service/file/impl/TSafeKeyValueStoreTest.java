@@ -17,7 +17,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import ome.smuggler.core.service.file.KeyValueStore;
-import ome.smuggler.core.types.UuidString;
+import util.types.UuidString;
 import util.types.PositiveN;
 
 
