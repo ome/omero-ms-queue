@@ -1,4 +1,4 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import static util.error.Exceptions.throwAsIfUnchecked;
 

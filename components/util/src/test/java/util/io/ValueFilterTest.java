@@ -1,11 +1,10 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static java.util.function.Function.identity;
 import static util.sequence.Arrayz.array;
 
-import util.io.SourceReader;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;

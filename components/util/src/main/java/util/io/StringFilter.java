@@ -1,8 +1,7 @@
-package ome.smuggler.core.io;
+package util.io;
 
 import java.util.function.Function;
 
-import util.io.StreamOps;
 import util.string.Strings;
 
 
