@@ -17,6 +17,7 @@ public class Schedule<T> {
      * Creates a new instance.
      * @param when when to execute the schedule.
      * @param what what to schedule.
+     * @throws NullPointerException if any of the arguments is {@code null}.
      */
     public Schedule(FutureTimepoint when, T what) {
         requireNonNull(when, "when");
