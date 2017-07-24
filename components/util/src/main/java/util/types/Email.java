@@ -1,4 +1,4 @@
-package ome.smuggler.core.types;
+package util.types;
 
 import static util.object.Either.left;
 import static util.object.Either.right;
@@ -37,7 +37,7 @@ public class Email extends Wrapper<String> implements Validator<String, String> 
         return regex.matcher(value).matches();
     }
     
-    protected Email(String wrappedValue) {
+    public Email(String wrappedValue) {
         super(wrappedValue);
     }
 

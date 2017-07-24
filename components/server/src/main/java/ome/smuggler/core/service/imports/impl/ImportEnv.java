@@ -14,6 +14,7 @@ import ome.smuggler.core.service.mail.MailRequestor;
 import ome.smuggler.core.service.omero.ImportService;
 import ome.smuggler.core.service.omero.SessionService;
 import ome.smuggler.core.types.*;
+import util.types.Email;
 import util.types.FutureTimepoint;
 
 /**
@@ -29,7 +30,7 @@ public class ImportEnv {
     private final KeyValueStore<ImportBatchId, ImportBatchStatus> batchStore;
     private final TaskFileStore<ImportId> failedImportLogStore;
     private final MailRequestor mail;
-    private final Optional<Email> sysAdminEmail; 
+    private final Optional<Email> sysAdminEmail;
     private final ImportLogger log;
     
     public ImportEnv(ImportConfigSource config, SessionService session,

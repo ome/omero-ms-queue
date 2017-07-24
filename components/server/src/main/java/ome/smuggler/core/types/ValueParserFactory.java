@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.util.function.Function;
 
 import util.object.Either;
+import util.types.Email;
 import util.types.PositiveN;
 
 /**

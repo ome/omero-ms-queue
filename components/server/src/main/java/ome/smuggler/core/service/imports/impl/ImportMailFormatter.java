@@ -8,11 +8,11 @@ import static util.sequence.Streams.concat;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import ome.smuggler.core.types.Email;
 import ome.smuggler.core.types.ImportBatchStatus;
 import ome.smuggler.core.types.PlainTextMail;
 import ome.smuggler.core.types.QueuedImport;
 import util.network.Hostname;
+import util.types.Email;
 
 /**
  * Builds email messages to notify users and sys admins of the processing
