@@ -56,10 +56,7 @@ public class ValueParserFactory {
      * the value could not be instantiated.
      */
     public static Either<String, Email> email(String value) {
-        return stringParser()
-              .withValidation(Email.validator())
-              .parse(value)
-              .map(Email::new);
+        return Email.from(value);
     }
     
     /**
