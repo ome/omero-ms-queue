@@ -21,7 +21,7 @@ public class BatchDisposalHandlerTest {
     private ImportConfigSource configMock;
 
     @Rule
-    public TemporaryFolder logDir = new TemporaryFolder();
+    public final TemporaryFolder logDir = new TemporaryFolder();
 
     @Before
     public void setup() {

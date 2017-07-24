@@ -30,7 +30,7 @@ public class TSafeKeyValueStoreTest {
     public static Integer[] stripeSupply = array(1, 2, 3);
 
     @DataPoints
-    public static UuidString[] keySupply =
+    public static final UuidString[] keySupply =
             Stream.generate(UuidString::new)
                   .limit(200)
                   .toArray(UuidString[]::new);

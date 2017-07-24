@@ -5,7 +5,6 @@ import static org.junit.Assume.*;
 import static org.junit.Assert.*;
 import static util.object.Pair.pair;
 
-import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;

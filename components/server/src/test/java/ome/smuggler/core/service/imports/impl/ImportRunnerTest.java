@@ -22,7 +22,7 @@ public class ImportRunnerTest {
     private ImportEnv env;
 
     @Rule
-    public TemporaryFolder logDir = new TemporaryFolder();
+    public final TemporaryFolder logDir = new TemporaryFolder();
 
     @Before
     public void setup() {
