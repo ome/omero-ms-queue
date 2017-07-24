@@ -14,7 +14,7 @@ public class FinaliserEventConsumerTest {
 
     class TestFinaliser extends Finaliser {
 
-        RepeatAction outcome;
+        final RepeatAction outcome;
 
         TestFinaliser(RepeatAction outcome) {
             super(dummyImportEnv());

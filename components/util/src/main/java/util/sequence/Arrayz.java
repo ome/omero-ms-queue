@@ -2,10 +2,7 @@ package util.sequence;
 
 import static java.util.Objects.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -318,7 +315,7 @@ public class Arrayz<A> {  // avoids conflicts with JDK Arrays class.
      */
     public A[] pruneNull(A[] list) {
         if (list == null) return generator.apply(0);
-        return filter(x -> x != null, list);
+        return filter(Objects::nonNull, list);
     }
     
     /**

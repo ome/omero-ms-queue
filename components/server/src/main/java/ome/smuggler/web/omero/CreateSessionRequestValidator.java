@@ -73,8 +73,9 @@ public class CreateSessionRequestValidator
             applyDefaults(r);
             checkRequiredFields(r);
 
-            Optional<String> errors = collectErrors();
-            return errors.isPresent() ? error(errors.get()) : right(r);
+            return collectErrors()
+                  .<Either<Error, CreateSessionRequest>> map(Error::error)
+                  .orElse(right(r));
         }
         return error("no create session request");
     }

@@ -79,12 +79,8 @@ public class ImportRequestValidator implements Validator<Error, ImportRequest> {
         if (datasetId.isPresent() && screenId.isPresent()) {
             parseResults.add(left("datasetId and screenId are mutually exclusive"));
         } else {
-            if (datasetId.isPresent()) {
-                parseResults.add(datasetId.get());
-            }
-            if (screenId.isPresent()) {
-                parseResults.add(screenId.get());
-            }
+            datasetId.ifPresent(parseResults::add);
+            screenId.ifPresent(parseResults::add);
         }
     }
     
@@ -129,9 +125,10 @@ public class ImportRequestValidator implements Validator<Error, ImportRequest> {
             checkImageContainerId(r);
             checkTextAnnotations(r);
             checkAnnotationIds(r);
-            
-            Optional<String> errors = collectErrors();
-            return errors.isPresent() ? error(errors.get()) : right(r);
+
+            return collectErrors()
+                  .<Either<Error, ImportRequest>> map(Error::error)
+                  .orElse(right(r));
         }
         return error("no import request");
     }

@@ -38,7 +38,7 @@ public class OmeCliCommandPrinter {
     }
 
     private Stream<Pair<Integer, String>> indexTokens() {
-        Stream<Integer> ix = IntStream.iterate(0, i -> i + 1).mapToObj(x -> x);
+        Stream<Integer> ix = IntStream.iterate(0, i -> i + 1).boxed();
         return zip(ix, command.tokens());
     }
 

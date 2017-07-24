@@ -2,7 +2,6 @@ package ome.smuggler.web.imports;
 
 import static java.util.stream.Collectors.toList;
 import static util.lambda.Functions.constant;
-import static util.object.Either.left;
 import static util.object.Either.right;
 import static util.object.Eithers.partitionEithers;
 import static util.sequence.Streams.pruneNull;
@@ -43,9 +42,10 @@ public class ImportBatchBuilder {
     collectValidationOutcome(Stream<Either<Error, ImportRequestValidator>> xs) {
         Pair<List<Error>, List<ImportRequestValidator>>
                 outcome = partitionEithers(xs);
-        Optional<Error> error = collectErrors(outcome.fst());
-        return error.isPresent() ? left(error.get())
-                                 : right(outcome.snd().stream());
+
+        return collectErrors(outcome.fst())
+              .<Either<Error, Stream<ImportRequestValidator>>> map(Either::left)
+              .orElse(right(outcome.snd().stream()));
     }
 
     private ImportInput buildInput(ImportRequestValidator validator) {

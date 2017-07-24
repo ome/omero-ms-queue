@@ -17,7 +17,7 @@ import java.util.UUID;
 public class FileOpsRewriteTest {
 
     private Path source;
-    private String content = "\\r\\n some stuff \t nobody \\r really cares \\n about!";
+    private final String content = "\\r\\n some stuff \t nobody \\r really cares \\n about!";
 
     @Before
     public void setup() throws Exception {

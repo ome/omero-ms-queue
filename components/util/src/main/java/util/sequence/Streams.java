@@ -6,12 +6,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.empty;
 import static java.util.stream.Stream.iterate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -205,7 +200,7 @@ public class Streams {
      */
     public static <T> Stream<T> pruneNull(Stream<T> xs) {
         if (xs == null) return empty();
-        return xs.filter(x -> x != null);
+        return xs.filter(Objects::nonNull);
     }
     
     /**

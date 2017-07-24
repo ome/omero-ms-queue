@@ -16,7 +16,7 @@ import java.io.*;
 @RunWith(Theories.class)
 public class ValueFilterTest {
 
-    private static SourceReader<InputStream, Integer> dummyReader = in -> 1;
+    private static final SourceReader<InputStream, Integer> dummyReader = in -> 1;
 
     @DataPoints
     public static String[] inputs = array("", "a", "ab");
