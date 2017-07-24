@@ -8,10 +8,10 @@ import static util.string.Strings.write;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import ome.smuggler.core.types.Email;
 import ome.smuggler.core.types.PlainTextMail;
 import ome.smuggler.core.types.QueuedImport;
 import util.network.Hostname;
+import util.types.Email;
 
 /**
  * Formats email messages to send out to sys admins when an import within a

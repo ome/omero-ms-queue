@@ -7,10 +7,10 @@ import java.nio.file.Path;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import ome.smuggler.core.io.FileOps;
-import ome.smuggler.core.io.StreamFilter;
 import ome.smuggler.core.service.file.TaskFileStore;
 import ome.smuggler.core.types.TaskIdPath;
+import util.io.FileOps;
+import util.io.StreamFilter;
 import util.lambda.ConsumerE;
 import util.object.Identifiable;
 

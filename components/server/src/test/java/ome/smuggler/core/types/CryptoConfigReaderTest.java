@@ -2,7 +2,7 @@ package ome.smuggler.core.types;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static ome.smuggler.core.io.crypto.CryptoKeyFactory.exportKey;
+import static util.io.crypto.CryptoKeyFactory.exportKey;
 
 import ome.smuggler.config.data.CryptoYmlFile;
 import ome.smuggler.config.items.CryptoConfig;

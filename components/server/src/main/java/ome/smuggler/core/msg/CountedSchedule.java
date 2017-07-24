@@ -1,10 +1,10 @@
 package ome.smuggler.core.msg;
 
-import static ome.smuggler.core.types.FutureTimepoint.now;
+import static util.types.FutureTimepoint.now;
 
-import ome.smuggler.core.types.FutureTimepoint;
-import ome.smuggler.core.types.PositiveN;
-import ome.smuggler.core.types.Schedule;
+import util.types.FutureTimepoint;
+import util.types.PositiveN;
+import util.types.Schedule;
 
 /**
  * Channel metadata to request the scheduling of a message and the sending of

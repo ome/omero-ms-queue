@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import ome.smuggler.core.io.FileOps;
-import ome.smuggler.core.types.Nat;
+import util.io.FileOps;
+import util.types.Nat;
 
 /**
  * Streams a file to the HTTP response body or sends a 404 if the file does not

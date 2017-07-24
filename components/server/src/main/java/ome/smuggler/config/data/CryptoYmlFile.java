@@ -1,11 +1,11 @@
 package ome.smuggler.config.data;
 
-import ome.smuggler.config.items.CryptoConfig;
-import ome.smuggler.core.io.crypto.CryptoAlgoSpec;
-import ome.smuggler.core.io.crypto.CryptoKeyFactory;
-import util.config.ConfigProvider;
-
 import java.util.stream.Stream;
+
+import ome.smuggler.config.items.CryptoConfig;
+import util.io.crypto.CryptoAlgoSpec;
+import util.io.crypto.CryptoKeyFactory;
+import util.config.ConfigProvider;
 
 /**
  * Default configuration for encryption of sensitive data, i.e. the content

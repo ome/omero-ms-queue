@@ -2,7 +2,7 @@ package ome.smuggler.core.service.file.impl;
 
 import static util.sequence.Arrayz.array;
 
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;

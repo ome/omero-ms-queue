@@ -1,6 +1,6 @@
 package ome.smuggler.core.service.imports.impl;
 
-import ome.smuggler.core.types.Email;
+import util.types.Email;
 import ome.smuggler.core.types.ImportBatchStatus;
 import ome.smuggler.core.types.PlainTextMail;
 import ome.smuggler.core.types.ProcessedImport;

@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import ome.smuggler.config.BaseDataDir;
 import ome.smuggler.config.items.MailConfig;
+import util.types.Email;
 
 /**
  * Implements {@link MailConfigSource} by extracting and validating values 

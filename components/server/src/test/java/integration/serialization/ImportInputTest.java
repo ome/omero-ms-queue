@@ -3,7 +3,7 @@ package integration.serialization;
 import static ome.smuggler.core.types.ValueParserFactory.*;
 
 import ome.smuggler.core.types.ImportInput;
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 import ome.smuggler.core.types.TextAnnotation;
 
 import org.junit.Test;

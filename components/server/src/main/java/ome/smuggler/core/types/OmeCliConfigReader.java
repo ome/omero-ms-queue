@@ -1,8 +1,8 @@
 package ome.smuggler.core.types;
 
-import ome.smuggler.config.items.OmeCliConfig;
-import ome.smuggler.core.io.FileOps;
-import util.runtime.jvm.ClassPathLocator;
+import static java.util.Objects.requireNonNull;
+import static ome.smuggler.core.convert.RawConfigValues.toDuration;
+import static util.string.Strings.isNullOrEmpty;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -10,9 +10,9 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.function.Supplier;
 
-import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.convert.RawConfigValues.toDuration;
-import static util.string.Strings.isNullOrEmpty;
+import ome.smuggler.config.items.OmeCliConfig;
+import util.io.FileOps;
+import util.runtime.jvm.ClassPathLocator;
 
 /**
  * Implements {@link OmeCliConfigSource} by reading configuration values as

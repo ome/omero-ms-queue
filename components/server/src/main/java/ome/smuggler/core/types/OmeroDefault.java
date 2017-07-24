@@ -2,6 +2,8 @@ package ome.smuggler.core.types;
 
 import java.time.Duration;
 
+import util.types.PositiveN;
+
 /**
  * Default values for OMERO configuration items.
  */

@@ -1,7 +1,7 @@
 package ome.smuggler.core.types;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.io.crypto.CryptoKeyFactory.importKey;
+import static util.io.crypto.CryptoKeyFactory.importKey;
 
 import ome.smuggler.config.items.CryptoConfig;
 

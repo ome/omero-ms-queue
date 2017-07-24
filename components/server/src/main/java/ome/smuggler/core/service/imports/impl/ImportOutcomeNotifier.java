@@ -2,9 +2,9 @@ package ome.smuggler.core.service.imports.impl;
 
 import static java.util.Objects.requireNonNull;
 
-import ome.smuggler.core.types.Email;
 import ome.smuggler.core.types.ImportBatchStatus;
 import ome.smuggler.core.types.PlainTextMail;
+import util.types.Email;
 
 /**
  * Triggers the sending of import outcome notification emails.

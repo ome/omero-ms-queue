@@ -3,7 +3,7 @@ package ome.smuggler.core.msg;
 import static java.util.Objects.requireNonNull;
 import static ome.smuggler.core.msg.ChannelMessage.message;
 
-import ome.smuggler.core.types.Schedule;
+import util.types.Schedule;
 
 /**
  * A channel sink feeding the channel output to a task that may produce more 

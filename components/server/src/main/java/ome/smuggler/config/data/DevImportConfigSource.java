@@ -7,8 +7,8 @@ import java.util.List;
 
 import ome.smuggler.config.BaseDataDir;
 import ome.smuggler.core.types.ImportConfigSource;
-import ome.smuggler.core.types.PositiveN;
 import util.runtime.CommandBuilder;
+import util.types.PositiveN;
 
 /**
  * Dev import settings.

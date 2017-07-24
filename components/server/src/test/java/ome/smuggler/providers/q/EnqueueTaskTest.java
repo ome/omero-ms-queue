@@ -2,7 +2,7 @@ package ome.smuggler.providers.q;
 
 import static org.mockito.Mockito.*;
 
-import ome.smuggler.core.convert.SinkWriter;
+import util.io.SinkWriter;
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.junit.Test;
 

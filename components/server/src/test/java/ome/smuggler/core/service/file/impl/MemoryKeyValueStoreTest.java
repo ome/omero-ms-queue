@@ -4,14 +4,14 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import ome.smuggler.core.service.file.KeyValueStore;
-import ome.smuggler.core.types.BaseStringId;
+import util.types.UuidString;
 import org.junit.Before;
 import org.junit.Test;
 
 
 public class MemoryKeyValueStoreTest {
 
-    private KeyValueStore<BaseStringId, Integer> target;
+    private KeyValueStore<UuidString, Integer> target;
 
     @Before
     public void setup() {
@@ -20,7 +20,7 @@ public class MemoryKeyValueStoreTest {
 
     @Test
     public void putValue() throws Exception {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         int value = 123;
         target.put(key, value);
 
@@ -30,7 +30,7 @@ public class MemoryKeyValueStoreTest {
 
     @Test
     public void modifyValue() throws Exception {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         int value = 123;
         target.put(key, value);
         target.modify(key, x -> x + 1);
@@ -41,13 +41,13 @@ public class MemoryKeyValueStoreTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void modifyThrowsIfNoValueAssociatedToKey() {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         target.modify(key, x -> x);
     }
 
     @Test
     public void getValue() throws Exception {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         int value = 123;
         target.put(key, value);
 
@@ -57,13 +57,13 @@ public class MemoryKeyValueStoreTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void getThrowsIfNoValueAssociatedToKey() {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         target.get(key);
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void removeValue() throws Exception {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         target.put(key, 123);
         target.remove(key);
 
@@ -73,7 +73,7 @@ public class MemoryKeyValueStoreTest {
 
     @Test
     public void removeDoesNothingIfNoValueAssociatedToKey() {
-        BaseStringId key = new BaseStringId();
+        UuidString key = new UuidString();
         target.remove(key);
     }
 
@@ -84,7 +84,7 @@ public class MemoryKeyValueStoreTest {
 
     @Test (expected = NullPointerException.class)
     public void putThrowsIfNullValue() {
-        target.put(new BaseStringId(), null);
+        target.put(new UuidString(), null);
     }
 
     @Test (expected = NullPointerException.class)
@@ -94,7 +94,7 @@ public class MemoryKeyValueStoreTest {
 
     @Test (expected = NullPointerException.class)
     public void modifyThrowsIfNullOperation() {
-        target.modify(new BaseStringId(), null);
+        target.modify(new UuidString(), null);
     }
 
     @Test (expected = NullPointerException.class)

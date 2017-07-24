@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ome.smuggler.config.items.MailConfig;
+import util.types.Email;
 
 /**
  * Provides read-only, type-safe access to mail configuration.

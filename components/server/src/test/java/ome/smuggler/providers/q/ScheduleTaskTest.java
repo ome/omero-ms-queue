@@ -10,7 +10,7 @@ import org.apache.activemq.artemis.api.core.Message;
 import org.junit.Test;
 
 import ome.smuggler.core.msg.SchedulingSource;
-import ome.smuggler.core.types.FutureTimepoint;
+import util.types.FutureTimepoint;
 
 
 public class ScheduleTaskTest extends BaseSendTest {

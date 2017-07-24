@@ -2,8 +2,8 @@ package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
 import static ome.smuggler.core.msg.ChannelMessage.message;
-import static ome.smuggler.core.types.FutureTimepoint.now;
 import static ome.smuggler.providers.q.Messages.getScheduleCount;
+import static util.types.FutureTimepoint.now;
 
 import java.util.Optional;
 

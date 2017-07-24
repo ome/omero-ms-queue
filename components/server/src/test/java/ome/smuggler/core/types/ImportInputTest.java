@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.Test;
+import util.types.PositiveN;
 
 public class ImportInputTest {
 

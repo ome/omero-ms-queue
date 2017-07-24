@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import ome.smuggler.config.items.OmeroSessionQConfig;
-import ome.smuggler.core.convert.SinkWriter;
-import ome.smuggler.core.convert.SourceReader;
 import ome.smuggler.core.msg.ChannelSource;
 import ome.smuggler.core.msg.Reschedulable;
 import ome.smuggler.core.service.omero.SessionService;
@@ -21,7 +19,8 @@ import ome.smuggler.providers.json.JsonOutputStreamWriter;
 import ome.smuggler.providers.q.DequeueTask;
 import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
-
+import util.io.SinkWriter;
+import util.io.SourceReader;
 
 /**
  * Singleton beans for HornetQ client resources that have to be shared and
