@@ -1,4 +1,4 @@
-package integration.util.runtime.jvm;
+package integration.runtime.jvm;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

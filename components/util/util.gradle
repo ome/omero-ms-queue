@@ -20,6 +20,16 @@ jar {
     baseName = 'ome-util'
 }
 
+test {  // added by java plugin, but says 'Runs the unit tests.'
+    description 'Runs all available tests.'
+}
+
+task test1(type: Test) {
+    group 'verification'
+    description 'Runs the unit tests only.'
+    exclude '**/integration/**'
+}
+
 jacocoTestReport {
     reports {
         xml.enabled true

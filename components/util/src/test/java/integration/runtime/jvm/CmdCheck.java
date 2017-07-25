@@ -1,4 +1,4 @@
-package integration.util.runtime.jvm;
+package integration.runtime.jvm;
 
 public class CmdCheck {
     

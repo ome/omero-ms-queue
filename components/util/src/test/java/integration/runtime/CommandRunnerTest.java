@@ -1,10 +1,14 @@
-package util.runtime;
+package integration.runtime;
 
 import static org.junit.Assert.*;
 
 import util.io.StreamOps;
 import org.junit.Test;
 import util.object.Pair;
+import util.runtime.BaseProgramArgument;
+import util.runtime.CommandBuilder;
+import util.runtime.CommandRunner;
+import util.runtime.ProgramArgument;
 import util.runtime.jvm.*;
 
 import java.io.InputStream;
