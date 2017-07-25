@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static ome.smuggler.core.service.imports.impl.Utils.*;
 
-import ome.smuggler.core.msg.RepeatAction;
+import kew.core.msg.RepeatAction;
 import ome.smuggler.core.types.ImportBatch;
 import ome.smuggler.core.types.ImportBatchStatus;
 import ome.smuggler.core.types.ProcessedImport;

@@ -1,6 +1,6 @@
 package ome.smuggler.core.service.imports.impl;
 
-import ome.smuggler.core.msg.ChannelMessage;
+import kew.core.msg.ChannelMessage;
 import ome.smuggler.core.types.*;
 import org.junit.Before;
 import org.junit.Rule;

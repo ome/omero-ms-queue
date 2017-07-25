@@ -1,7 +1,7 @@
 package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 import static ome.smuggler.providers.q.Messages.getScheduleCount;
 import static util.types.FutureTimepoint.now;
 
@@ -9,9 +9,9 @@ import java.util.Optional;
 
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
-import ome.smuggler.core.msg.ChannelMessage;
-import ome.smuggler.core.msg.CountedSchedule;
-import ome.smuggler.core.msg.MessageSink;
+import kew.core.msg.ChannelMessage;
+import kew.core.msg.CountedSchedule;
+import kew.core.msg.MessageSink;
 
 
 /**

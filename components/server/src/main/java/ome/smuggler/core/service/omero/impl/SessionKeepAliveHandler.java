@@ -4,8 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Optional;
 
-import ome.smuggler.core.msg.CountedSchedule;
-import ome.smuggler.core.msg.Reschedulable;
+import kew.core.msg.CountedSchedule;
+import kew.core.msg.Reschedulable;
 import ome.smuggler.core.service.omero.SessionService;
 import ome.smuggler.core.types.QueuedOmeroKeepAlive;
 import util.types.FutureTimepoint;

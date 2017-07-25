@@ -1,7 +1,7 @@
 package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 import static ome.smuggler.providers.q.Messages.durableMessage;
 import static ome.smuggler.providers.q.Messages.setScheduleCount;
 import static ome.smuggler.providers.q.Messages.setScheduledDeliveryTime;
@@ -10,9 +10,9 @@ import java.io.OutputStream;
 
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 
-import ome.smuggler.core.msg.ChannelMessage;
-import ome.smuggler.core.msg.CountedSchedule;
-import ome.smuggler.core.msg.MessageSource;
+import kew.core.msg.ChannelMessage;
+import kew.core.msg.CountedSchedule;
+import kew.core.msg.MessageSource;
 import util.io.SinkWriter;
 
 /**

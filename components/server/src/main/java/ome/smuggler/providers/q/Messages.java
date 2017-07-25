@@ -9,7 +9,7 @@ import java.util.function.Function;
 import org.apache.activemq.artemis.api.core.Message;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
-import ome.smuggler.core.msg.CountedSchedule;
+import kew.core.msg.CountedSchedule;
 import util.types.FutureTimepoint;
 import util.types.PositiveN;
 

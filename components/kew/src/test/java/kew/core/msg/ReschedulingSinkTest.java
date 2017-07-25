@@ -1,8 +1,8 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 import static util.types.FutureTimepoint.now;
 
 import java.time.Duration;
@@ -67,7 +67,7 @@ public class ReschedulingSinkTest implements Reschedulable<CountedSchedule> {
     }
     
     private void assertEmptyLoopbackOrScheduledMsgMetaIsSameAsMsgData() {
-        List<ChannelMessage<CountedSchedule, CountedSchedule>>  
+        List<ChannelMessage<CountedSchedule, CountedSchedule>>
         actualMessagesSentOnLoopback= loopback.dequeue();
     
         assertThat(actualMessagesSentOnLoopback.size(), is(messageCap - 1));

@@ -1,4 +1,4 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 import static java.util.Objects.requireNonNull;
 

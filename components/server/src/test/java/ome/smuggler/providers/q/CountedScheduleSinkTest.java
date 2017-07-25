@@ -3,7 +3,7 @@ package ome.smuggler.providers.q;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 import static util.types.FutureTimepoint.now;
 
 import java.time.Duration;
@@ -12,9 +12,9 @@ import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.junit.Before;
 import org.junit.Test;
 
-import ome.smuggler.core.msg.ChannelMessage;
-import ome.smuggler.core.msg.CountedSchedule;
-import ome.smuggler.core.msg.MessageSink;
+import kew.core.msg.ChannelMessage;
+import kew.core.msg.CountedSchedule;
+import kew.core.msg.MessageSink;
 
 public class CountedScheduleSinkTest implements MessageSink<CountedSchedule, Long> {
 

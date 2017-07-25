@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static ome.smuggler.core.service.imports.impl.Utils.*;
 
-import ome.smuggler.core.msg.ChannelMessage;
+import kew.core.msg.ChannelMessage;
 import ome.smuggler.core.types.*;
 import org.junit.Before;
 import org.junit.Test;

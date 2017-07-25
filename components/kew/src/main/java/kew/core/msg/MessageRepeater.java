@@ -1,7 +1,7 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.msg.RepeatAction.Repeat;
+import static kew.core.msg.RepeatAction.Repeat;
 import static util.sequence.Arrayz.hasNulls;
 
 import java.time.Duration;
@@ -79,7 +79,7 @@ public class MessageRepeater<T> implements Reschedulable<T> {
         int retryCount = current.count().get().intValue() - 1;  // PositiveN is always > 0
         if (retryCount < repeatIntervals.length) {
             RepeatAction outcome = consumer.consume(data);
-            return outcome == Repeat ? Optional.of(retryCount) : 
+            return outcome == Repeat ? Optional.of(retryCount) :
                                        Optional.empty();
         } else {
             lastDeliveryHandler.consume(current, data);

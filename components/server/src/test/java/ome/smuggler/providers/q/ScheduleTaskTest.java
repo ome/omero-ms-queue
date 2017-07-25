@@ -1,7 +1,7 @@
 package ome.smuggler.providers.q;
 
 import static org.mockito.Mockito.*;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 
 import java.time.Duration;
 
@@ -9,7 +9,7 @@ import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.Message;
 import org.junit.Test;
 
-import ome.smuggler.core.msg.SchedulingSource;
+import kew.core.msg.SchedulingSource;
 import util.types.FutureTimepoint;
 
 

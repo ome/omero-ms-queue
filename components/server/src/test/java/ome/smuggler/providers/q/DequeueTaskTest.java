@@ -13,9 +13,9 @@ import org.apache.activemq.artemis.api.core.client.ClientSession;
 import org.junit.Test;
 
 import ome.smuggler.config.items.ImportQConfig;
-import ome.smuggler.core.msg.ChannelMessage;
-import ome.smuggler.core.msg.ChannelSink;
-import ome.smuggler.core.msg.MessageSink;
+import kew.core.msg.ChannelMessage;
+import kew.core.msg.ChannelSink;
+import kew.core.msg.MessageSink;
 
 import java.io.InputStream;
 

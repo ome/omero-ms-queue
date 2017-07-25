@@ -1,7 +1,7 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.msg.RepeatAction.Repeat;
+import static kew.core.msg.RepeatAction.Repeat;
 
 import java.util.function.Consumer;
 

@@ -6,7 +6,7 @@ import util.io.SinkWriter;
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.junit.Test;
 
-import ome.smuggler.core.msg.ChannelSource;
+import kew.core.msg.ChannelSource;
 
 import java.io.OutputStream;
 

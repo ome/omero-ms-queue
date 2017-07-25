@@ -1,4 +1,4 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 /**
  * Indicates whether a message should be re-delivered after being consumed.

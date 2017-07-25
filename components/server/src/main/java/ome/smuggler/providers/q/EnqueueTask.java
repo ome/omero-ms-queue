@@ -9,8 +9,8 @@ import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientProducer;
 
-import ome.smuggler.core.msg.ChannelMessage;
-import ome.smuggler.core.msg.MessageSource;
+import kew.core.msg.ChannelMessage;
+import kew.core.msg.MessageSource;
 import util.io.SinkWriter;
 
 /**

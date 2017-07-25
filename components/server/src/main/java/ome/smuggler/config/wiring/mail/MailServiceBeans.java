@@ -3,7 +3,7 @@ package ome.smuggler.config.wiring.mail;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import ome.smuggler.core.msg.ChannelSource;
+import kew.core.msg.ChannelSource;
 import ome.smuggler.core.service.file.TaskFileStore;
 import ome.smuggler.core.service.file.impl.TaskIdPathStore;
 import ome.smuggler.core.service.mail.FailedMailHandler;

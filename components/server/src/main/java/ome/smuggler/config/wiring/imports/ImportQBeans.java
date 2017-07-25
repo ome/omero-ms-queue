@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import kew.core.msg.ChannelSource;
+import kew.core.msg.Reschedulable;
+import kew.core.msg.ReschedulableFactory;
 import ome.smuggler.config.wiring.crypto.SerializationFactory;
 import ome.smuggler.config.items.ImportQConfig;
-import ome.smuggler.core.msg.ChannelSource;
-import ome.smuggler.core.msg.Reschedulable;
-import ome.smuggler.core.msg.ReschedulableFactory;
 import ome.smuggler.core.service.imports.FailedImportHandler;
 import ome.smuggler.core.service.imports.ImportProcessor;
 import ome.smuggler.core.types.ImportConfigSource;

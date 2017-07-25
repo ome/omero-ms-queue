@@ -1,4 +1,4 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 /**
  * Encapsulates the consumption of an asynchronous message received from a 

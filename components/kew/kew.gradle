@@ -6,6 +6,8 @@ apply plugin: 'jacoco'
 
 
 dependencies {
+    compile project(":util")
+
     testCompile libset.test_base
 }
 

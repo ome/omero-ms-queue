@@ -1,8 +1,8 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 
 import java.util.List;
 import java.util.Optional;

@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static ome.smuggler.core.service.imports.impl.Utils.*;
 
-import ome.smuggler.core.msg.RepeatAction;
-import ome.smuggler.core.msg.SchedulingSource;
+import kew.core.msg.RepeatAction;
+import kew.core.msg.SchedulingSource;
 import ome.smuggler.core.types.*;
 import org.junit.Before;
 import org.junit.Test;

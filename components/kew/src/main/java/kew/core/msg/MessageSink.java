@@ -1,7 +1,7 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 
 /**
  * Encapsulates the consumption of an asynchronous message received from a 

@@ -1,7 +1,7 @@
 package ome.smuggler.core.service.imports.impl;
 
-import ome.smuggler.core.msg.ChannelSource;
-import ome.smuggler.core.msg.SchedulingSource;
+import kew.core.msg.ChannelSource;
+import kew.core.msg.SchedulingSource;
 import ome.smuggler.core.service.file.KeyValueStore;
 import ome.smuggler.core.service.file.TaskFileStore;
 import ome.smuggler.core.service.file.impl.MemoryKeyValueStore;

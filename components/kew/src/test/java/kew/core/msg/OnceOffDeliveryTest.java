@@ -1,9 +1,9 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static ome.smuggler.core.msg.RepeatAction.Repeat;
-import static ome.smuggler.core.msg.RepeatAction.Stop;
+import static kew.core.msg.RepeatAction.Repeat;
+import static kew.core.msg.RepeatAction.Stop;
 import static util.types.FutureTimepoint.now;
 import static util.sequence.Arrayz.array;
 

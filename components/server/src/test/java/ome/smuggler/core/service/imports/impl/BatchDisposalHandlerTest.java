@@ -1,6 +1,6 @@
 package ome.smuggler.core.service.imports.impl;
 
-import ome.smuggler.core.msg.RepeatAction;
+import kew.core.msg.RepeatAction;
 import ome.smuggler.core.types.ImportBatch;
 import ome.smuggler.core.types.ImportConfigSource;
 import ome.smuggler.core.types.ProcessedImport;

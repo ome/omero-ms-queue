@@ -7,10 +7,10 @@ import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import kew.core.msg.ChannelSource;
+import kew.core.msg.Reschedulable;
+import kew.core.msg.ReschedulableFactory;
 import ome.smuggler.config.items.MailQConfig;
-import ome.smuggler.core.msg.ChannelSource;
-import ome.smuggler.core.msg.Reschedulable;
-import ome.smuggler.core.msg.ReschedulableFactory;
 import ome.smuggler.core.service.mail.FailedMailHandler;
 import ome.smuggler.core.service.mail.MailProcessor;
 import ome.smuggler.core.types.MailConfigSource;

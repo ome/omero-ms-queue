@@ -1,10 +1,10 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
-import static ome.smuggler.core.msg.RepeatAction.Repeat;
-import static ome.smuggler.core.msg.RepeatAction.Stop;
+import static kew.core.msg.RepeatAction.Repeat;
+import static kew.core.msg.RepeatAction.Stop;
 import static util.types.FutureTimepoint.now;
 import static util.sequence.Arrayz.array;
 import static util.sequence.Arrayz.asStream;
@@ -48,7 +48,7 @@ public class MessageRepeaterTest {
     private Optional<Integer> exceededRedeliveryData;
     
     private MessageRepeater<Integer> newRepeater(Duration[] intervals,
-            RepeatAction stopOrRepeat) {
+                                                 RepeatAction stopOrRepeat) {
         return new MessageRepeater<>(
                 d -> {
                     consumedData = Optional.of(d);

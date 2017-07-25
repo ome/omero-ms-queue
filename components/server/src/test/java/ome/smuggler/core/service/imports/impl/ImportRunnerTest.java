@@ -1,7 +1,7 @@
 package ome.smuggler.core.service.imports.impl;
 
-import ome.smuggler.core.msg.ChannelMessage;
-import ome.smuggler.core.msg.RepeatAction;
+import kew.core.msg.ChannelMessage;
+import kew.core.msg.RepeatAction;
 import ome.smuggler.core.types.ProcessedImport;
 import ome.smuggler.core.types.QueuedImport;
 import org.junit.Before;

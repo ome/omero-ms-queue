@@ -1,6 +1,6 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 
 /**
  * Encapsulates the sending of an asynchronous message along a channel that

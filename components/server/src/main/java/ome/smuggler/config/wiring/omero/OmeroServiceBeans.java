@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import kew.core.msg.ChannelSource;
 import ome.smuggler.config.items.MountPointsConfig;
-import ome.smuggler.core.msg.ChannelSource;
 import ome.smuggler.core.service.file.RemotePathResolver;
 import ome.smuggler.core.service.file.impl.RemotePathMapper;
 import ome.smuggler.core.service.omero.ImportService;

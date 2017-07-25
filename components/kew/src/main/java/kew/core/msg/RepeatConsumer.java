@@ -1,4 +1,4 @@
-package ome.smuggler.core.msg;
+package kew.core.msg;
 
 /**
  * Plugs into a channel sink to consume its data and optionally request that 

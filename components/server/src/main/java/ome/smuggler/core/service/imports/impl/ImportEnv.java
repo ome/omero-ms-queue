@@ -5,8 +5,8 @@ import static util.io.FileOps.ensureDirectory;
 
 import java.util.Optional;
 
-import ome.smuggler.core.msg.ChannelSource;
-import ome.smuggler.core.msg.SchedulingSource;
+import kew.core.msg.ChannelSource;
+import kew.core.msg.SchedulingSource;
 import ome.smuggler.core.service.file.KeyValueStore;
 import ome.smuggler.core.service.file.TaskFileStore;
 import ome.smuggler.core.service.log.LogService;

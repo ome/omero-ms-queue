@@ -1,7 +1,7 @@
 package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 import static util.error.Exceptions.throwAsIfUnchecked;
 
 import java.io.InputStream;
@@ -11,8 +11,8 @@ import org.apache.activemq.artemis.api.core.client.ClientConsumer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.MessageHandler;
 
-import ome.smuggler.core.msg.ChannelSink;
-import ome.smuggler.core.msg.MessageSink;
+import kew.core.msg.ChannelSink;
+import kew.core.msg.MessageSink;
 import util.io.SourceReader;
 
 /**
