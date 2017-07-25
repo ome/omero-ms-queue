@@ -22,3 +22,22 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.4'
 }
 
+// library sets shared across sub-projects.
+ext.libset = [
+    /* Base test deps with compatible version numbers.
+     * The jars below are a subset of those in the 'spring-boot-starter-test'
+     * which we use in 'server.gradle'. All the other sub-projects don't depend
+     * on Spring so we've collected here the common test deps to keep the
+     * testing libs the same across the board.
+     * NOTES
+     * 1. Versions. Same as those specified by 'spring-boot-starter-test'
+     * which we use in the server project.
+     * 2. Upgrading. Version numbers must be the same as those used by Booty.
+     */
+    test_base: [
+        'org.hamcrest:hamcrest-core:1.3',
+        'org.hamcrest:hamcrest-library:1.3',
+        'org.mockito:mockito-core:1.10.19',
+        'junit:junit:4.12'
+    ]
+]
