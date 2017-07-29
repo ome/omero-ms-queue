@@ -1,4 +1,4 @@
-package kew.providers.q.spi;
+package kew.core.qchan.spi;
 
 /**
  * Specifies the types of messages we expect the underlying messaging

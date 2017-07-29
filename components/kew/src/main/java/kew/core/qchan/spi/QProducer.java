@@ -1,4 +1,4 @@
-package kew.providers.q.spi;
+package kew.core.qchan.spi;
 
 import java.io.OutputStream;
 

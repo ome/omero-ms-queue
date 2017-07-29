@@ -1,4 +1,4 @@
-package kew.providers.q.spi;
+package kew.core.qchan.spi;
 
 /**
  * Provides access to a queue in the underlying messaging middleware.
