@@ -3,9 +3,9 @@ package util.io;
 import static util.error.Exceptions.unchecked;
 
 /**
- * Reads a value {@code V} from a data source {@code S}.
- * For example, {@code S} could be an input stream and the value {@code V}
- * could be de-serialised from the stream. Or {@code V} could be the body of
+ * Reads a value {@code T} from a data source {@code S}.
+ * For example, {@code S} could be an input stream and the value {@code T}
+ * could be de-serialised from the stream. Or {@code T} could be the body of
  * a message fetched from a queue {@code S}.
  * @see SinkWriter
  */
