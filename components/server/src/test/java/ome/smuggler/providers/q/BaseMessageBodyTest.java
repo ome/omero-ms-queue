@@ -1,6 +1,8 @@
 package ome.smuggler.providers.q;
 
 import static org.mockito.Mockito.*;
+import static ome.smuggler.providers.q.MessageBodyReader.bodyReader;
+import static ome.smuggler.providers.q.MessageBodyWriter.writeBody;
 
 import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
@@ -51,13 +53,9 @@ public abstract class BaseMessageBodyTest<T> {
     }
 
     protected T writeThenReadValue(T value, int serializedValueLen) {
-        MessageBodyWriter writer = new MessageBodyWriter();
-        writer.write(msgMock, out -> serializer().write(out, value));
-
+        writeBody(msgMock, out -> serializer().write(out, value));
         simulateSendReceive(serializedValueLen);
-
-        MessageBodyReader reader = new MessageBodyReader();
-        return deserializer().uncheckedRead(reader.read(msgMock));
+        return bodyReader(deserializer()::read).apply(msgMock);
     }
 
     protected abstract SinkWriter<T, OutputStream> serializer();

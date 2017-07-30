@@ -18,6 +18,19 @@ import util.lambda.ConsumerE;
 public class MessageBodyWriter
         implements SinkWriter<ConsumerE<OutputStream>, ClientMessage> {
 
+    /**
+     * Convenience method to instantiate a writer and have it write the
+     * message body.
+     * @param sink the Artemis message to write the body data to.
+     * @param bodyWriter writes the body data to the given stream.
+     * @throws NullPointerException if any argument is {@code null}.
+     */
+    public static void writeBody(ClientMessage sink,
+                                 ConsumerE<OutputStream> bodyWriter) {
+        MessageBodyWriter w = new MessageBodyWriter();
+        w.write(sink, bodyWriter);
+    }
+
     @Override
     public void write(ClientMessage sink, ConsumerE<OutputStream> bodyWriter) {
         requireNonNull(sink, "sink");
