@@ -24,7 +24,7 @@ public interface QMsgFactory<QM> {
          * crash.
          */
         NonDurable
-    };
+    }
 
     /**
      * Creates a new queue message of the specified type.
