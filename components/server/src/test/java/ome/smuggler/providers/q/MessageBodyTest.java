@@ -26,16 +26,17 @@ public class MessageBodyTest extends BaseMessageBodyTest<byte[]> {
     };
 
     // copy input bytes into output stream
-    private static SinkWriter<byte[], OutputStream> serializer() {
+    @Override
+    protected SinkWriter<byte[], OutputStream> serializer() {
         return (out, buf) -> {
             out.write(buf);
             out.flush();
         };
     }
 
-
     // read input stream into byte array
-    private static SourceReader<InputStream, byte[]> deserializer() {
+    @Override
+    protected SourceReader<InputStream, byte[]> deserializer() {
         return in -> {
             ByteArrayOutputStream buf = new ByteArrayOutputStream();
             int b;
@@ -44,16 +45,6 @@ public class MessageBodyTest extends BaseMessageBodyTest<byte[]> {
             }
             return buf.toByteArray();
         };
-    }
-
-    @Override
-    protected MessageBodyWriter<byte[]> writer() {
-        return new MessageBodyWriter<>(serializer());
-    }
-
-    @Override
-    protected MessageBodyReader<byte[]> reader() {
-        return new MessageBodyReader<>(deserializer());
     }
 
     @Theory

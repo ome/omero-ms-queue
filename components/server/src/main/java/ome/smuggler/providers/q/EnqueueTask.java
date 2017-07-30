@@ -23,7 +23,7 @@ public class EnqueueTask<T>
 
     private final QueueConnector queue;
     private final ClientProducer producer;
-    private final MessageBodyWriter<T> bodyWriter;
+    private final SinkWriter<T, OutputStream> serializer;
 
     /**
      * Creates a new instance.
@@ -36,10 +36,16 @@ public class EnqueueTask<T>
                        SinkWriter<T, OutputStream> serializer)
             throws ActiveMQException {
         requireNonNull(queue, "queue");
+        requireNonNull(serializer, "serializer");
         
         this.queue = queue;
         this.producer = queue.newProducer();
-        this.bodyWriter = new MessageBodyWriter<>(serializer);
+        this.serializer = serializer;
+    }
+
+    private void writeBody(ClientMessage sink, T data) {
+        MessageBodyWriter bodyWriter = new MessageBodyWriter();
+        bodyWriter.write(sink, out -> serializer.write(out, data));
     }
 
     @Override
@@ -51,7 +57,7 @@ public class EnqueueTask<T>
         Function<QueueConnector, ClientMessage> messageBuilder = 
                 msg.metadata().orElse(QueueConnector::newDurableMessage);
         ClientMessage qMsg = messageBuilder.apply(queue);
-        bodyWriter.write(qMsg, msg.data());
+        writeBody(qMsg, msg.data());
         producer.send(qMsg);
     }
 

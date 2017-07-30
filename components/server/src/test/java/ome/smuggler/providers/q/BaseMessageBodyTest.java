@@ -6,6 +6,11 @@ import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
+import util.io.SinkWriter;
+import util.io.SourceReader;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 public abstract class BaseMessageBodyTest<T> {
@@ -46,11 +51,16 @@ public abstract class BaseMessageBodyTest<T> {
     }
 
     protected T writeThenReadValue(T value, int serializedValueLen) {
-        writer().uncheckedWrite(msgMock, value);
+        MessageBodyWriter writer = new MessageBodyWriter();
+        writer.write(msgMock, out -> serializer().write(out, value));
+
         simulateSendReceive(serializedValueLen);
-        return reader().uncheckedRead(msgMock);
+
+        MessageBodyReader reader = new MessageBodyReader();
+        return deserializer().uncheckedRead(reader.read(msgMock));
     }
 
-    protected abstract MessageBodyWriter<T> writer();
-    protected abstract MessageBodyReader<T> reader();
+    protected abstract SinkWriter<T, OutputStream> serializer();
+    protected abstract SourceReader<InputStream, T> deserializer();
+
 }

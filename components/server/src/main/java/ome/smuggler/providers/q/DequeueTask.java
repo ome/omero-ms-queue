@@ -24,7 +24,7 @@ public class DequeueTask<T> implements MessageHandler {
     private final ClientConsumer receiver;
     private final MessageSink<ClientMessage, T> sink;
     private final boolean redeliverOnCrash;
-    private final MessageBodyReader<T> bodyReader;
+    private final SourceReader<InputStream, T> deserializer;
     
     /**
      * Creates a new instance.
@@ -70,12 +70,13 @@ public class DequeueTask<T> implements MessageHandler {
             throws ActiveMQException {
         requireNonNull(queue, "queue");
         requireNonNull(consumer, "consumer");
+        requireNonNull(deserializer, "deserializer");
 
         this.sink = consumer;
         this.receiver = queue.newConsumer();
         this.receiver.setMessageHandler(this);
         this.redeliverOnCrash = redeliverOnCrash;
-        this.bodyReader = new MessageBodyReader<>(deserializer);
+        this.deserializer = deserializer;
     }
     
     private void removeFromQueue(ClientMessage msg) {
@@ -104,10 +105,15 @@ public class DequeueTask<T> implements MessageHandler {
         removeFromQueue(msg);
         sink.consume(message(msg, messageData));
     }
+
+    private T readBody(ClientMessage source) {
+        MessageBodyReader bodyReader = new MessageBodyReader();
+        return deserializer.uncheckedRead(bodyReader.read(source));
+    }
     
     @Override
     public void onMessage(ClientMessage msg) {
-        T messageData = bodyReader.uncheckedRead(msg);
+        T messageData = readBody(msg);
         if (redeliverOnCrash) {
             consumeThenRemove(msg, messageData);
         } else {

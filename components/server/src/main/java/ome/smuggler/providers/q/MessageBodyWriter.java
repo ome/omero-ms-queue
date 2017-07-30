@@ -8,34 +8,23 @@ import java.io.OutputStream;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
 import util.io.SinkWriter;
+import util.lambda.ConsumerE;
 
 
 /**
  * Writes the body of a message to the underlying Artemis buffer.
- * It uses a serializer to convert the body into a byte stream.
  * @see MessageBodyReader
  */
-public class MessageBodyWriter<T> implements SinkWriter<T, ClientMessage> {
-
-    private final SinkWriter<T, OutputStream> serializer;
-
-    /**
-     * Creates a new instance.
-     * @param serializer the serializer to use.
-     * @throws NullPointerException if the argument is {@code null}.
-     */
-    public MessageBodyWriter(SinkWriter<T, OutputStream> serializer) {
-        requireNonNull(serializer, "serializer");
-        this.serializer = serializer;
-    }
+public class MessageBodyWriter
+        implements SinkWriter<ConsumerE<OutputStream>, ClientMessage> {
 
     @Override
-    public void write(ClientMessage sink, T body) throws Exception {
+    public void write(ClientMessage sink, ConsumerE<OutputStream> bodyWriter) {
         requireNonNull(sink, "sink");
-        requireNonNull(body, "body");
+        requireNonNull(bodyWriter, "bodyWriter");
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(4*1024);  // (*)
-        serializer.write(out, body);
+        bodyWriter.accept(out);
         byte[] serialized = out.toByteArray();
 
         sink.getBodyBuffer().writeInt(serialized.length);               // (*)

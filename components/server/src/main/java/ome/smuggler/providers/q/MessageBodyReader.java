@@ -11,35 +11,22 @@ import util.io.SourceReader;
 
 
 /**
- * Reads the body of a message from the underlying Artemis buffer.
- * It uses a de-serializer to convert the underlying byte buffer into the body
- * value.
+ * Reads the body of a message from the underlying Artemis buffer into an
+ * input stream.
  * @see MessageBodyWriter
  */
-public class MessageBodyReader<T> implements SourceReader<ClientMessage, T> {
-
-    private final SourceReader<InputStream, T> deserializer;
-
-    /**
-     * Creates a new instance.
-     * @param deserializer the deserializer to use.
-     * @throws NullPointerException if the argument is {@code null}.
-     */
-    public MessageBodyReader(SourceReader<InputStream, T> deserializer) {
-        requireNonNull(deserializer, "deserializer");
-        this.deserializer = deserializer;
-    }
+public class MessageBodyReader
+        implements SourceReader<ClientMessage, InputStream> {
 
     @Override
-    public T read(ClientMessage source) throws Exception {
+    public InputStream read(ClientMessage source) {
         requireNonNull(source, "source");
 
         int length = source.getBodyBuffer().readInt();            // (*)
         byte[] buf = new byte[length];
         source.getBodyBuffer().readBytes(buf);
 
-        ByteArrayInputStream in = new ByteArrayInputStream(buf);  // (*)
-        return deserializer.read(in);
+        return new ByteArrayInputStream(buf);  // (*)
     }
     /* NOTE. Large messages.
      * If we ever going to need large messages (I doubt it!) we could easily
