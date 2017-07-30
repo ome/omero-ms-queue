@@ -7,5 +7,5 @@ import java.util.function.Function;
  * {@link QMsgFactory message factory}.
  * @param <QM> the message type in the underlying middleware.
  */
-public interface QMsgBuilder<QM> extends Function<QMsgFactory, QM> {
+public interface QMsgBuilder<QM> extends Function<QMsgFactory<QM>, QM> {
 }
