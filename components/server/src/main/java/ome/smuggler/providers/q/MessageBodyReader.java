@@ -37,6 +37,17 @@ public class MessageBodyReader
         return reader.andThen(deserialiser);
     }
 
+    /**
+     * Convenience method to instantiate a reader and have it read the
+     * message body into a stream.
+     * @param source the Artemis message from where to read the body data.
+     * @throws NullPointerException if the argument is {@code null}.
+     */
+    public static InputStream readBody(ClientMessage source) {
+        MessageBodyReader r = new MessageBodyReader();
+        return r.read(source);
+    }
+
     @Override
     public InputStream read(ClientMessage source) {
         requireNonNull(source, "source");

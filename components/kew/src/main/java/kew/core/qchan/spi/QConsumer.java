@@ -18,10 +18,13 @@ public interface QConsumer<QM> {
      * @param handler handles a queued messaged received by the underlying
      *                messaging middleware consumer. The actual message
      *                content is passed to the consumer in an input stream.
+     * @return a new instance set with the specified handler.
      * @throws NullPointerException if the argument is {@code null}.
-     * @return reference to self, just out of convenience.
+     * @throws Exception if the handler couldn't be connected to the underlying
+     * queue.
      * @see QConnector
      */
-    QConsumer<QM> withMessageHandler(BiConsumerE<QM, InputStream> handler);
+    QConsumer<QM> withMessageHandler(BiConsumerE<QM, InputStream> handler)
+        throws Exception;
 
 }
