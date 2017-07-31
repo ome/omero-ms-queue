@@ -4,12 +4,10 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.function.Function;
 
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
 import util.io.SourceReader;
-import util.lambda.FunctionE;
 
 
 /**
