@@ -5,8 +5,6 @@ import static ome.smuggler.providers.q.MessageBodyReader.readBody;
 
 import java.io.InputStream;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
-import org.apache.activemq.artemis.api.core.client.ClientConsumer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.MessageHandler;
 
@@ -20,37 +18,21 @@ import util.lambda.BiConsumerE;
 public class ArtemisQConsumer
         implements QConsumer<ArtemisMessage>, MessageHandler {
 
-    private final ClientConsumer consumer;
     private final BiConsumerE<ArtemisMessage, InputStream> messageHandler;
 
-    private ArtemisQConsumer(ClientConsumer consumer,
-                             BiConsumerE<ArtemisMessage, InputStream> handler) {
-        this.consumer = consumer;
+    /**
+     *
+     * @param handler
+     * @throws NullPointerException if the argument is {@code null}.
+     */
+    public ArtemisQConsumer(BiConsumerE<ArtemisMessage, InputStream> handler) {
+        requireNonNull(handler, "handler");
         this.messageHandler = handler;
     }
 
-    /**
-     * Helper constructor called to instantiate a temp object from which to
-     * get the actual instance with a proper handler set.
-     * @param consumer the underlying Artemis consumer.
-     * @throws NullPointerException if the argument is {@code null}.
-     */
-    ArtemisQConsumer(ClientConsumer consumer) {
-        requireNonNull(consumer, "consumer");
-
-        this.consumer = consumer;
-        messageHandler = (m, d) -> {};
-    }
-
     @Override
-    public QConsumer<ArtemisMessage> withMessageHandler(
-            BiConsumerE<ArtemisMessage, InputStream> handler)
-            throws ActiveMQException {
-        requireNonNull(handler, "handler");
-
-        ArtemisQConsumer qConsumer = new ArtemisQConsumer(consumer, handler);
-        consumer.setMessageHandler(qConsumer);
-        return qConsumer;
+    public BiConsumerE<ArtemisMessage, InputStream> messageHandler() {
+        return messageHandler;
     }
 
     @Override
