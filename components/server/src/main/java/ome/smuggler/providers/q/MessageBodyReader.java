@@ -21,23 +21,6 @@ public class MessageBodyReader
         implements SourceReader<ClientMessage, InputStream> {
 
     /**
-     * Convenience method to compose the {@link #read(ClientMessage) method}
-     * with a deserialiser.
-     * @param deserialiser reads the message body from an input stream and
-     *                     converts it to a {@code T}-value.
-     * @param <T> the type of the value in the message body.
-     * @return the composite function.
-     */
-    public static <T> Function<ClientMessage, T> bodyReader(
-            FunctionE<InputStream, T> deserialiser) {
-        requireNonNull(deserialiser, "deserialiser");
-
-        Function<ClientMessage, InputStream> reader =
-                new MessageBodyReader()::read;
-        return reader.andThen(deserialiser);
-    }
-
-    /**
      * Convenience method to instantiate a reader and have it read the
      * message body into a stream.
      * @param source the Artemis message from where to read the body data.
