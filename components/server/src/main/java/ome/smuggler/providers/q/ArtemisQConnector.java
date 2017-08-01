@@ -44,25 +44,18 @@ public class ArtemisQConnector
     public QConsumer<ArtemisMessage> newConsumer(
             BiConsumerE<ArtemisMessage, InputStream> messageHandler)
             throws Exception {
-        ArtemisQConsumer adapter = new ArtemisQConsumer(messageHandler);
         ClientConsumer consumer =
                 session.createConsumer(config.getName(), false);
-        consumer.setMessageHandler(adapter);
-
-        return adapter;
+        return new ArtemisQConsumer(consumer, messageHandler);
     }
-    // TODO what happens when consumer gets out of scope?!
-    // you definitely don't want it to be garbage-collected!
+
     @Override
     public QConsumer<ArtemisMessage> newBrowser(
             BiConsumerE<ArtemisMessage, InputStream> messageHandler)
             throws Exception {
-        ArtemisQConsumer adapter = new ArtemisQConsumer(messageHandler);
         ClientConsumer consumer =
                 session.createConsumer(config.getName(), true);
-        consumer.setMessageHandler(adapter);
-
-        return adapter;
+        return new ArtemisQConsumer(consumer, messageHandler);
     }
 
     @Override
