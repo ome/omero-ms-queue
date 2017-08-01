@@ -30,6 +30,7 @@ public interface QMsgFactory<QM> {
      * Creates a new queue message of the specified type.
      * @param t the message type.
      * @return a new message.
+     * @throws NullPointerException if the argument is {@code null}.
      */
     QM queueMessage(MessageType t);
 

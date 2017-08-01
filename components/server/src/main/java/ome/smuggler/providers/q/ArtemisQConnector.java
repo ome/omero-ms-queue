@@ -2,17 +2,18 @@ package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
 
-import kew.core.qchan.spi.*;
+import java.io.InputStream;
+import java.util.function.Function;
+
+import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.client.ClientConsumer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientProducer;
 import org.apache.activemq.artemis.api.core.client.ClientSession;
 import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 
+import kew.core.qchan.spi.*;
 import util.lambda.BiConsumerE;
-
-import java.io.InputStream;
-import java.util.function.Function;
 
 
 /**
@@ -43,7 +44,7 @@ public class ArtemisQConnector
     @Override
     public QConsumer<ArtemisMessage> newConsumer(
             BiConsumerE<ArtemisMessage, InputStream> messageHandler)
-            throws Exception {
+            throws ActiveMQException {
         ClientConsumer consumer =
                 session.createConsumer(config.getName(), false);
         return new ArtemisQConsumer(consumer, messageHandler);
@@ -52,20 +53,22 @@ public class ArtemisQConnector
     @Override
     public QConsumer<ArtemisMessage> newBrowser(
             BiConsumerE<ArtemisMessage, InputStream> messageHandler)
-            throws Exception {
+            throws ActiveMQException {
         ClientConsumer consumer =
                 session.createConsumer(config.getName(), true);
         return new ArtemisQConsumer(consumer, messageHandler);
     }
 
     @Override
-    public QProducer<ArtemisMessage> newProducer() throws Exception {
+    public QProducer<ArtemisMessage> newProducer() throws ActiveMQException {
         ClientProducer producer = session.createProducer(config.getAddress());
         return new ArtemisQProducer(producer, this);
     }
 
     @Override
     public ArtemisMessage queueMessage(MessageType t) {
+        requireNonNull(t, "message type");
+
         Function<Boolean, ClientMessage> create = session::createMessage;
         Function<Boolean, ArtemisMessage> builder =
                 create.andThen(ArtemisMessage::new);  // (2)
