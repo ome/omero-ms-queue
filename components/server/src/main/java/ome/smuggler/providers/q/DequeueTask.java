@@ -6,11 +6,9 @@ import static util.error.Exceptions.throwAsIfUnchecked;
 
 import java.io.InputStream;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
-import org.apache.activemq.artemis.api.core.client.ClientConsumer;
-import org.apache.activemq.artemis.api.core.client.ClientMessage;
-import org.apache.activemq.artemis.api.core.client.MessageHandler;
-
+import kew.core.qchan.spi.HasReceiptAck;
+import kew.core.qchan.spi.QConnector;
+import kew.core.qchan.spi.QConsumer;
 import kew.core.msg.ChannelSink;
 import kew.core.msg.MessageSink;
 import util.io.SourceReader;
@@ -18,11 +16,13 @@ import util.io.SourceReader;
 /**
  * Receives messages asynchronously from a queue and dispatches them to a 
  * consumer.
+ * @param <QM> the message type in the underlying middleware.
+ * @param <T> the type of the message data.
  */
-public class DequeueTask<T> implements MessageHandler {
+public class DequeueTask<QM extends HasReceiptAck, T> {
     
-    private final ClientConsumer receiver;
-    private final MessageSink<ClientMessage, T> sink;
+    private final QConsumer<QM> receiver;  // keep ref to avoid GC nuking it.
+    private final MessageSink<QM, T> sink;
     private final boolean redeliverOnCrash;
     private final SourceReader<InputStream, T> deserializer;
     
@@ -36,15 +36,15 @@ public class DequeueTask<T> implements MessageHandler {
      * processing a message, the message will be delivered again once the
      * process is rebooted. If {@code false}, a message will only ever be 
      * delivered once to the consumer.
-     * @throws ActiveMQException if an error occurs while setting up Artemis to
-     * receive messages on the specified queue.
+     * @throws Exception if an error occurs while setting up the underlying
+     * middleware to receive messages on the specified queue.
      * @throws NullPointerException if any argument is {@code null}.
      */
-    public DequeueTask(QueueConnector queue,
+    public DequeueTask(QConnector<QM> queue,
                        ChannelSink<T> consumer,
                        SourceReader<InputStream, T> deserializer,
                        boolean redeliverOnCrash)
-            throws ActiveMQException {
+            throws Exception {
         this(queue, MessageSink.forwardDataTo(consumer), deserializer,
              redeliverOnCrash);
     }
@@ -59,35 +59,34 @@ public class DequeueTask<T> implements MessageHandler {
      * process is rebooted. If {@code false}, a message will only ever be 
      * delivered once to the consumer.
      * @param deserializer de-serialises the message data, a {@code T}-value.
-     * @throws ActiveMQException if an error occurs while setting up Artemis to
-     * receive messages on the specified queue.
+     * @throws Exception if an error occurs while setting up the underlying
+     * middleware to receive messages on the specified queue.
      * @throws NullPointerException if any argument is {@code null}.
      */
-    public DequeueTask(QueueConnector queue,
-                       MessageSink<ClientMessage, T> consumer,
+    public DequeueTask(QConnector<QM> queue,
+                       MessageSink<QM, T> consumer,
                        SourceReader<InputStream, T> deserializer,
                        boolean redeliverOnCrash)
-            throws ActiveMQException {
+            throws Exception {
         requireNonNull(queue, "queue");
         requireNonNull(consumer, "consumer");
         requireNonNull(deserializer, "deserializer");
 
         this.sink = consumer;
-        this.receiver = queue.newConsumer();
-        this.receiver.setMessageHandler(this);
+        this.receiver = queue.newConsumer(this::handleMessage);
         this.redeliverOnCrash = redeliverOnCrash;
         this.deserializer = deserializer;
     }
     
-    private void removeFromQueue(ClientMessage msg) {
+    private void removeFromQueue(QM msg) {
         try {
-            msg.acknowledge();
-        } catch (ActiveMQException e) {
+            msg.removeFromQueue();
+        } catch (Exception e) {
             throwAsIfUnchecked(e);
         }
     }
     
-    private void consumeThenRemove(ClientMessage msg, T messageData) {
+    private void consumeThenRemove(QM msg, T messageData) {
         try {
             sink.consume(message(msg, messageData));  // (*)
         } finally {
@@ -101,24 +100,18 @@ public class DequeueTask<T> implements MessageHandler {
      * - http://stackoverflow.com/questions/15243991/what-happen-if-client-acknowledgment-not-done
      */
     
-    private void removeThenConsume(ClientMessage msg, T messageData) {
+    private void removeThenConsume(QM msg, T messageData) {
         removeFromQueue(msg);
         sink.consume(message(msg, messageData));
     }
 
-    private T readBody(ClientMessage source) {
-        MessageBodyReader bodyReader = new MessageBodyReader();
-        return deserializer.uncheckedRead(bodyReader.read(source));
-    }
-    
-    @Override
-    public void onMessage(ClientMessage msg) {
-        T messageData = readBody(msg);
+    private void handleMessage(QM msg, InputStream body) {
+        T messageData = deserializer.uncheckedRead(body);
         if (redeliverOnCrash) {
             consumeThenRemove(msg, messageData);
         } else {
             removeThenConsume(msg, messageData);
         }
     }
-    
+
 }

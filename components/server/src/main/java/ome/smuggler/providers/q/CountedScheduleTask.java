@@ -2,14 +2,12 @@ package ome.smuggler.providers.q;
 
 import static java.util.Objects.requireNonNull;
 import static kew.core.msg.ChannelMessage.message;
-import static ome.smuggler.providers.q.Messages.durableMessage;
-import static ome.smuggler.providers.q.Messages.setScheduleCount;
-import static ome.smuggler.providers.q.Messages.setScheduledDeliveryTime;
+import static kew.core.qchan.MetaProps.scheduleCount;
+import static kew.core.qchan.MetaProps.scheduledDelivery;
 
 import java.io.OutputStream;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
-
+import kew.core.qchan.spi.*;
 import kew.core.msg.ChannelMessage;
 import kew.core.msg.CountedSchedule;
 import kew.core.msg.MessageSource;
@@ -20,35 +18,38 @@ import util.io.SinkWriter;
  * time in the future and makes a sender-specified delivery count available in
  * the metadata.
  * @see CountedScheduleSink
+ * @param <QM> the message type in the underlying middleware.
+ * @param <T> the type of the message data.
  */
-public class CountedScheduleTask<T> implements MessageSource<CountedSchedule, T> {
+public class CountedScheduleTask<QM extends HasSchedule & HasProps, T>
+        implements MessageSource<CountedSchedule, T> {
 
-    private final EnqueueTask<T> channel;
+    private final EnqueueTask<QM, T> channel;
     
     /**
      * Creates a new instance.
-     * @param queue provides access to the queue on which to put messages.
+     * @param producer provides access to the queue on which to put messages.
      * @param serializer serialises the message data, a {@code T}-value.
-     * @throws ActiveMQException if a queue producer could not be created.
      * @throws NullPointerException if any argument is {@code null}.
      */
-    public CountedScheduleTask(QueueConnector queue,
-                               SinkWriter<T, OutputStream> serializer)
-            throws ActiveMQException {
-        this.channel = new EnqueueTask<>(queue, serializer);
+    public CountedScheduleTask(QProducer<QM> producer,
+                               SinkWriter<T, OutputStream> serializer) {
+        this.channel = new EnqueueTask<>(producer, serializer);
     }
-    
+
+    private QMsgBuilder<QM> messageBuilder(CountedSchedule metadata) {
+        QMsgBuilder<QM> dm = QMsgFactory::durableMessage;
+        return dm.with(scheduledDelivery(metadata.when()))
+                 .with(scheduleCount(metadata.count()));
+    }
+
     @Override
     public void send(ChannelMessage<CountedSchedule, T> msg) throws Exception {
         requireNonNull(msg, "msg");
         
         CountedSchedule metadata = msg.metadata()
                                       .orElse(CountedSchedule.first());
-        channel.send(
-                message(durableMessage().andThen(
-                             setScheduledDeliveryTime(metadata.when())).andThen(
-                             setScheduleCount(metadata.count())), 
-                        msg.data()));
+        channel.send(message(messageBuilder(metadata), msg.data()));
     }
 
 }

@@ -3,62 +3,59 @@ package ome.smuggler.providers.q;
 import static java.util.Objects.requireNonNull;
 
 import java.io.OutputStream;
-import java.util.function.Function;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
-import org.apache.activemq.artemis.api.core.client.ClientMessage;
-import org.apache.activemq.artemis.api.core.client.ClientProducer;
-
+import kew.core.qchan.spi.QMsgBuilder;
+import kew.core.qchan.spi.QMsgFactory;
+import kew.core.qchan.spi.QProducer;
 import kew.core.msg.ChannelMessage;
 import kew.core.msg.MessageSource;
 import util.io.SinkWriter;
 
 /**
  * Puts messages on a queue, asynchronously.
- * Messages are durable by default but any other kind of message can be
+ * MetaProps are durable by default but any other kind of message can be
  * constructed by providing a message builder function as message metadata.
+ *
+ * @param <QM> the message type in the underlying middleware.
+ * @param <T> the type of the message data.
  */
-public class EnqueueTask<T> 
-    implements MessageSource<Function<QueueConnector, ClientMessage>, T> {
+public class EnqueueTask<QM, T>
+    implements MessageSource<QMsgBuilder<QM>, T> {
 
-    private final QueueConnector queue;
-    private final ClientProducer producer;
+    private final QProducer<QM> producer;
     private final SinkWriter<T, OutputStream> serializer;
 
     /**
      * Creates a new instance.
-     * @param queue provides access to the queue on which to put messages.
+     * @param producer provides access to the queue on which to put messages.
      * @param serializer serialises the message data, a {@code T}-value.
-     * @throws ActiveMQException if a queue producer could not be created.
      * @throws NullPointerException if any argument is {@code null}.
      */
-    public EnqueueTask(QueueConnector queue,
-                       SinkWriter<T, OutputStream> serializer)
-            throws ActiveMQException {
-        requireNonNull(queue, "queue");
+    public EnqueueTask(QProducer<QM> producer,
+                       SinkWriter<T, OutputStream> serializer) {
+        requireNonNull(producer, "producer");
         requireNonNull(serializer, "serializer");
         
-        this.queue = queue;
-        this.producer = queue.newProducer();
+        this.producer = producer;
         this.serializer = serializer;
     }
 
-    private void writeBody(ClientMessage sink, T data) {
-        MessageBodyWriter bodyWriter = new MessageBodyWriter();
-        bodyWriter.write(sink, out -> serializer.write(out, data));
+    private void writeBody(OutputStream out,
+                           ChannelMessage<QMsgBuilder<QM>, T> msg)
+            throws Exception {
+        T data = msg.data();
+        serializer.write(out, data);
     }
 
     @Override
-    public void send(
-            ChannelMessage<Function<QueueConnector, ClientMessage>, T> msg) 
-                    throws Exception {
+    public void send(ChannelMessage<QMsgBuilder<QM>, T> msg) throws Exception {
         requireNonNull(msg, "msg");
-        
-        Function<QueueConnector, ClientMessage> messageBuilder = 
-                msg.metadata().orElse(QueueConnector::newDurableMessage);
-        ClientMessage qMsg = messageBuilder.apply(queue);
-        writeBody(qMsg, msg.data());
-        producer.send(qMsg);
+
+        QMsgBuilder<QM> messageBuilder =
+                msg.metadata().orElse(QMsgFactory::durableMessage);
+        producer.sendMessage(
+                   messageBuilder,
+                   out -> writeBody(out, msg));
     }
 
 }
