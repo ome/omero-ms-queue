@@ -53,7 +53,7 @@ public class ArtemisQProducerTest {
 
     @Test (expected = NullPointerException.class)
     public void sendMessageThrowsIfNullConsumer() throws Exception {
-        target.sendMessage(QMsgFactory::durableMessage, null);
+        target.sendMessage(QMsgFactory::nonDurableMessage, null);
     }
 
 }
