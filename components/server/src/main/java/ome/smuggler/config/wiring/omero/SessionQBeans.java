@@ -6,8 +6,13 @@ import java.io.OutputStream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import kew.core.qchan.QChannelFactory;
 import kew.core.msg.ChannelSource;
+import kew.core.msg.MessageSink;
 import kew.core.msg.Reschedulable;
+import util.io.SinkWriter;
+import util.io.SourceReader;
+
 import ome.smuggler.config.items.OmeroSessionQConfig;
 import ome.smuggler.core.service.omero.SessionService;
 import ome.smuggler.core.service.omero.impl.OmeroEnv;
@@ -16,11 +21,9 @@ import ome.smuggler.core.types.QueuedOmeroKeepAlive;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
 import ome.smuggler.providers.q.ArtemisMessage;
-import kew.core.qchan.DequeueTask;
-import ome.smuggler.providers.q.QChannelFactory;
+import ome.smuggler.providers.q.ArtemisQChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
-import util.io.SinkWriter;
-import util.io.SourceReader;
+
 
 /**
  * Singleton beans for Artemis client resources that have to be shared and
@@ -38,22 +41,23 @@ public class SessionQBeans {
     }
 
     @Bean
-    public QChannelFactory<QueuedOmeroKeepAlive> sessionChannelFactory(
+    public QChannelFactory<ArtemisMessage, QueuedOmeroKeepAlive>
+        sessionChannelFactory(
             ServerConnector connector, OmeroSessionQConfig qConfig) {
-        return new QChannelFactory<>(connector, qConfig);
+        return new ArtemisQChannelFactory<>(connector, qConfig);
     }
 
     @Bean
     public ChannelSource<QueuedOmeroKeepAlive> sessionSourceChannel(
-            QChannelFactory<QueuedOmeroKeepAlive> factory)
+            QChannelFactory<ArtemisMessage, QueuedOmeroKeepAlive> factory)
             throws Exception {
         return factory.buildSource(serializer());
     }
 
     @Bean
-    public DequeueTask<ArtemisMessage, QueuedOmeroKeepAlive>
+    public MessageSink<ArtemisMessage, InputStream>
         dequeueSessionTask(
-                QChannelFactory<QueuedOmeroKeepAlive> factory,
+                QChannelFactory<ArtemisMessage, QueuedOmeroKeepAlive> factory,
                 OmeroEnv env,
                 SessionService service)
             throws Exception {

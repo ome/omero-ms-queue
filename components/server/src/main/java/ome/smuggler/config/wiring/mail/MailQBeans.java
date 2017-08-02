@@ -3,12 +3,18 @@ package ome.smuggler.config.wiring.mail;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import ome.smuggler.providers.q.ArtemisQChannelFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import kew.core.qchan.QChannelFactory;
 import kew.core.msg.ChannelSource;
+import kew.core.msg.MessageSink;
 import kew.core.msg.Reschedulable;
 import kew.core.msg.ReschedulableFactory;
+import util.io.SinkWriter;
+import util.io.SourceReader;
+
 import ome.smuggler.config.items.MailQConfig;
 import ome.smuggler.core.service.mail.FailedMailHandler;
 import ome.smuggler.core.service.mail.MailProcessor;
@@ -17,11 +23,7 @@ import ome.smuggler.core.types.QueuedMail;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
 import ome.smuggler.providers.q.ArtemisMessage;
-import kew.core.qchan.DequeueTask;
-import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
-import util.io.SinkWriter;
-import util.io.SourceReader;
 
 
 /**
@@ -40,20 +42,21 @@ public class MailQBeans {
     }
 
     @Bean
-    public QChannelFactory<QueuedMail> mailChannelFactory(
+    public QChannelFactory<ArtemisMessage, QueuedMail> mailChannelFactory(
             ServerConnector connector, MailQConfig qConfig) {
-        return new QChannelFactory<>(connector, qConfig);
+        return new ArtemisQChannelFactory<>(connector, qConfig);
     }
     
     @Bean
     public ChannelSource<QueuedMail> mailSourceChannel(
-            QChannelFactory<QueuedMail> factory) throws Exception {
+            QChannelFactory<ArtemisMessage, QueuedMail> factory)
+            throws Exception {
         return factory.buildSource(serializer());
     }
     
     @Bean
-    public DequeueTask<ArtemisMessage, QueuedMail> dequeueMailTask(
-            QChannelFactory<QueuedMail> factory,
+    public MessageSink<ArtemisMessage, InputStream> dequeueMailTask(
+            QChannelFactory<ArtemisMessage, QueuedMail> factory,
             MailConfigSource mailConfig,
             MailProcessor processor,
             FailedMailHandler failureHandler) throws Exception {
