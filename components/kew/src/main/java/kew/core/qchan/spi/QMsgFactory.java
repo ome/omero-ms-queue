@@ -8,38 +8,23 @@ package kew.core.qchan.spi;
 public interface QMsgFactory<QM> {
 
     /**
-     * Kinds of messages we expect the underlying middleware to support.
-     */
-    enum MessageType {
-        /**
-         * Denotes a message that the underlying middleware will persist on
-         * the queue as long as the queue itself is persistent. A durable
-         * message is supposed to survive a crash and still be available for
-         * delivery when the system comes back online.
-         */
-        Durable,
-        /**
-         * Denotes a message that the underlying middleware won't persist on
-         * the queue. An undelivered, non-durable message won't survive a
-         * crash.
-         */
-        NonDurable
-    }
-
-    /**
      * Creates a new queue message of the specified type.
+     * If the implementation doesn't support durable messages then it should
+     * fall back to creating a non-durable message.
      * @param t the message type.
      * @return a new message.
      * @throws NullPointerException if the argument is {@code null}.
      */
-    QM queueMessage(MessageType t);
+    QM queueMessage(QMessageType t);
 
     /**
      * Creates a new durable message.
+     * If the implementation doesn't support durable messages then it should
+     * fall back to creating a non-durable message.
      * @return the message.
      */
     default QM durableMessage() {
-        return queueMessage(MessageType.Durable);
+        return queueMessage(QMessageType.Durable);
     }
 
     /**
@@ -47,7 +32,7 @@ public interface QMsgFactory<QM> {
      * @return the message.
      */
     default QM nonDurableMessage() {
-        return queueMessage(MessageType.NonDurable);
+        return queueMessage(QMessageType.NonDurable);
     }
 
 }

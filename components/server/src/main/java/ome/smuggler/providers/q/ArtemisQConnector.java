@@ -66,7 +66,7 @@ public class ArtemisQConnector
     }
 
     @Override
-    public ArtemisMessage queueMessage(MessageType t) {
+    public ArtemisMessage queueMessage(QMessageType t) {
         requireNonNull(t, "message type");
 
         Function<Boolean, ClientMessage> create = session::createMessage;
