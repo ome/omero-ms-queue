@@ -6,6 +6,7 @@ import static util.error.Exceptions.throwAsIfUnchecked;
 
 import java.io.InputStream;
 
+import kew.core.msg.ChannelMessage;
 import kew.core.qchan.spi.HasReceiptAck;
 import kew.core.qchan.spi.QConnector;
 import kew.core.qchan.spi.QConsumer;
@@ -19,7 +20,8 @@ import util.io.SourceReader;
  * @param <QM> the message type in the underlying middleware.
  * @param <T> the type of the message data.
  */
-public class DequeueTask<QM extends HasReceiptAck, T> {
+public class DequeueTask<QM extends HasReceiptAck, T>
+    implements MessageSink<QM, InputStream> {
     
     private final QConsumer<QM> receiver;  // keep ref to avoid GC nuking it.
     private final MessageSink<QM, T> sink;
@@ -121,5 +123,15 @@ public class DequeueTask<QM extends HasReceiptAck, T> {
     public QConsumer<QM> receiver() {
         return receiver;
     }
+
+    @Override
+    public void consume(ChannelMessage<QM, InputStream> msg) {
+        requireNonNull(msg, "msg");
+        handleMessage(msg.metadata().get(), msg.data());
+    }
+    /* NOTE
+     * Implementing MessageSink so that the QChannelFactory can expose this
+     * interface to clients rather than the concrete type of DequeueTask.
+     */
 
 }
