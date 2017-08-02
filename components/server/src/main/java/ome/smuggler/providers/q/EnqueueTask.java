@@ -13,7 +13,7 @@ import util.io.SinkWriter;
 
 /**
  * Puts messages on a queue, asynchronously.
- * MetaProps are durable by default but any other kind of message can be
+ * Messages are durable by default but any other kind of message can be
  * constructed by providing a message builder function as message metadata.
  *
  * @param <QM> the message type in the underlying middleware.

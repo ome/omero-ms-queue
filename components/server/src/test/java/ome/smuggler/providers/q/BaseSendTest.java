@@ -3,6 +3,7 @@ package ome.smuggler.providers.q;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import kew.core.qchan.spi.QConnector;
 import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
@@ -16,7 +17,7 @@ public class BaseSendTest {
     protected ClientProducer producer;
     protected ClientMessage msgToQueue;
     protected ActiveMQBuffer msgBody;
-    protected QueueConnector connector;
+    protected QConnector<ArtemisMessage> connector;
     
     protected void initMocks() throws ActiveMQException {
         ImportQConfig q = new ImportQConfig();
@@ -33,7 +34,7 @@ public class BaseSendTest {
         msgBody = mock(ActiveMQBuffer.class);
         when(msgToQueue.getBodyBuffer()).thenReturn(msgBody);
         
-        connector = new QueueConnector(q, sesh);
+        connector = new ArtemisQConnector(q, sesh);
     }
     
 }

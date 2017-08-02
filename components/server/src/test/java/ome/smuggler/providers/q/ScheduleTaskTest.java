@@ -5,7 +5,6 @@ import static kew.core.msg.ChannelMessage.message;
 
 import java.time.Duration;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.Message;
 import org.junit.Test;
 
@@ -15,27 +14,27 @@ import util.types.FutureTimepoint;
 
 public class ScheduleTaskTest extends BaseSendTest {
     
-    private SchedulingSource<String> newTask() throws ActiveMQException {
+    private SchedulingSource<String> newTask() throws Exception {
         initMocks();
         when(msgToQueue.putLongProperty(anyString(), anyLong()))
         .thenReturn(msgToQueue);
         
-        return new ScheduleTask<>(connector, (v, s) -> {});
+        return new ScheduleTask<>(connector.newProducer(), (v, s) -> {});
     }
     
     @Test
-    public void sendMessage() throws ActiveMQException {
-        newTask().asDataSource().uncheckedSend("msg");
+    public void sendMessage() throws Exception {
+        newTask().asDataSource().send("msg");
 
         verify(producer).send(msgToQueue);
     }
     
     @Test
-    public void scheduleMessage() throws ActiveMQException {
+    public void scheduleMessage() throws Exception {
         FutureTimepoint when = new FutureTimepoint(Duration.ofMinutes(1));
         long expectedSchedule = when.get().toMillis();
         
-        newTask().uncheckedSend(message(when, "msg"));
+        newTask().send(message(when, "msg"));
         
         verify(msgToQueue).putLongProperty(
                 eq(Message.HDR_SCHEDULED_DELIVERY_TIME.toString()), 
@@ -44,13 +43,13 @@ public class ScheduleTaskTest extends BaseSendTest {
     }
     
     @Test (expected = NullPointerException.class)
-    public void throwIfCtorArg1Null() throws ActiveMQException {
+    public void throwIfCtorArg1Null() {
         new ScheduleTask<>(null, (v, s) -> {});
     }
 
     @Test (expected = NullPointerException.class)
-    public void throwIfCtorArg2Null() throws ActiveMQException {
-        new ScheduleTask<>(connector, null);
+    public void throwIfCtorArg2Null() throws Exception {
+        new ScheduleTask<>(connector.newProducer(), null);
     }
 
 }

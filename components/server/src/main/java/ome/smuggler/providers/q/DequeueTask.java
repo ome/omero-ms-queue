@@ -114,4 +114,12 @@ public class DequeueTask<QM extends HasReceiptAck, T> {
         }
     }
 
+    /**
+     * @return the underlying consumer used to receive messages from the
+     * queue.
+     */
+    public QConsumer<QM> receiver() {
+        return receiver;
+    }
+
 }

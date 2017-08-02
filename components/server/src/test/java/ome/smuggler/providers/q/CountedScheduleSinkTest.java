@@ -19,17 +19,19 @@ import kew.core.msg.MessageSink;
 public class CountedScheduleSinkTest implements MessageSink<CountedSchedule, Long> {
 
     private static final Long DataWhenNoMetadata = -1L;
-    private CountedScheduleSink<Long> target;
+    private CountedScheduleSink<ArtemisMessage, Long> target;
     private ChannelMessage<CountedSchedule, Long> mappedMsg;
     
-    private ChannelMessage<ClientMessage, Long> newQueuedMsg(Long count) {        
+    private ChannelMessage<ArtemisMessage, Long> newQueuedMsg(Long count) {
         ClientMessage qMsg = mock(ClientMessage.class);
         boolean hasProp = count != null;
         when(qMsg.containsProperty(Messages.ScheduleCountKey))
             .thenReturn(hasProp);
         when(qMsg.getLongProperty(Messages.ScheduleCountKey))
             .thenReturn(count);
-        return message(qMsg, hasProp ? count : DataWhenNoMetadata);
+
+        ArtemisMessage adapterMsg = new ArtemisMessage(qMsg);
+        return message(adapterMsg, hasProp ? count : DataWhenNoMetadata);
     }
     
     private void assertMapped(Long expectedCount) {

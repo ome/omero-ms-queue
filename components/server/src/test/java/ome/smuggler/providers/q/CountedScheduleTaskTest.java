@@ -5,7 +5,6 @@ import static kew.core.msg.ChannelMessage.message;
 
 import java.time.Duration;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.Message;
 import org.junit.Test;
 
@@ -17,30 +16,30 @@ import util.types.PositiveN;
 
 public class CountedScheduleTaskTest extends BaseSendTest {
     
-    private MessageSource<CountedSchedule, String> newTask() throws ActiveMQException {
+    private MessageSource<CountedSchedule, String> newTask() throws Exception {
         initMocks();
         when(msgToQueue.putLongProperty(anyString(), anyLong()))
         .thenReturn(msgToQueue);
         
-        return new CountedScheduleTask<>(connector, (v, s) -> {});
+        return new CountedScheduleTask<>(connector.newProducer(), (v, s) -> {});
     }
     
     @Test
-    public void sendMessage() throws ActiveMQException {
-        newTask().asDataSource().uncheckedSend("msg");
+    public void sendMessage() throws Exception {
+        newTask().asDataSource().send("msg");
 
         verify(producer).send(msgToQueue);
     }
     
     @Test
-    public void scheduleMessage() throws ActiveMQException {
+    public void scheduleMessage() throws Exception {
         FutureTimepoint when = new FutureTimepoint(Duration.ofMinutes(1));
         long expectedSchedule = when.get().toMillis();
         long expectedCount = 1;
         PositiveN count = PositiveN.of(expectedCount);
         CountedSchedule metadata = new CountedSchedule(when, count);
         
-        newTask().uncheckedSend(message(metadata, "msg"));
+        newTask().send(message(metadata, "msg"));
         
         verify(msgToQueue).putLongProperty(
                 eq(Message.HDR_SCHEDULED_DELIVERY_TIME.toString()), 
@@ -52,13 +51,13 @@ public class CountedScheduleTaskTest extends BaseSendTest {
     }
     
     @Test (expected = NullPointerException.class)
-    public void throwIfCtorArg1Null() throws ActiveMQException {
+    public void throwIfCtorArg1Null() {
         new CountedScheduleTask<>(null, (v, s) -> {});
     }
 
     @Test (expected = NullPointerException.class)
-    public void throwIfCtorArg2Null() throws ActiveMQException {
-        new CountedScheduleTask<>(connector, null);
+    public void throwIfCtorArg2Null() throws Exception {
+        new CountedScheduleTask<>(connector.newProducer(), null);
     }
 
 }

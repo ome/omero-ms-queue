@@ -17,14 +17,15 @@ public class EnqueueTaskTest extends BaseSendTest {
         return (v, s) -> {};
     }
 
-    private ChannelSource<String> newTask() throws ActiveMQException {
+    private ChannelSource<String> newTask() throws Exception {
         initMocks();
-        return new EnqueueTask<>(connector, serializer()).asDataSource();
+        return new EnqueueTask<>(connector.newProducer(),
+                                 serializer()).asDataSource();
     }
     
     @Test
-    public void sendMessage() throws ActiveMQException {
-        newTask().uncheckedSend("msg");
+    public void sendMessage() throws Exception {
+        newTask().send("msg");
 
         verify(msgBody).writeBytes((byte[]) any());
         verify(producer).send(msgToQueue);
@@ -36,7 +37,7 @@ public class EnqueueTaskTest extends BaseSendTest {
     }
 
     @Test (expected = NullPointerException.class)
-    public void ctorThrowsIfNullWriter() throws ActiveMQException {
-        new EnqueueTask<>(connector, null);
+    public void ctorThrowsIfNullWriter() throws Exception {
+        new EnqueueTask<>(connector.newProducer(), null);
     }
 }
