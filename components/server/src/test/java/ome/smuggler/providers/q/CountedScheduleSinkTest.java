@@ -8,8 +8,8 @@ import static util.types.FutureTimepoint.now;
 
 import java.time.Duration;
 
-import kew.core.qchan.CountedScheduleSink;
-import kew.core.qchan.MetaProps;
+import kew.core.qchan.impl.CountedScheduleSink;
+import kew.core.qchan.impl.MetaProps;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.junit.Before;
 import org.junit.Test;

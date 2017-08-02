@@ -1,4 +1,4 @@
-package kew.core.qchan;
+package kew.core.qchan.impl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

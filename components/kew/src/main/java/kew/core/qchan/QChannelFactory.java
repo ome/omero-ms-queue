@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import kew.core.msg.*;
+import kew.core.qchan.impl.*;
 import kew.core.qchan.spi.*;
 import util.io.SinkWriter;
 import util.io.SourceReader;

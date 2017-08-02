@@ -1,9 +1,9 @@
-package kew.core.qchan;
+package kew.core.qchan.impl;
 
 import static java.util.Objects.requireNonNull;
 import static kew.core.msg.ChannelMessage.message;
-import static kew.core.qchan.MetaProps.scheduleCount;
-import static kew.core.qchan.MetaProps.scheduledDelivery;
+import static kew.core.qchan.impl.MetaProps.scheduleCount;
+import static kew.core.qchan.impl.MetaProps.scheduledDelivery;
 
 import java.io.OutputStream;
 

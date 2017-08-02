@@ -1,4 +1,4 @@
-package kew.core.qchan;
+package kew.core.qchan.impl;
 
 import java.util.Optional;
 import java.util.function.Consumer;

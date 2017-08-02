@@ -1,8 +1,8 @@
-package kew.core.qchan;
+package kew.core.qchan.impl;
 
 import static java.util.Objects.requireNonNull;
 import static kew.core.msg.ChannelMessage.message;
-import static kew.core.qchan.MetaProps.getScheduleCount;
+import static kew.core.qchan.impl.MetaProps.getScheduleCount;
 import static util.types.FutureTimepoint.now;
 
 import java.util.Optional;

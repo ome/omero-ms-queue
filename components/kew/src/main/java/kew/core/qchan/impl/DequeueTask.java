@@ -1,4 +1,4 @@
-package kew.core.qchan;
+package kew.core.qchan.impl;
 
 import static java.util.Objects.requireNonNull;
 import static kew.core.msg.ChannelMessage.message;

@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import kew.core.qchan.DequeueTask;
+import kew.core.qchan.impl.DequeueTask;
 import kew.core.qchan.spi.QConnector;
 import util.io.SourceReader;
 import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
