@@ -9,6 +9,7 @@ import static util.types.FutureTimepoint.now;
 import java.time.Duration;
 
 import kew.core.qchan.CountedScheduleSink;
+import kew.core.qchan.MetaProps;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +27,9 @@ public class CountedScheduleSinkTest implements MessageSink<CountedSchedule, Lon
     private ChannelMessage<ArtemisMessage, Long> newQueuedMsg(Long count) {
         ClientMessage qMsg = mock(ClientMessage.class);
         boolean hasProp = count != null;
-        when(qMsg.containsProperty(Messages.ScheduleCountKey))
+        when(qMsg.containsProperty(MetaProps.ScheduleCountKey))
             .thenReturn(hasProp);
-        when(qMsg.getLongProperty(Messages.ScheduleCountKey))
+        when(qMsg.getLongProperty(MetaProps.ScheduleCountKey))
             .thenReturn(count);
 
         ArtemisMessage adapterMsg = new ArtemisMessage(qMsg);

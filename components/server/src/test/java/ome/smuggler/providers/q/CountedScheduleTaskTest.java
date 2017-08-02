@@ -6,6 +6,7 @@ import static kew.core.msg.ChannelMessage.message;
 import java.time.Duration;
 
 import kew.core.qchan.CountedScheduleTask;
+import kew.core.qchan.MetaProps;
 import org.apache.activemq.artemis.api.core.Message;
 import org.junit.Test;
 
@@ -46,7 +47,7 @@ public class CountedScheduleTaskTest extends BaseSendTest {
                 eq(Message.HDR_SCHEDULED_DELIVERY_TIME.toString()), 
                 eq(expectedSchedule));
         verify(msgToQueue).putLongProperty(
-                eq(Messages.ScheduleCountKey), 
+                eq(MetaProps.ScheduleCountKey),
                 eq(expectedCount));
         verify(producer).send(msgToQueue);
     }
