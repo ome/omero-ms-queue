@@ -5,6 +5,7 @@ import static kew.core.msg.ChannelMessage.message;
 
 import java.time.Duration;
 
+import kew.core.qchan.CountedScheduleTask;
 import org.apache.activemq.artemis.api.core.Message;
 import org.junit.Test;
 

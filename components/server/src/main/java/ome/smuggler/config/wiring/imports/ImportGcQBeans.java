@@ -14,7 +14,7 @@ import ome.smuggler.core.service.imports.FailedFinalisationHandler;
 import ome.smuggler.core.service.imports.ImportFinaliser;
 import ome.smuggler.core.types.ImportConfigSource;
 import ome.smuggler.core.types.ProcessedImport;
-import ome.smuggler.providers.q.DequeueTask;
+import kew.core.qchan.DequeueTask;
 import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
 

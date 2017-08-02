@@ -15,6 +15,7 @@ import kew.core.msg.MessageSource;
 import kew.core.msg.Reschedulable;
 import kew.core.msg.ReschedulingSink;
 import kew.core.msg.SchedulingSource;
+import kew.core.qchan.*;
 import kew.core.qchan.spi.QConnector;
 import kew.core.qchan.spi.QMsgBuilder;
 import util.io.SinkWriter;

@@ -1,4 +1,4 @@
-package ome.smuggler.providers.q;
+package kew.core.qchan;
 
 import static java.util.Objects.requireNonNull;
 

@@ -2,6 +2,7 @@ package ome.smuggler.providers.q;
 
 import static org.mockito.Mockito.*;
 
+import kew.core.qchan.EnqueueTask;
 import util.io.SinkWriter;
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.junit.Test;

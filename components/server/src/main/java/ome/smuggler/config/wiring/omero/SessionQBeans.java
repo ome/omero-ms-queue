@@ -16,7 +16,7 @@ import ome.smuggler.core.types.QueuedOmeroKeepAlive;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
 import ome.smuggler.providers.q.ArtemisMessage;
-import ome.smuggler.providers.q.DequeueTask;
+import kew.core.qchan.DequeueTask;
 import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
 import util.io.SinkWriter;

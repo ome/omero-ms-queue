@@ -14,7 +14,7 @@ import ome.smuggler.core.service.imports.ImportProcessor;
 import ome.smuggler.core.types.ImportConfigSource;
 import ome.smuggler.core.types.QueuedImport;
 import ome.smuggler.providers.q.ArtemisMessage;
-import ome.smuggler.providers.q.DequeueTask;
+import kew.core.qchan.DequeueTask;
 import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
 
