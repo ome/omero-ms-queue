@@ -7,10 +7,10 @@ import org.junit.Test;
 
 public class QMsgFactoryTest {
 
-    private static final Integer DurableMsg = 1;
-    private static final Integer NonDurableMsg = 2;
+    public static final Integer DurableMsg = 1;
+    public static final Integer NonDurableMsg = 2;
 
-    private static QMsgFactory<Integer> factory() {
+    public static QMsgFactory<Integer> factory() {
         return t -> t.equals(QMessageType.Durable) ? DurableMsg
                                                    : NonDurableMsg;
     }

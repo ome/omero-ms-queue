@@ -4,7 +4,6 @@ import static org.mockito.Mockito.*;
 
 import kew.core.qchan.impl.EnqueueTask;
 import util.io.SinkWriter;
-import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.junit.Test;
 
 import kew.core.msg.ChannelSource;
@@ -31,14 +30,5 @@ public class EnqueueTaskTest extends BaseSendTest {
         verify(msgBody).writeBytes((byte[]) any());
         verify(producer).send(msgToQueue);
     }
-    
-    @Test (expected = NullPointerException.class)
-    public void ctorThrowsIfNullQ() throws ActiveMQException {
-        new EnqueueTask<>(null, serializer());
-    }
 
-    @Test (expected = NullPointerException.class)
-    public void ctorThrowsIfNullWriter() throws Exception {
-        new EnqueueTask<>(connector.newProducer(), null);
-    }
 }
