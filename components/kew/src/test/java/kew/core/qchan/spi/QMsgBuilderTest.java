@@ -29,9 +29,7 @@ public class QMsgBuilderTest {
     @Test
     public void withSetter() {
         int seed = 1;
-        Consumer<Integer> setter = x -> {
-            assertThat(x, is(seed));
-        };
+        Consumer<Integer> setter = x -> assertThat(x, is(seed));
         int result = qMsgBuilder().with(setter).apply(qMsgFactory(seed));
 
         assertThat(result, is(seed));
