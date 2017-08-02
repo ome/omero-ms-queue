@@ -3,7 +3,6 @@ package ome.smuggler.config.wiring.mail;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +16,7 @@ import ome.smuggler.core.types.MailConfigSource;
 import ome.smuggler.core.types.QueuedMail;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
+import ome.smuggler.providers.q.ArtemisMessage;
 import ome.smuggler.providers.q.DequeueTask;
 import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
@@ -25,7 +25,7 @@ import util.io.SourceReader;
 
 
 /**
- * Singleton beans for HornetQ client resources that have to be shared and
+ * Singleton beans for Artemis client resources that have to be shared and
  * reused. 
  */
 @Configuration
@@ -47,16 +47,16 @@ public class MailQBeans {
     
     @Bean
     public ChannelSource<QueuedMail> mailSourceChannel(
-            QChannelFactory<QueuedMail> factory) throws ActiveMQException {
+            QChannelFactory<QueuedMail> factory) throws Exception {
         return factory.buildSource(serializer());
     }
     
     @Bean
-    public DequeueTask<QueuedMail> dequeueMailTask(
+    public DequeueTask<ArtemisMessage, QueuedMail> dequeueMailTask(
             QChannelFactory<QueuedMail> factory,
             MailConfigSource mailConfig,
             MailProcessor processor,
-            FailedMailHandler failureHandler) throws ActiveMQException {
+            FailedMailHandler failureHandler) throws Exception {
         Reschedulable<QueuedMail> consumer = 
                 ReschedulableFactory.buildForRepeatConsumer(processor, 
                         mailConfig.retryIntervals(), failureHandler);

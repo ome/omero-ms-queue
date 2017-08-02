@@ -3,7 +3,6 @@ package ome.smuggler.config.wiring.omero;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,6 +15,7 @@ import ome.smuggler.core.service.omero.impl.SessionKeepAliveHandler;
 import ome.smuggler.core.types.QueuedOmeroKeepAlive;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
+import ome.smuggler.providers.q.ArtemisMessage;
 import ome.smuggler.providers.q.DequeueTask;
 import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
@@ -23,7 +23,7 @@ import util.io.SinkWriter;
 import util.io.SourceReader;
 
 /**
- * Singleton beans for HornetQ client resources that have to be shared and
+ * Singleton beans for Artemis client resources that have to be shared and
  * reused.
  */
 @Configuration
@@ -46,16 +46,17 @@ public class SessionQBeans {
     @Bean
     public ChannelSource<QueuedOmeroKeepAlive> sessionSourceChannel(
             QChannelFactory<QueuedOmeroKeepAlive> factory)
-            throws ActiveMQException {
+            throws Exception {
         return factory.buildSource(serializer());
     }
 
     @Bean
-    public DequeueTask<QueuedOmeroKeepAlive> dequeueSessionTask(
+    public DequeueTask<ArtemisMessage, QueuedOmeroKeepAlive>
+        dequeueSessionTask(
                 QChannelFactory<QueuedOmeroKeepAlive> factory,
                 OmeroEnv env,
                 SessionService service)
-            throws ActiveMQException {
+            throws Exception {
         Reschedulable<QueuedOmeroKeepAlive> consumer =
                 new SessionKeepAliveHandler(env, service);
         return factory.buildReschedulableSink(consumer,

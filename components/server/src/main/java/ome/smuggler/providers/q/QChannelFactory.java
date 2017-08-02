@@ -4,10 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.function.Function;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
-import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 
 import kew.core.msg.ChannelSink;
@@ -18,20 +15,22 @@ import kew.core.msg.MessageSource;
 import kew.core.msg.Reschedulable;
 import kew.core.msg.ReschedulingSink;
 import kew.core.msg.SchedulingSource;
+import kew.core.qchan.spi.QConnector;
+import kew.core.qchan.spi.QMsgBuilder;
 import util.io.SinkWriter;
 import util.io.SourceReader;
 
 public class QChannelFactory<T> {
 
-    public static <T> QChannelFactory<T> with(ServerConnector connector, 
+    public static <T> QChannelFactory<T> with(ServerConnector connector,
                                               CoreQueueConfiguration qConfig) {
         return new QChannelFactory<>(connector, qConfig);
     }
-    
-    
+
+
     private final ServerConnector connector;
     private final CoreQueueConfiguration qConfig;
-    
+
     public QChannelFactory(ServerConnector connector, 
                            CoreQueueConfiguration qConfig) {
         requireNonNull(connector, "connector");
@@ -40,15 +39,15 @@ public class QChannelFactory<T> {
         this.connector = connector;
         this.qConfig = qConfig;
     }
-   
-    private QueueConnector queue() {
-        return new QueueConnector(qConfig, connector.getSession());
+
+    private QConnector<ArtemisMessage> queue() {
+        return new ArtemisQConnector(qConfig, connector.getSession());
     }
-    
+
     public ChannelSource<T> buildSource(SinkWriter<T, OutputStream> serializer)
-            throws ActiveMQException {
-        MessageSource<Function<QueueConnector, ClientMessage>, T> task = // (*) 
-                new EnqueueTask<>(queue(), serializer);
+            throws Exception {
+        MessageSource<QMsgBuilder<ArtemisMessage>, T> task = // (*)
+                new EnqueueTask<>(queue().newProducer(), serializer);
         return task.asDataSource();  
     }
     /* (*) If the ascended Java masters had blessed us with a slightly less
@@ -63,62 +62,65 @@ public class QChannelFactory<T> {
      * 
      *      return new EnqueueTask<QueuedImport>(q).asDataSource();
      */
-    
+
     public SchedulingSource<T> buildSchedulingSource(
-            SinkWriter<T, OutputStream> serializer) throws ActiveMQException {
-        return new ScheduleTask<>(queue(), serializer);
+            SinkWriter<T, OutputStream> serializer) throws Exception {
+        return new ScheduleTask<>(queue().newProducer(), serializer);
     }
-    
+
     public MessageSource<CountedSchedule, T> buildCountedScheduleSource(
             SinkWriter<T, OutputStream> serializer)
-            throws ActiveMQException {
-        return new CountedScheduleTask<>(queue(), serializer);
+            throws Exception {
+        return new CountedScheduleTask<>(queue().newProducer(), serializer);
     }
-    
-    public DequeueTask<T> buildSink(ChannelSink<T> consumer,
-                                    SourceReader<InputStream, T> deserializer)
-            throws ActiveMQException {
+
+    public DequeueTask<ArtemisMessage, T> buildSink(
+            ChannelSink<T> consumer, SourceReader<InputStream, T> deserializer)
+            throws Exception {
         return new DequeueTask<>(queue(), consumer, deserializer, true);
     }
-    
-    public DequeueTask<T> buildSink(ChannelSink<T> consumer,
-                                    SourceReader<InputStream, T> deserializer,
-                                    boolean redeliverOnCrash)
-                    throws ActiveMQException {
+
+    public DequeueTask<ArtemisMessage, T> buildSink(
+            ChannelSink<T> consumer,
+            SourceReader<InputStream, T> deserializer,
+            boolean redeliverOnCrash)
+                    throws Exception {
         return new DequeueTask<>(queue(), consumer, deserializer,
                                  redeliverOnCrash);
     }
-    
-    public DequeueTask<T> buildCountedScheduleSink(
+
+    public DequeueTask<ArtemisMessage, T> buildCountedScheduleSink(
             MessageSink<CountedSchedule, T> consumer,
             SourceReader<InputStream, T> deserializer)
-                    throws ActiveMQException {
-        CountedScheduleSink<T> sink = new CountedScheduleSink<>(consumer);
+                    throws Exception {
+        CountedScheduleSink<ArtemisMessage, T> sink =
+                new CountedScheduleSink<>(consumer);
         return new DequeueTask<>(queue(), sink, deserializer, true);
     }
-    
-    public DequeueTask<T> buildCountedScheduleSink(
+
+    public DequeueTask<ArtemisMessage, T> buildCountedScheduleSink(
             MessageSink<CountedSchedule, T> consumer,
             SourceReader<InputStream, T> deserializer,
             boolean redeliverOnCrash) 
-                    throws ActiveMQException {
-        CountedScheduleSink<T> sink = new CountedScheduleSink<>(consumer);
+                    throws Exception {
+        CountedScheduleSink<ArtemisMessage, T> sink =
+                new CountedScheduleSink<>(consumer);
         return new DequeueTask<>(queue(), sink, deserializer, redeliverOnCrash);
     }
-    
-    public DequeueTask<T> buildReschedulableSink(
+
+    public DequeueTask<ArtemisMessage, T> buildReschedulableSink(
             Reschedulable<T> consumer,
             SinkWriter<T, OutputStream> serializer,
-            SourceReader<InputStream, T> deserializer) throws ActiveMQException {
+            SourceReader<InputStream, T> deserializer) throws Exception {
         return buildReschedulableSink(consumer, serializer, deserializer, true);
     }
-    
-    public DequeueTask<T> buildReschedulableSink(
+
+    public DequeueTask<ArtemisMessage, T> buildReschedulableSink(
             Reschedulable<T> consumer,
             SinkWriter<T, OutputStream> serializer,
             SourceReader<InputStream, T> deserializer,
             boolean redeliverOnCrash)
-                    throws ActiveMQException {
+                    throws Exception {
         MessageSource<CountedSchedule, T> loopback = 
                 buildCountedScheduleSource(serializer);
         ReschedulingSink<T> sink = new ReschedulingSink<>(consumer, loopback);

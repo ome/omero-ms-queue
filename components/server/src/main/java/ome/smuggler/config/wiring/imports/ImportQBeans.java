@@ -1,6 +1,5 @@
 package ome.smuggler.config.wiring.imports;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +13,13 @@ import ome.smuggler.core.service.imports.FailedImportHandler;
 import ome.smuggler.core.service.imports.ImportProcessor;
 import ome.smuggler.core.types.ImportConfigSource;
 import ome.smuggler.core.types.QueuedImport;
+import ome.smuggler.providers.q.ArtemisMessage;
 import ome.smuggler.providers.q.DequeueTask;
 import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
 
 /**
- * Singleton beans for HornetQ client resources that have to be shared and
+ * Singleton beans for Artemis client resources that have to be shared and
  * reused. 
  */
 @Configuration
@@ -36,16 +36,16 @@ public class ImportQBeans {
     
     @Bean
     public ChannelSource<QueuedImport> importSourceChannel(
-            QChannelFactory<QueuedImport> factory) throws ActiveMQException {
+            QChannelFactory<QueuedImport> factory) throws Exception {
         return factory.buildSource(sf.serializer());
     }
     
     @Bean
-    public DequeueTask<QueuedImport> dequeueImportTask(
+    public DequeueTask<ArtemisMessage, QueuedImport> dequeueImportTask(
             QChannelFactory<QueuedImport> factory,
             ImportConfigSource importConfig,
             ImportProcessor processor,
-            FailedImportHandler failureHandler) throws ActiveMQException {
+            FailedImportHandler failureHandler) throws Exception {
         Reschedulable<QueuedImport> consumer = 
                 ReschedulableFactory.buildForRepeatConsumer(processor, 
                         importConfig.retryIntervals(), failureHandler);

@@ -1,6 +1,6 @@
 package ome.smuggler.config.wiring.imports;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
+import ome.smuggler.providers.q.ArtemisMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import ome.smuggler.providers.q.QChannelFactory;
 import ome.smuggler.providers.q.ServerConnector;
 
 /**
- * Singleton beans for HornetQ client resources that have to be shared and
+ * Singleton beans for Artemis client resources that have to be shared and
  * reused. 
  */
 @Configuration
@@ -36,16 +36,17 @@ public class ImportGcQBeans {
     
     @Bean
     public SchedulingSource<ProcessedImport> importGcSourceChannel(
-            QChannelFactory<ProcessedImport> factory) throws ActiveMQException {
+            QChannelFactory<ProcessedImport> factory) throws Exception {
         return factory.buildSchedulingSource(sf.serializer());
     }
     
     @Bean
-    public DequeueTask<ProcessedImport> dequeueImportFinaliserTask(
+    public DequeueTask<ArtemisMessage, ProcessedImport>
+        dequeueImportFinaliserTask(
             QChannelFactory<ProcessedImport> factory,
             ImportConfigSource importConfig,
             ImportFinaliser finaliser,
-            FailedFinalisationHandler failureHandler) throws ActiveMQException {
+            FailedFinalisationHandler failureHandler) throws Exception {
         Reschedulable<ProcessedImport> consumer =
                 ReschedulableFactory.buildForRepeatConsumer(
                         finaliser,
