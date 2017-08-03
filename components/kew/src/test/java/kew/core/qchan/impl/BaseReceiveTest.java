@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.InputStream;
 
+import kew.core.qchan.spi.QConsumer;
 import org.junit.Before;
 
 import kew.core.msg.ChannelMessage;
@@ -19,15 +20,22 @@ public class BaseReceiveTest
                    SourceReader<InputStream, String> {
 
     protected QConnector<TestQMsg> qConnector;
+    protected QConsumer<TestQMsg> qConsumer;
     protected ChannelMessage<TestQMsg, String> receivedMsg;
-    protected String dataToReceive = "data";
+    protected String dataToReceive;
     protected boolean redeliverOnCrash;
+    protected RuntimeException simulateConsumerCrash;
 
     @Before
     @SuppressWarnings("unchecked")
-    public void setup() {
+    public void setup() throws Exception {
         receivedMsg = null;
+        simulateConsumerCrash = null;
+        dataToReceive = "data";
+
         qConnector = mock(QConnector.class);
+        qConsumer = mock(QConsumer.class);
+        when(qConnector.newConsumer(any())).thenReturn(qConsumer);
     }
 
     @Override
@@ -46,6 +54,8 @@ public class BaseReceiveTest
             assertNotNull(meta.removedFromQueue);
             assertThat(meta.removedFromQueue, is(true));
         }
+        if (simulateConsumerCrash != null)
+            throw simulateConsumerCrash;
     }
 
     protected void assertHasReceivedMessage() {

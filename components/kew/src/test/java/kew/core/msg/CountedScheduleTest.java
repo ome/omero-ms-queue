@@ -64,5 +64,11 @@ public class CountedScheduleTest {
         CountedSchedule cs2 = new CountedSchedule(when, PositiveN.of(2));
         assertTrue(cs1.equals(cs2));
     }
+
+    @Test
+    public void equalsReturnsTrueIfSameReference() {
+        CountedSchedule cs = CountedSchedule.first();
+        assertTrue(cs.equals(cs));
+    }
     
 }

@@ -15,7 +15,7 @@ public class CountedScheduleSinkTest
         implements MessageSink<CountedSchedule, String> {
 
     private ChannelMessage<CountedSchedule, String> consumerMsg;
-    private String dataToReceive = "data";
+    private final String dataToReceive = "data";
 
     @Override
     public void consume(ChannelMessage<CountedSchedule, String> msg) {

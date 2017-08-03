@@ -1,10 +1,13 @@
 package kew.core.qchan.impl;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import static kew.core.msg.ChannelMessage.message;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import kew.core.qchan.spi.QConsumer;
 import org.junit.Test;
 
 import kew.core.msg.ChannelMessage;
@@ -22,18 +25,54 @@ public class DequeueTaskTest extends BaseReceiveTest {
         return new DequeueTask<>(qConnector, this, this, redeliverOnCrash);
     }
 
+    private void assertReceive() throws Exception {
+        try {
+            newTarget().consume(newMessage());
+            if (simulateConsumerCrash != null) {
+                fail("consumer should've crashed!");
+            }
+        } catch (RuntimeException e) {
+            assertThat(e, is(simulateConsumerCrash));
+        }
+        assertHasReceivedMessage();
+    }
+
     @Test
     public void receiveMessageWithRedeliveryOnCrash() throws Exception {
         redeliverOnCrash = true;
-        newTarget().consume(newMessage());
-        assertHasReceivedMessage();
+        simulateConsumerCrash = null;
+        assertReceive();
     }
 
     @Test
     public void receiveMessageWithoutRedeliveryOnCrash() throws Exception {
         redeliverOnCrash = false;
-        newTarget().consume(newMessage());
-        assertHasReceivedMessage();
+        simulateConsumerCrash = null;
+        assertReceive();
+    }
+
+    @Test
+    public void receiveMessageWithRedeliveryOnCrashAndMakeConsumerCrash()
+            throws Exception {
+        redeliverOnCrash = true;
+        simulateConsumerCrash = new RuntimeException();
+        assertReceive();
+    }
+
+    @Test
+    public void receiveMessageWithoutRedeliveryOnCrashAndMakeConsumerCrash()
+            throws Exception {
+        redeliverOnCrash = false;
+        simulateConsumerCrash = new RuntimeException();
+        assertReceive();
+    }
+
+    @Test
+    public void keepReferenceToQConsumer() throws Exception {
+        QConsumer<TestQMsg> actual = newTarget().receiver();
+
+        assertNotNull(actual);
+        assertThat(actual, is(qConsumer));
     }
 
     @Test (expected = NullPointerException.class)

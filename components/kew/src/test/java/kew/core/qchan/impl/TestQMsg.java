@@ -13,8 +13,8 @@ import java.util.Optional;
 public class TestQMsg implements HasProps, HasReceiptAck, HasSchedule {
 
     public FutureTimepoint schedule;
-    public Map<String, String> stringProps;
-    public Map<String, Long> longProps;
+    public final Map<String, String> stringProps;
+    public final Map<String, Long> longProps;
     public QMessageType type;
     public Boolean removedFromQueue;
 

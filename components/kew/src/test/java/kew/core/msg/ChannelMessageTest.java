@@ -62,5 +62,27 @@ public class ChannelMessageTest {
         m2 = new ChannelMessage<>(0);
         assertTrue(m1.equals(m2));
     }
-    
+
+    @Test
+    public void equalsReturnsTrueIfSameReference() {
+        ChannelMessage<String, Integer> m = new ChannelMessage<>("", 0);
+        assertTrue(m.equals(m));
+    }
+
+    @Test
+    public void equalValuesHaveSameHash() {
+        ChannelMessage<String, Integer> m1 = new ChannelMessage<>("x", 1);
+        ChannelMessage<String, Integer> m2 = new ChannelMessage<>("x", 1);
+
+        assertEquals(m1.hashCode(), m2.hashCode());
+    }
+
+    @Test
+    public void differentValuesHaveDifferentHash() {
+        ChannelMessage<String, Integer> m1 = new ChannelMessage<>("m1", 1);
+        ChannelMessage<String, Integer> m2 = new ChannelMessage<>("m2", 1);
+
+        assertNotEquals(m1.hashCode(), m2.hashCode());
+    }
+
 }

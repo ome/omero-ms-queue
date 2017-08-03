@@ -46,4 +46,9 @@ public class MetaPropsTest {
         assertThat(actual.get(), is(PositiveN.of(count)));
     }
 
+    @Test
+    public void ctor() {
+        new MetaProps();  // just to make coverage 100%...
+    }
+
 }
