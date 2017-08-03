@@ -42,15 +42,5 @@ public class ScheduleTaskTest extends BaseSendTest {
                 eq(expectedSchedule));
         verify(producer).send(msgToQueue);
     }
-    
-    @Test (expected = NullPointerException.class)
-    public void throwIfCtorArg1Null() {
-        new ScheduleTask<>(null, (v, s) -> {});
-    }
-
-    @Test (expected = NullPointerException.class)
-    public void throwIfCtorArg2Null() throws Exception {
-        new ScheduleTask<>(connector.newProducer(), null);
-    }
 
 }

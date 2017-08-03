@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import ome.smuggler.config.items.ImportQConfig;
 import kew.core.msg.ChannelMessage;
-import kew.core.msg.ChannelSink;
 import kew.core.msg.MessageSink;
 
 import java.io.InputStream;
@@ -71,49 +70,6 @@ public class DequeueTaskTest implements MessageSink<ArtemisMessage, String> {
         
         assertThat(receivedMsg.message(), is(qMsg));
         assertThat(receivedData, is(msgData));
-    }
-    
-    @Test (expected = NullPointerException.class)
-    public void ctor1ThrowsIfArg1Null() throws Exception {
-        new DequeueTask<>(null, (ChannelSink<String>) d -> {},
-                          deserializer(""), true);
-    }
-    
-    @Test (expected = NullPointerException.class)
-    @SuppressWarnings("unchecked")
-    public void ctor1ThrowsIfArg2Null() throws Exception {
-        new DequeueTask<>(mock(QConnector.class),
-                          (ChannelSink<String>)null, deserializer(""), true);
-    }
-
-    @Test (expected = NullPointerException.class)
-    @SuppressWarnings("unchecked")
-    public void ctor1ThrowsIfArg4Null() throws Exception {
-        new DequeueTask<>(mock(QConnector.class),
-                          (ChannelSink<String>) d -> {}, null, true);
-    }
-
-    @Test (expected = NullPointerException.class)
-    public void ctor2ThrowsIfArg1Null() throws Exception {
-        new DequeueTask<>(null, (MessageSink<ArtemisMessage, String>) msg -> {},
-                          deserializer(""), true);
-    }
-    
-    @Test (expected = NullPointerException.class)
-    @SuppressWarnings("unchecked")
-    public void ctor2ThrowsIfArg2Null() throws Exception {
-        new DequeueTask<>(mock(QConnector.class),
-                          (MessageSink<ArtemisMessage, String>)null,
-                          deserializer(""), true);
-    }
-
-    @Test (expected = NullPointerException.class)
-    @SuppressWarnings("unchecked")
-    public void ctor2ThrowsIfArg4Null() throws Exception {
-        new DequeueTask<>(mock(QConnector.class),
-                (MessageSink<ArtemisMessage, String>) msg -> {},
-                (SourceReader<InputStream, String>) null,
-                true);
     }
 
 }

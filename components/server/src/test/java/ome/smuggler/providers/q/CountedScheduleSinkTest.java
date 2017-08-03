@@ -80,9 +80,4 @@ public class CountedScheduleSinkTest implements MessageSink<CountedSchedule, Lon
         target.consume(newQueuedMsg(0L));
     }
     
-    @Test (expected = NullPointerException.class)
-    public void ctorThrowsIfNullArg() {
-        new CountedScheduleSink<>(null);
-    }
-    
 }

@@ -51,15 +51,5 @@ public class CountedScheduleTaskTest extends BaseSendTest {
                 eq(expectedCount));
         verify(producer).send(msgToQueue);
     }
-    
-    @Test (expected = NullPointerException.class)
-    public void throwIfCtorArg1Null() {
-        new CountedScheduleTask<>(null, (v, s) -> {});
-    }
-
-    @Test (expected = NullPointerException.class)
-    public void throwIfCtorArg2Null() throws Exception {
-        new CountedScheduleTask<>(connector.newProducer(), null);
-    }
 
 }
