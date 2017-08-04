@@ -1,7 +1,7 @@
-package ome.smuggler.providers.q;
+package kew.providers.artemis;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.providers.q.MessageBodyReader.readBody;
+import static kew.providers.artemis.MessageBodyReader.readBody;
 
 import java.io.InputStream;
 

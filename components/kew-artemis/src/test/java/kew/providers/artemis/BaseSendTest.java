@@ -1,16 +1,16 @@
-package ome.smuggler.providers.q;
+package kew.providers.artemis;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import kew.core.qchan.spi.QConnector;
 import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientProducer;
 import org.apache.activemq.artemis.api.core.client.ClientSession;
+import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 
-import ome.smuggler.config.items.ImportQConfig;
+import kew.core.qchan.spi.QConnector;
 
 public class BaseSendTest {
 
@@ -20,7 +20,7 @@ public class BaseSendTest {
     protected QConnector<ArtemisMessage> connector;
     
     protected void initMocks() throws ActiveMQException {
-        ImportQConfig q = new ImportQConfig();
+        CoreQueueConfiguration q = new CoreQueueConfiguration();
         q.setName("q");
         ClientSession sesh = mock(ClientSession.class);
         

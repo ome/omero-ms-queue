@@ -11,6 +11,9 @@ import kew.core.msg.ChannelSource;
 import kew.core.msg.MessageSink;
 import kew.core.msg.Reschedulable;
 import kew.core.msg.ReschedulableFactory;
+import kew.providers.artemis.ArtemisMessage;
+import kew.providers.artemis.ArtemisQChannelFactory;
+import kew.providers.artemis.ServerConnector;
 
 import ome.smuggler.config.wiring.crypto.SerializationFactory;
 import ome.smuggler.config.items.ImportQConfig;
@@ -18,9 +21,6 @@ import ome.smuggler.core.service.imports.FailedImportHandler;
 import ome.smuggler.core.service.imports.ImportProcessor;
 import ome.smuggler.core.types.ImportConfigSource;
 import ome.smuggler.core.types.QueuedImport;
-import ome.smuggler.providers.q.ArtemisMessage;
-import ome.smuggler.providers.q.ArtemisQChannelFactory;
-import ome.smuggler.providers.q.ServerConnector;
 
 /**
  * Singleton beans for Artemis client resources that have to be shared and

@@ -3,7 +3,6 @@ package ome.smuggler.config.wiring.mail;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import ome.smuggler.providers.q.ArtemisQChannelFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +11,9 @@ import kew.core.msg.ChannelSource;
 import kew.core.msg.MessageSink;
 import kew.core.msg.Reschedulable;
 import kew.core.msg.ReschedulableFactory;
+import kew.providers.artemis.ArtemisMessage;
+import kew.providers.artemis.ArtemisQChannelFactory;
+import kew.providers.artemis.ServerConnector;
 import util.io.SinkWriter;
 import util.io.SourceReader;
 
@@ -22,9 +24,6 @@ import ome.smuggler.core.types.MailConfigSource;
 import ome.smuggler.core.types.QueuedMail;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
-import ome.smuggler.providers.q.ArtemisMessage;
-import ome.smuggler.providers.q.ServerConnector;
-
 
 /**
  * Singleton beans for Artemis client resources that have to be shared and

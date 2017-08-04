@@ -8,7 +8,7 @@ apply plugin: 'jacoco'
 
 
 dependencies {
-    compile project(":kew"), project(":util")
+    compile project(":kew-artemis"), project(":util")
 
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")

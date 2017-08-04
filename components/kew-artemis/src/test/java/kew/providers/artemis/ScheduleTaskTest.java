@@ -1,4 +1,4 @@
-package ome.smuggler.providers.q;
+package kew.providers.artemis;
 
 import static org.mockito.Mockito.*;
 import static kew.core.msg.ChannelMessage.message;

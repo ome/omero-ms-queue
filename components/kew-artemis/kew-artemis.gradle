@@ -6,6 +6,11 @@ apply plugin: 'jacoco'
 
 
 dependencies {
+    compile project(":kew"), project(":util")
+
+    compile("org.apache.activemq:artemis-server:1.5.5")
+    compile("org.apache.activemq:artemis-core-client:1.5.5")
+
     testCompile libset.test_base
 }
 

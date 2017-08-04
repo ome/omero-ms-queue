@@ -1,8 +1,8 @@
-package ome.smuggler.providers.q;
+package kew.providers.artemis;
 
 import static org.mockito.Mockito.*;
-import static ome.smuggler.providers.q.MessageBodyReader.readBody;
-import static ome.smuggler.providers.q.MessageBodyWriter.writeBody;
+import static kew.providers.artemis.MessageBodyReader.readBody;
+import static kew.providers.artemis.MessageBodyWriter.writeBody;
 
 import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;

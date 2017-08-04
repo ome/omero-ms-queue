@@ -1,4 +1,4 @@
-package ome.smuggler.providers.q;
+package kew.providers.artemis;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -11,9 +11,9 @@ import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
 import org.apache.activemq.artemis.api.core.client.ClientConsumer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientSession;
+import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 import org.junit.Test;
 
-import ome.smuggler.config.items.ImportQConfig;
 import kew.core.msg.ChannelMessage;
 import kew.core.msg.MessageSink;
 
@@ -30,7 +30,7 @@ public class DequeueTaskTest implements MessageSink<ArtemisMessage, String> {
     
     private DequeueTask<ArtemisMessage, String> newTask(String sentData)
             throws Exception {
-        ImportQConfig q = new ImportQConfig();
+        CoreQueueConfiguration q = new CoreQueueConfiguration();
         q.setName("q");
         ClientSession sesh = mock(ClientSession.class);
         ClientConsumer receiver = mock(ClientConsumer.class);
