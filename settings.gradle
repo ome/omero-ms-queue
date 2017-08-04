@@ -6,7 +6,7 @@
  */
 rootProject.name = 'ome-smuggler'
 
-include 'cli', 'jclient', 'kew', 'packager', 'server', 'util'
+include 'cli', 'jclient', 'kew', 'kew-artemis', 'packager', 'server', 'util'
 
 rootProject.children.each { project ->
     String fileBaseName = project.name.replaceAll("\\p{Upper}") { "-${it.toLowerCase()}" }
