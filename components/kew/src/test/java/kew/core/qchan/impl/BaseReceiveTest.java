@@ -23,7 +23,7 @@ public class BaseReceiveTest
     protected QConsumer<TestQMsg> qConsumer;
     protected ChannelMessage<TestQMsg, String> receivedMsg;
     protected String dataToReceive;
-    protected boolean redeliverOnCrash;
+    protected boolean redeliverOnRecovery;
     protected RuntimeException simulateConsumerCrash;
 
     @Before
@@ -48,7 +48,7 @@ public class BaseReceiveTest
     public void consume(ChannelMessage<TestQMsg, String> msg) {
         receivedMsg = msg;
         TestQMsg meta = receivedMetadata();
-        if (redeliverOnCrash) {
+        if (redeliverOnRecovery) {
             assertNull(meta.removedFromQueue);
         } else {
             assertNotNull(meta.removedFromQueue);

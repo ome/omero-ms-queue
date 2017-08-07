@@ -22,7 +22,7 @@ public class DequeueTaskTest extends BaseReceiveTest {
     }
 
     private DequeueTask<TestQMsg, String> newTarget() throws Exception {
-        return new DequeueTask<>(qConnector, this, this, redeliverOnCrash);
+        return new DequeueTask<>(qConnector, this, this, redeliverOnRecovery);
     }
 
     private void assertReceive() throws Exception {
@@ -38,31 +38,31 @@ public class DequeueTaskTest extends BaseReceiveTest {
     }
 
     @Test
-    public void receiveMessageWithRedeliveryOnCrash() throws Exception {
-        redeliverOnCrash = true;
+    public void receiveMessageWithRedeliveryOnRecovery() throws Exception {
+        redeliverOnRecovery = true;
         simulateConsumerCrash = null;
         assertReceive();
     }
 
     @Test
-    public void receiveMessageWithoutRedeliveryOnCrash() throws Exception {
-        redeliverOnCrash = false;
+    public void receiveMessageWithoutRedeliveryOnRecovery() throws Exception {
+        redeliverOnRecovery = false;
         simulateConsumerCrash = null;
         assertReceive();
     }
 
     @Test
-    public void receiveMessageWithRedeliveryOnCrashAndMakeConsumerCrash()
+    public void receiveMessageWithRedeliveryOnRecoveryAndMakeConsumerCrash()
             throws Exception {
-        redeliverOnCrash = true;
+        redeliverOnRecovery = true;
         simulateConsumerCrash = new RuntimeException();
         assertReceive();
     }
 
     @Test
-    public void receiveMessageWithoutRedeliveryOnCrashAndMakeConsumerCrash()
+    public void receiveMessageWithoutRedeliveryOnRecoveryAndMakeConsumerCrash()
             throws Exception {
-        redeliverOnCrash = false;
+        redeliverOnRecovery = false;
         simulateConsumerCrash = new RuntimeException();
         assertReceive();
     }

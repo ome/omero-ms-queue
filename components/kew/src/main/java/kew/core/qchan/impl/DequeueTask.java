@@ -25,7 +25,7 @@ public class DequeueTask<QM extends HasReceiptAck, T>
     
     private final QConsumer<QM> receiver;  // keep ref to avoid GC nuking it.
     private final MessageSink<QM, T> sink;
-    private final boolean redeliverOnCrash;
+    private final boolean redeliverOnRecovery;
     private final SourceReader<InputStream, T> deserializer;
     
     /**
@@ -33,7 +33,7 @@ public class DequeueTask<QM extends HasReceiptAck, T>
      * @param queue provides access to the queue from which to fetch messages.
      * @param consumer consumes message data fetched from the queue.
      * @param deserializer de-serialises the message data, a {@code T}-value.
-     * @param redeliverOnCrash if {@code true} and the process terminates 
+     * @param redeliverOnRecovery if {@code true} and the process terminates
      * abnormally (e.g. segfault, power failure) while the consumer is busy 
      * processing a message, the message will be delivered again once the
      * process is rebooted. If {@code false}, a message will only ever be 
@@ -45,17 +45,17 @@ public class DequeueTask<QM extends HasReceiptAck, T>
     public DequeueTask(QConnector<QM> queue,
                        ChannelSink<T> consumer,
                        SourceReader<InputStream, T> deserializer,
-                       boolean redeliverOnCrash)
+                       boolean redeliverOnRecovery)
             throws Exception {
         this(queue, MessageSink.forwardDataTo(consumer), deserializer,
-             redeliverOnCrash);
+             redeliverOnRecovery);
     }
     
     /**
      * Creates a new instance.
      * @param queue provides access to the queue from which to fetch messages.
      * @param consumer consumes message data and metadata fetched from the queue.
-     * @param redeliverOnCrash if {@code true} and the process terminates 
+     * @param redeliverOnRecovery if {@code true} and the process terminates
      * abnormally (e.g. segfault, power failure) while the consumer is busy 
      * processing a message, the message will be delivered again once the
      * process is rebooted. If {@code false}, a message will only ever be 
@@ -68,7 +68,7 @@ public class DequeueTask<QM extends HasReceiptAck, T>
     public DequeueTask(QConnector<QM> queue,
                        MessageSink<QM, T> consumer,
                        SourceReader<InputStream, T> deserializer,
-                       boolean redeliverOnCrash)
+                       boolean redeliverOnRecovery)
             throws Exception {
         requireNonNull(queue, "queue");
         requireNonNull(consumer, "consumer");
@@ -76,7 +76,7 @@ public class DequeueTask<QM extends HasReceiptAck, T>
 
         this.sink = consumer;
         this.receiver = queue.newConsumer(this::handleMessage);
-        this.redeliverOnCrash = redeliverOnCrash;
+        this.redeliverOnRecovery = redeliverOnRecovery;
         this.deserializer = deserializer;
     }
     
@@ -109,7 +109,7 @@ public class DequeueTask<QM extends HasReceiptAck, T>
 
     private void handleMessage(QM msg, InputStream body) {
         T messageData = deserializer.uncheckedRead(body);
-        if (redeliverOnCrash) {
+        if (redeliverOnRecovery) {
             consumeThenRemove(msg, messageData);
         } else {
             removeThenConsume(msg, messageData);

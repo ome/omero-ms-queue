@@ -95,7 +95,7 @@ public interface QChannelFactory
      * queue.
      * @param consumer consumes the message data.
      * @param deserializer de-serialises the message data, a {@code T}-value.
-     * @param redeliverOnCrash if {@code true} and the process terminates
+     * @param redeliverOnRecovery if {@code true} and the process terminates
      * abnormally (e.g. segfault, power failure) while the consumer is busy
      * processing a message, the message will be delivered again once the
      * process is rebooted. If {@code false}, a message will only ever be
@@ -108,10 +108,10 @@ public interface QChannelFactory
     default MessageSink<QM, InputStream> buildSink(
             ChannelSink<T> consumer,
             SourceReader<InputStream, T> deserializer,
-            boolean redeliverOnCrash)
+            boolean redeliverOnRecovery)
             throws Exception {
         return new DequeueTask<>(queue(), consumer, deserializer,
-                                 redeliverOnCrash);
+                                 redeliverOnRecovery);
     }
 
     /**
@@ -139,7 +139,7 @@ public interface QChannelFactory
      * queue that were sent with {@link CountedSchedule} metadata.
      * @param consumer consumes the message.
      * @param deserializer de-serialises the message data, a {@code T}-value.
-     * @param redeliverOnCrash if {@code true} and the process terminates
+     * @param redeliverOnRecovery if {@code true} and the process terminates
      * abnormally (e.g. segfault, power failure) while the consumer is busy
      * processing a message, the message will be delivered again once the
      * process is rebooted. If {@code false}, a message will only ever be
@@ -152,11 +152,11 @@ public interface QChannelFactory
     default MessageSink<QM, InputStream> buildCountedScheduleSink(
             MessageSink<CountedSchedule, T> consumer,
             SourceReader<InputStream, T> deserializer,
-            boolean redeliverOnCrash)
+            boolean redeliverOnRecovery)
             throws Exception {
         CountedScheduleSink<QM, T> sink =
                 new CountedScheduleSink<>(consumer);
-        return new DequeueTask<>(queue(), sink, deserializer, redeliverOnCrash);
+        return new DequeueTask<>(queue(), sink, deserializer, redeliverOnRecovery);
     }
 
     /**
@@ -187,7 +187,7 @@ public interface QChannelFactory
      * @param consumer consumes the message and optionally sends a new one.
      * @param serializer serialises the message data, a {@code T}-value.
      * @param deserializer de-serialises the message data, a {@code T}-value.
-     * @param redeliverOnCrash if {@code true} and the process terminates
+     * @param redeliverOnRecovery if {@code true} and the process terminates
      * abnormally (e.g. segfault, power failure) while the consumer is busy
      * processing a message, the message will be delivered again once the
      * process is rebooted. If {@code false}, a message will only ever be
@@ -201,12 +201,12 @@ public interface QChannelFactory
             Reschedulable<T> consumer,
             SinkWriter<T, OutputStream> serializer,
             SourceReader<InputStream, T> deserializer,
-            boolean redeliverOnCrash)
+            boolean redeliverOnRecovery)
             throws Exception {
         MessageSource<CountedSchedule, T> loopback =
                 buildCountedScheduleSource(serializer);
         ReschedulingSink<T> sink = new ReschedulingSink<>(consumer, loopback);
-        return buildCountedScheduleSink(sink, deserializer, redeliverOnCrash);
+        return buildCountedScheduleSink(sink, deserializer, redeliverOnRecovery);
     }
 
 }
