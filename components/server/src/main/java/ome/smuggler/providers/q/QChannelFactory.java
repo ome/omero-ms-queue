@@ -10,8 +10,6 @@ import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 
-import ome.smuggler.core.convert.SinkWriter;
-import ome.smuggler.core.convert.SourceReader;
 import ome.smuggler.core.msg.ChannelSink;
 import ome.smuggler.core.msg.ChannelSource;
 import ome.smuggler.core.msg.CountedSchedule;
@@ -20,7 +18,8 @@ import ome.smuggler.core.msg.MessageSource;
 import ome.smuggler.core.msg.Reschedulable;
 import ome.smuggler.core.msg.ReschedulingSink;
 import ome.smuggler.core.msg.SchedulingSource;
-
+import util.io.SinkWriter;
+import util.io.SourceReader;
 
 public class QChannelFactory<T> {
 

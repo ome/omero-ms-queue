@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.google.gson.reflect.TypeToken;
 
-import ome.smuggler.core.types.Email;
+import util.types.Email;
 import ome.smuggler.core.types.PlainTextMail;
 
 public class PlainTextMailTest extends JsonWriteReadTest {

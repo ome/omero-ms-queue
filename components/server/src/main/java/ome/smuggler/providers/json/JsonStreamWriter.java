@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.io.Writer;
 import java.util.function.Function;
 
-import ome.smuggler.core.convert.SinkWriter;
+import util.io.SinkWriter;
 
 
 /**

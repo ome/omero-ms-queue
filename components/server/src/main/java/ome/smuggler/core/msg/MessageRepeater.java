@@ -9,8 +9,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import ome.smuggler.core.types.FutureTimepoint;
-import ome.smuggler.core.types.Schedule;
+import util.types.FutureTimepoint;
+import util.types.Schedule;
 
 /**
  * Plugs into a {@link ReschedulingSink} to deliver the same message to sink's

@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 
-import ome.smuggler.core.convert.SinkWriter;
+import util.io.SinkWriter;
 
 /**
  * Serializes an object into JSON and writes the serialized data to a sink.

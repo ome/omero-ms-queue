@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assume.*;
 import static ome.smuggler.core.msg.RepeatAction.Repeat;
 import static ome.smuggler.core.msg.RepeatAction.Stop;
-import static ome.smuggler.core.types.FutureTimepoint.now;
+import static util.types.FutureTimepoint.now;
 import static util.sequence.Arrayz.array;
 import static util.sequence.Arrayz.asStream;
 
@@ -20,9 +20,9 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import ome.smuggler.core.types.FutureTimepoint;
-import ome.smuggler.core.types.PositiveN;
-import ome.smuggler.core.types.Schedule;
+import util.types.FutureTimepoint;
+import util.types.PositiveN;
+import util.types.Schedule;
 
 @RunWith(Theories.class)
 public class MessageRepeaterTest {

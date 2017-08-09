@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 import ome.smuggler.config.BaseDataDir;
-import ome.smuggler.core.types.Email;
 import ome.smuggler.core.types.MailConfigSource;
 import ome.smuggler.core.types.MailProtocol;
+import util.types.Email;
 
 /**
  * Dev mail settings.

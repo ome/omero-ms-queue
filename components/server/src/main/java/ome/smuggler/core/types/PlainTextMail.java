@@ -5,6 +5,8 @@ import static util.string.Strings.requireString;
 
 import java.util.Objects;
 
+import util.types.Email;
+
 /**
  * A plain text email message.
  */

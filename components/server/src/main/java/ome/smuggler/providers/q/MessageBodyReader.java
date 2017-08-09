@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 
-import ome.smuggler.core.convert.SourceReader;
+import util.io.SourceReader;
 
 
 /**

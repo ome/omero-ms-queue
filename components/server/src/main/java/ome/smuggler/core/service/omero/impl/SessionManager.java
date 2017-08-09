@@ -7,9 +7,8 @@ import java.time.Duration;
 import java.util.Optional;
 
 import ome.smuggler.core.service.omero.SessionService;
-import ome.smuggler.core.types.FutureTimepoint;
 import ome.smuggler.core.types.QueuedOmeroKeepAlive;
-
+import util.types.FutureTimepoint;
 
 /**
  * Implements the {@link SessionService}.

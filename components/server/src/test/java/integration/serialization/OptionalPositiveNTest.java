@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 import java.util.Optional;
 
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 
 import org.junit.Test;
 

@@ -10,10 +10,10 @@ import java.io.OutputStream;
 
 import org.apache.activemq.artemis.api.core.ActiveMQException;
 
-import ome.smuggler.core.convert.SinkWriter;
 import ome.smuggler.core.msg.ChannelMessage;
 import ome.smuggler.core.msg.CountedSchedule;
 import ome.smuggler.core.msg.MessageSource;
+import util.io.SinkWriter;
 
 /**
  * Enqueues a message that will only be delivered to consumers at a specified

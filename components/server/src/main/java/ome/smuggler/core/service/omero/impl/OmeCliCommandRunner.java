@@ -1,16 +1,16 @@
 package ome.smuggler.core.service.omero.impl;
 
-import ome.smuggler.core.io.CommandRunner;
-import ome.smuggler.core.io.StreamOps;
-import util.lambda.FunctionE;
-import util.object.Pair;
+import static java.util.Objects.requireNonNull;
+import static util.object.Pair.pair;
 
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static util.object.Pair.pair;
-import static java.util.Objects.requireNonNull;
+import util.io.StreamOps;
+import util.lambda.FunctionE;
+import util.object.Pair;
+import util.runtime.CommandRunner;
 
 /**
  * Spawns a separate JVM process to run an OME CLI command.

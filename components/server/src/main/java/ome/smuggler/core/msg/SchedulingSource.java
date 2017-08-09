@@ -1,6 +1,6 @@
 package ome.smuggler.core.msg;
 
-import ome.smuggler.core.types.FutureTimepoint;
+import util.types.FutureTimepoint;
 
 /**
  * A channel source that allows the scheduling of messages to send. 

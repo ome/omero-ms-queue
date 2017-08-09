@@ -11,7 +11,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.Primitives;
 import com.google.gson.reflect.TypeToken;
 
-import ome.smuggler.core.convert.SourceReader;
+import util.io.SourceReader;
 
 /**
  * Parses an object in JSON serialized form as found in a given data source.

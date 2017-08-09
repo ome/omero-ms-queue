@@ -17,42 +17,42 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
 import ome.smuggler.core.service.file.KeyValueStore;
-import ome.smuggler.core.types.BaseStringId;
-import ome.smuggler.core.types.PositiveN;
+import util.types.UuidString;
+import util.types.PositiveN;
 
 
 @RunWith(Theories.class)
 public class TSafeKeyValueStoreTest {
 
-    interface TestStore extends KeyValueStore<BaseStringId, Integer> {}
+    interface TestStore extends KeyValueStore<UuidString, Integer> {}
 
     @DataPoints
     public static Integer[] stripeSupply = array(1, 2, 3);
 
     @DataPoints
-    public static BaseStringId[] keySupply =
-            Stream.generate(BaseStringId::new)
+    public static UuidString[] keySupply =
+            Stream.generate(UuidString::new)
                   .limit(200)
-                  .toArray(BaseStringId[]::new);
+                  .toArray(UuidString[]::new);
 
     @Theory
-    public void sameKeysShareSameLock(BaseStringId key, Integer stripes) {
-        TSafeKeyValueStore<BaseStringId, Integer> target =
+    public void sameKeysShareSameLock(UuidString key, Integer stripes) {
+        TSafeKeyValueStore<UuidString, Integer> target =
                 new TSafeKeyValueStore<>(mock(TestStore.class),
                                          PositiveN.of(stripes));
-        BaseStringId sameKey = new BaseStringId(key.id());
+        UuidString sameKey = new UuidString(key.id());
         assertThat(target.lookupLock(key), is(target.lookupLock(sameKey)));
     }
 
     @Test
     public void differentKeysMayHaveDifferentLocks() {
         int stripes = 2;
-        TSafeKeyValueStore<BaseStringId, Integer> target =
+        TSafeKeyValueStore<UuidString, Integer> target =
                 new TSafeKeyValueStore<>(mock(TestStore.class),
                                          PositiveN.of(stripes));
         Set<Lock> lookedUpLocks = new HashSet<>();
 
-        for (BaseStringId key : keySupply) {
+        for (UuidString key : keySupply) {
             lookedUpLocks.add(target.lookupLock(key));
         }
         assertThat(lookedUpLocks.size(), is(stripes));
@@ -61,7 +61,7 @@ public class TSafeKeyValueStoreTest {
     @Test
     public void forwardPutCalls() {
         TestStore target = mock(TestStore.class);
-        TSafeKeyValueStore<BaseStringId, Integer> wrapper =
+        TSafeKeyValueStore<UuidString, Integer> wrapper =
                 new TSafeKeyValueStore<>(target, PositiveN.of(1));
 
         wrapper.put(keySupply[0], 1);
@@ -71,7 +71,7 @@ public class TSafeKeyValueStoreTest {
     @Test
     public void forwardModifyCalls() {
         TestStore target = mock(TestStore.class);
-        TSafeKeyValueStore<BaseStringId, Integer> wrapper =
+        TSafeKeyValueStore<UuidString, Integer> wrapper =
                 new TSafeKeyValueStore<>(target, PositiveN.of(1));
 
         Function<Integer, Integer> id = x -> x;
@@ -82,7 +82,7 @@ public class TSafeKeyValueStoreTest {
     @Test
     public void forwardRemoveCalls() {
         TestStore target = mock(TestStore.class);
-        TSafeKeyValueStore<BaseStringId, Integer> wrapper =
+        TSafeKeyValueStore<UuidString, Integer> wrapper =
                 new TSafeKeyValueStore<>(target, PositiveN.of(1));
 
         wrapper.remove(keySupply[0]);

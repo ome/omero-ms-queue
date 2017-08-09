@@ -2,7 +2,7 @@ package ome.smuggler.core.msg;
 
 import java.util.Optional;
 
-import ome.smuggler.core.types.Schedule;
+import util.types.Schedule;
 
 /**
  * A task that consumes a channel sink's output and optionally requests the 

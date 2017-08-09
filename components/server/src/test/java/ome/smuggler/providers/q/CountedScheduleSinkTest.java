@@ -4,7 +4,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static ome.smuggler.core.msg.ChannelMessage.message;
-import static ome.smuggler.core.types.FutureTimepoint.now;
+import static util.types.FutureTimepoint.now;
 
 import java.time.Duration;
 

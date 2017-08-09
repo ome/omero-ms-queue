@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import ome.smuggler.core.types.Schedule;
+import util.types.Schedule;
 
 /**
  * Plugs into a {@link ReschedulingSink} to deliver messages to sink's consumers

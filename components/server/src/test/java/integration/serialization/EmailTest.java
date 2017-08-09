@@ -1,7 +1,7 @@
 package integration.serialization;
 
 import static ome.smuggler.core.types.ValueParserFactory.email;
-import ome.smuggler.core.types.Email;
+import util.types.Email;
 
 import org.junit.Test;
 

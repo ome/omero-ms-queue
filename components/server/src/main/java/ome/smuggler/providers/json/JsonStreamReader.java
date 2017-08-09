@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.io.Reader;
 import java.util.function.Function;
 
-import ome.smuggler.core.convert.SourceReader;
+import util.io.SourceReader;
 
 /**
  * Reads JSON from a stream of type {@code S} and de-serialises it as a

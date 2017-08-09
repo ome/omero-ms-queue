@@ -6,6 +6,7 @@ import java.util.List;
 
 import ome.smuggler.config.items.ImportConfig;
 import util.runtime.CommandBuilder;
+import util.types.PositiveN;
 
 /**
  * Provides read-only, type-safe access to the import configuration.

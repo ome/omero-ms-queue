@@ -1,7 +1,7 @@
 package integration.serialization;
 
 import static ome.smuggler.core.types.ValueParserFactory.positiveInt;
-import ome.smuggler.core.types.PositiveN;
+import util.types.PositiveN;
 
 import org.junit.Test;
 

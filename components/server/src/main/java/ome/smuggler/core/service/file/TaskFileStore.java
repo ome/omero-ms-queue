@@ -7,8 +7,8 @@ import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import ome.smuggler.core.io.StreamFilter;
-import ome.smuggler.core.io.StringFilter;
+import util.io.StreamFilter;
+import util.io.StringFilter;
 import util.lambda.ConsumerE;
 import util.lambda.FunctionE;
 import util.object.Identifiable;

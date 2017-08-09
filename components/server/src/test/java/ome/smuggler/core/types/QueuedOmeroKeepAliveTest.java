@@ -2,9 +2,10 @@ package ome.smuggler.core.types;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static ome.smuggler.core.types.FutureTimepoint.now;
+import static util.types.FutureTimepoint.now;
 
 import org.junit.Test;
+import util.types.FutureTimepoint;
 
 import java.net.URI;
 

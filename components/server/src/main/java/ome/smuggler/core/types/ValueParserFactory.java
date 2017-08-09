@@ -14,6 +14,8 @@ import java.time.Duration;
 import java.util.function.Function;
 
 import util.object.Either;
+import util.types.Email;
+import util.types.PositiveN;
 
 /**
  * Methods to instantiate valid values of a certain type from their string
@@ -54,10 +56,7 @@ public class ValueParserFactory {
      * the value could not be instantiated.
      */
     public static Either<String, Email> email(String value) {
-        return stringParser()
-              .withValidation(Email.validator())
-              .parse(value)
-              .map(Email::new);
+        return Email.from(value);
     }
     
     /**
@@ -67,7 +66,7 @@ public class ValueParserFactory {
      * the value could not be instantiated.
      */
     public static Either<String, PositiveN> positiveInt(String value) {
-        return parsePosInt(value, PositiveN::new);
+        return parsePosInt(value, PositiveN::of);
     }
     
     /**
