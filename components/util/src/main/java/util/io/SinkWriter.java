@@ -21,7 +21,7 @@ public interface SinkWriter<T, S> {
     void write(S sink, T value) throws Exception;
     
     /**
-     * Calls the {@link #write(Object, Object)} write} method converting any
+     * Calls the {@link #write(Object, Object) write} method converting any
      * checked exception into an unchecked one that will bubble up without
      * requiring a {@code throws} clause on this method.
      * @param sink where to write the value to.
