@@ -9,6 +9,9 @@ apply plugin: 'jacoco'
 
 dependencies {
     compile project(":kew-artemis"), project(":util")
+    /* NOTE: the external libs util depends on are exactly the same as
+     * those brought in by the Spring Boot starters below.
+     */
 
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")
