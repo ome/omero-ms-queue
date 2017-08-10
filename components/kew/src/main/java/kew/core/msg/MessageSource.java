@@ -21,7 +21,7 @@ public interface MessageSource<M, D>
      * @return a channel source adapter.
      */
     default ChannelSource<D> asDataSource() {
-        return data -> send(message(data));
+        return new ChannelSourceAdapter<>(this);
     }
     
 }
