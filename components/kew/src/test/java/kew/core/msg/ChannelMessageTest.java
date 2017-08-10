@@ -50,6 +50,10 @@ public class ChannelMessageTest {
         ChannelMessage<String, Integer> m1 = new ChannelMessage<>(0);
         ChannelMessage<String, Integer> m2 = new ChannelMessage<>("", 0);
         assertFalse(m1.equals(m2));
+
+        m1 = new ChannelMessage<>("", 0);
+        m2 = new ChannelMessage<>("", 1);
+        assertFalse(m1.equals(m2));
     }
     
     @Test
