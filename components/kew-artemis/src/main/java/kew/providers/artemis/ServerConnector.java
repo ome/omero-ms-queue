@@ -7,10 +7,12 @@ import org.apache.activemq.artemis.api.core.client.ClientSession;
 import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
 import org.apache.activemq.artemis.api.core.client.ServerLocator;
 
+import util.io.Disconnectable;
+
 /**
  * Establishes a connection and client session with the Artemis server.
  */
-public class ServerConnector {
+public class ServerConnector implements Disconnectable {
 
     private static ClientSession startSession(ClientSessionFactory csf) 
             throws ActiveMQException {
@@ -60,5 +62,16 @@ public class ServerConnector {
     public ClientSession getSession() {
         return session;
     }
-    
+
+    /**
+     * Closes the current session with the Artemis server.
+     * After calling this method any consumers and producers attached to this
+     * session won't be usable.
+     * @throws Exception if an error occurs.
+     */
+    @Override
+    public void close() throws Exception {
+        session.close();
+    }
+
 }
