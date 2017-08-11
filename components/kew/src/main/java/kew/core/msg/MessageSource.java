@@ -1,5 +1,7 @@
 package kew.core.msg;
 
+import static kew.core.msg.ChannelMessage.message;
+
 /**
  * Encapsulates the sending of an asynchronous message along a channel that
  * supports metadata.
@@ -19,7 +21,7 @@ public interface MessageSource<M, D>
      * @return a channel source adapter.
      */
     default ChannelSource<D> asDataSource() {
-        return new ChannelSourceAdapter<>(this);
+        return data -> send(message(data));
     }
     
 }

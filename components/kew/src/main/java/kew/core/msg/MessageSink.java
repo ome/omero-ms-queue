@@ -1,6 +1,7 @@
 package kew.core.msg;
 
 import static java.util.Objects.requireNonNull;
+import static kew.core.msg.ChannelMessage.message;
 
 /**
  * Encapsulates the consumption of an asynchronous message received from a 
@@ -31,7 +32,7 @@ public interface MessageSink<M, D> extends ChannelSink<ChannelMessage<M, D>> {
      * @return a channel sink adapter.
      */
     default ChannelSink<D> asDataSink() {
-        return new ChannelSinkAdapter<>(this);
+        return data -> consume(message(data));
     }
     
 }
