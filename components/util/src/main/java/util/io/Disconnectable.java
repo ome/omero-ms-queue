@@ -1,4 +1,4 @@
-package kew.core.qchan.spi;
+package util.io;
 
 import static util.error.Exceptions.unchecked;
 
