@@ -56,5 +56,47 @@ public class ScheduleTask<QM extends HasSchedule, T>
         FutureTimepoint when = msg.metadata().orElse(now());
         channel.send(message(messageBuilder(when), msg.data()));
     }
-    
+
 }
+/* NOTE. Design debt.
+ * If we had composable channel sources, then we wouldn't need to have this
+ * class keep a reference to the underlying channel to forward method calls.
+ * Notes to self follow, just in case one day I'll find the time to do it.
+ * ChannelSource could be a contravariant functor CS from types to effectful
+ * computations (a Kleisli category for some monad E)
+ *
+ *         x                   x → ()      more accurately: x → E ()
+ *                  CS                     but Java being Java we can pretend
+ *       f ↓   ------------->    ↑         there's no E...
+ *
+ *         y                   y → ()
+ *
+ * The basic idea is that if you can send y-data and can transform x's into
+ * y's then you can also send x-data. The arrow map of CS could be implemented
+ * by a helper class ChannelSourceTransformer similar to this one:
+ *
+ * - https://github.com/c0c0n3/omero-ms-queue/commit/9904d437361fbe9f05fb2ae5a8041133d45f294e
+ *
+ * Then it's just a matter of adding a convenience method to ChannelSource to
+ * compute: (CS f) (CS y)
+ * Now ScheduleTask becomes just a function:
+ *
+ *   ChannelMessage<FutureTimepoint, T>  →  ChannelMessage<QMsgBuilder<QM>, T>
+ *
+ *         FutureTimepoint when = msg.metadata().orElse(now());
+ *         return message(messageBuilder(when), msg.data());
+ *
+ *
+ * and we can replace the rest of the functionality currently sitting here
+ * in ScheduleTask with:
+ *
+ *     enqueueTask.m(scheduleFunction)
+ *
+ * where m is the convenience composition method of ChannelSource.
+ * For this to work smoothly, we'll have to get rid of the MessageSource
+ * interface though cos it's gonna break composability. There's no loss of
+ * functionality cos MessageSource is only meant to be a type alias to
+ * improve readability. But Java doesn't have proper type aliases (never
+ * mind readability!) so I don't think there's any easy way of implementing
+ * composability of sources while still keeping the message source alias.
+ */

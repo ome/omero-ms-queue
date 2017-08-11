@@ -53,3 +53,6 @@ public class CountedScheduleTask<QM extends HasSchedule & HasProps, T>
     }
 
 }
+/* NOTE. Design debt.
+ * Same considerations as note in ScheduleTask.
+ */
