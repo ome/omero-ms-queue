@@ -136,6 +136,40 @@ public class Exceptions {
     }
 
     /**
+     * Runs the given action and catches any throwable.
+     * @param target the action to run.
+     * @return any throwable raised while running the action or empty if no
+     * throwable was raised.
+     * @throws NullPointerException if the argument is {@code null}.
+     */
+    public static Optional<Throwable> runAndCatchAny(ActionE target) {
+        requireNonNull(target, "target");
+        try {
+            target.run();
+            return Optional.empty();
+        } catch (Throwable t) {
+            return Optional.of(t);
+        }
+    }
+
+    /**
+     * Runs the given action and catches any thrown exception.
+     * @param target the action to run.
+     * @return any exception raised while running the action or empty if no
+     * exception was raised.
+     * @throws NullPointerException if the argument is {@code null}.
+     */
+    public static Optional<Exception> runAndCatchE(ActionE target) {
+        requireNonNull(target, "target");
+        try {
+            target.run();
+            return Optional.empty();
+        } catch (Exception t) {
+            return Optional.of(t);
+        }
+    }
+
+    /**
      * Runs each action and catches any thrown exception.
      * Exceptions are collected in the returned array {@code r} in the same
      * order in which actions {@code xs} are passed in to this method, i.e.
@@ -154,14 +188,7 @@ public class Exceptions {
             throw new NullPointerException("null action(s)");
         }
         return Stream.of(xs)
-                     .map(x -> {
-                         try {
-                             x.run();
-                             return Optional.empty();
-                         } catch (Throwable t) {
-                             return Optional.of(t);
-                         }
-                     })
+                     .map(Exceptions::runAndCatchAny)
                      .toArray(Optional[]::new);
     }
 

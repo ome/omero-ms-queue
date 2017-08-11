@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Optional;
+
 public class DisconnectableTest {
 
     static class Resource implements Disconnectable {
@@ -56,6 +58,27 @@ public class DisconnectableTest {
         Resource r = new Resource();
         r.disconnect();
 
+        assertTrue(Resource.hasCalledClose);
+    }
+
+    @Test
+    public void disconnectWithoutException() {
+        Optional<Exception> actual = Disconnectable.disconnect(new Resource());
+
+        assertNotNull(actual);
+        assertFalse(actual.isPresent());
+        assertTrue(Resource.hasCalledClose);
+    }
+
+    @Test
+    public void disconnectWithException() {
+        Resource r = new Resource();
+        r.shouldThrow(true);
+        Optional<Exception> actual = Disconnectable.disconnect(r);
+
+        assertNotNull(actual);
+        assertTrue(actual.isPresent());
+        assertThat(Resource.throwFromClose, is(actual.get()));
         assertTrue(Resource.hasCalledClose);
     }
 
