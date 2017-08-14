@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class ServerConnectorTest {
 
-    static ServerConnector newConnector() throws Exception {
+    public static ServerConnector newConnector() throws Exception {
         ServerLocator locator = mock(ServerLocator.class);
         ClientSessionFactory factory = mock(ClientSessionFactory.class);
         ClientSession session = mock(ClientSession.class);

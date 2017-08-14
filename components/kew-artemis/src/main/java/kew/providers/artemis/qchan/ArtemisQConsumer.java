@@ -1,7 +1,7 @@
-package kew.providers.artemis;
+package kew.providers.artemis.qchan;
 
 import static java.util.Objects.requireNonNull;
-import static kew.providers.artemis.MessageBodyReader.readBody;
+import static kew.providers.artemis.qchan.MessageBodyReader.readBody;
 
 import java.io.InputStream;
 

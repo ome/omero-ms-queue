@@ -1,8 +1,8 @@
-package kew.providers.artemis;
+package kew.providers.artemis.qchan;
 
 import static org.mockito.Mockito.*;
-import static kew.providers.artemis.MessageBodyReader.readBody;
-import static kew.providers.artemis.MessageBodyWriter.writeBody;
+import static kew.providers.artemis.qchan.MessageBodyReader.readBody;
+import static kew.providers.artemis.qchan.MessageBodyWriter.writeBody;
 
 import org.apache.activemq.artemis.api.core.ActiveMQBuffer;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;

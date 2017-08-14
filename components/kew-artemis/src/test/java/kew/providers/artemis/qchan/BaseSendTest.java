@@ -1,4 +1,4 @@
-package kew.providers.artemis;
+package kew.providers.artemis.qchan;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

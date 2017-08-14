@@ -1,4 +1,4 @@
-package kew.providers.artemis;
+package kew.providers.artemis.qchan;
 
 import static java.util.Objects.requireNonNull;
 

@@ -1,8 +1,9 @@
-package kew.providers.artemis;
+package kew.providers.artemis.qchan;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import kew.providers.artemis.ServerConnectorTest;
 import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 import org.junit.Test;
 

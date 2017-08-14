@@ -1,7 +1,8 @@
-package kew.providers.artemis;
+package kew.providers.artemis.qchan;
 
 import static java.util.Objects.requireNonNull;
 
+import kew.providers.artemis.ServerConnector;
 import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
 
 import kew.core.qchan.QChannelFactory;

@@ -11,8 +11,8 @@ import kew.core.msg.Reschedulable;
 import kew.core.msg.ReschedulableFactory;
 import kew.core.msg.SchedulingSource;
 import kew.core.qchan.QChannelFactory;
-import kew.providers.artemis.ArtemisMessage;
-import kew.providers.artemis.ArtemisQChannelFactory;
+import kew.providers.artemis.qchan.ArtemisMessage;
+import kew.providers.artemis.qchan.ArtemisQChannelFactory;
 import kew.providers.artemis.ServerConnector;
 
 import ome.smuggler.config.wiring.crypto.SerializationFactory;
