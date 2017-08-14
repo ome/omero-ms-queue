@@ -1,5 +1,7 @@
 package ome.smuggler.config;
 
+import util.config.BaseDir;
+
 /**
  * The base directory where to look for configuration files.
  * This path can be specified in the {@link #SysPropKey system properties} at 

@@ -1,4 +1,4 @@
-package ome.smuggler.config;
+package util.config;
 
 import static java.util.Objects.requireNonNull;
 import static util.string.Strings.isNullOrEmpty;
@@ -133,7 +133,7 @@ public class BaseDir extends Wrapper<Path> {
      * empty.
      */
     public Path resolveRequiredPath(String configuredPath) {
-        requireString(configuredPath, configuredPath);
+        requireString(configuredPath, "configuredPath");
         return get().resolve(configuredPath);
     }
 
