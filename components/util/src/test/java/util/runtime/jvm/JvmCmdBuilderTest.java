@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.junit.Test;
 
 import util.runtime.BaseProgramArgument;
+import util.runtime.CommandBuilder;
 import util.runtime.ProgramArgument;
 
 public class JvmCmdBuilderTest {
@@ -74,5 +75,50 @@ public class JvmCmdBuilderTest {
         
         assertArrayEquals(expected, actual);
     }
-    
+
+    @Test
+    public void canAddSysProps() {
+        String key = "file.separator";
+        String fileSep = System.getProperty(key);
+        assertNotNull(fileSep);  // should always be there!
+
+        Path jarFile = Paths.get("");
+        JvmCmdBuilder target = JvmCmdFactory.java(new JarJvmArg(jarFile))
+                                            .addCurrentSysProps();
+
+        Optional<String> actual = target.tokens()
+                                        .filter(t -> t.contains(key))
+                                        .findFirst();
+        assertTrue(actual.isPresent());
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void addPropThrowsIfNullArray() {
+        Path jarFile = Paths.get("");
+        JvmCmdFactory.java(new JarJvmArg(jarFile))
+                     .addProp((SysPropJvmArg[])null);
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void addPropThrowsIfArrayContainsNulls() {
+        Path jarFile = Paths.get("");
+        JvmCmdFactory.java(new JarJvmArg(jarFile))
+                     .addProp(new SysPropJvmArg("k", "v"), null);
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void addApplicationArgumentThrowsIfNullArray() {
+        Path jarFile = Paths.get("");
+        JvmCmdFactory.java(new JarJvmArg(jarFile))
+                     .addApplicationArgument((CommandBuilder[])null);
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void addApplicationArgumentThrowsIfArrayContainsNulls() {
+        Path jarFile = Paths.get("");
+        JvmCmdFactory.java(new JarJvmArg(jarFile))
+                     .addApplicationArgument(
+                             new BaseProgramArgument<>(), null);
+    }
+
 }

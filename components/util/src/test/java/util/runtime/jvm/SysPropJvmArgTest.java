@@ -2,6 +2,7 @@ package util.runtime.jvm;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static util.object.Pair.pair;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,6 +10,8 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
+import util.object.Either;
+import util.object.Pair;
 import util.runtime.CommandBuilder;
 
 public class SysPropJvmArgTest {
@@ -68,6 +71,26 @@ public class SysPropJvmArgTest {
         String[] actual = tokensArray(SysPropJvmArg.toJvmArguments(props));
 
         assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void validateRejectsNullKey() {
+        SysPropJvmArg target = new SysPropJvmArg();
+        Either<String, Pair<String, String>> result =
+                target.validate(pair(null, "v"));
+
+        assertNotNull(result);
+        assertTrue(result.isLeft());
+    }
+
+    @Test
+    public void validateRejectsNullValue() {
+        SysPropJvmArg target = new SysPropJvmArg();
+        Either<String, Pair<String, String>> result =
+                target.validate(pair("k", null));
+
+        assertNotNull(result);
+        assertTrue(result.isLeft());
     }
     
 }

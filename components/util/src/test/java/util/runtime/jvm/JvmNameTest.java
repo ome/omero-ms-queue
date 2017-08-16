@@ -46,5 +46,23 @@ public class JvmNameTest {
     public void returnJavaIfNotWindows() {
         assertName("Arch Linux", "java");
     }
+
+    @Test
+    public void knownConstants() {
+        JvmName[] vs = JvmName.values();
+        assertThat(vs.length, is(2));
+    }
+
+    @Test
+    public void javaConstant() {
+        JvmName c = JvmName.valueOf("Java");
+        assertNotNull(c);
+    }
+
+    @Test
+    public void javaExeConstant() {
+        JvmName c = JvmName.valueOf("JavaExe");
+        assertNotNull(c);
+    }
     
 }

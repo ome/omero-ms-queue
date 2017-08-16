@@ -76,5 +76,10 @@ public class EithersCollectTest {
                           .toArray(Integer[]::new);
         assertArrayEquals(array(1, 4), actual);
     }
-    
+
+    @Test
+    public void ctor() {
+        new Eithers();  // only to get 100% coverage.
+    }
+
 }

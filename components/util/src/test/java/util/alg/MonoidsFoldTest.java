@@ -22,7 +22,7 @@ public class MonoidsFoldTest {
     
     @Before
     public void setup() {
-        sumMonoid = new Monoids<>(MonoidProviderTest.intSumMonoid());
+        sumMonoid = Monoids.with(MonoidProviderTest.intSumMonoid());
     }
     
     @Theory

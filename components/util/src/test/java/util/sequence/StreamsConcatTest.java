@@ -18,14 +18,18 @@ import org.junit.runner.RunWith;
 @RunWith(Theories.class)
 public class StreamsConcatTest {
 
+    private static Stream<Integer> toStream(Integer[] xs) {
+        return xs == null ? null : Stream.of(xs);
+    }
+
     @DataPoints
     public static final Integer[][] supply = new Integer[][] {
-        array(), array(1), array(1, 2), array(1, 2, 3)
+        null, array(), array(1), array(1, 2), array(1, 2, 3)
     };
     
     @Theory
     public void streamsConcatSameAsArrayzConcat(Integer[] xs, Integer[] ys, Integer[] zs) {
-        Integer[] actual = concat(Stream.of(xs), Stream.of(ys), Stream.of(zs))
+        Integer[] actual = concat(toStream(xs), toStream(ys), toStream(zs))
                           .toArray(Integer[]::new);
         Integer[] expected = Arrayz.op(Integer[]::new).concat(xs, ys, zs);
         
