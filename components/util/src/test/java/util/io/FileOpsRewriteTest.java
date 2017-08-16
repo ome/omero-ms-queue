@@ -4,40 +4,13 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import util.types.Nat;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.UUID;
 
-public class FileOpsRewriteTest {
-
-    private Path source;
-    private final String content = "\\r\\n some stuff \t nobody \\r really cares \\n about!";
-
-    @Before
-    public void setup() throws Exception {
-        source = Files.createTempFile("test", UUID.randomUUID().toString());
-        FileOps.writeNew(source, out -> {
-            PrintWriter w = new PrintWriter(out);
-            w.print(content);
-            w.flush();
-        });
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        FileOps.delete(source);
-    }
-
-    private String readContent() throws IOException {
-        return StreamOps.readLinesIntoString(
-                Files.newInputStream(source));
-    }
+public class FileOpsRewriteTest extends BaseFileOpsTest {
 
     @Test (expected = NullPointerException.class)
     public void throwIfNullTarget() throws Exception {
@@ -46,28 +19,34 @@ public class FileOpsRewriteTest {
 
     @Test (expected = NullPointerException.class)
     public void throwIfNullFilter() throws Exception {
-        FileOps.rewrite(source, null);
+        FileOps.rewrite(pathInTempDir("x"), null);
     }
 
     @Test
     public void overrideSourceWithEmptyFileWhenFilterOutputsNothing()
         throws Exception {
+        Path source = createFileInTempDir("x", new byte[] { 1, 2 });
+        assertThat(FileOps.byteLength(source), is(Nat.of(2)));
+
         FileOps.rewrite(source, (in, out) -> {});
+
         assertThat(FileOps.byteLength(source), is(Nat.of(0)));
     }
 
     @Test
     public void overrideSourceWithFilterOutput() throws Exception {
-        String oldContent = readContent();
-        assertThat(oldContent, is(content));
+        Path source = createFileInTempDir("x", new byte[] { 1, 2 });
+        byte[] newContent = new byte[] { 99 };
+        FileOps.rewrite(source, (in, out) -> out.write(newContent));
 
-        String newContent = "overridden :-)";
-        FileOps.rewrite(source, (in, out) -> {
-            PrintWriter w = new PrintWriter(out);
-            w.print(newContent);
-            w.flush();
-        });
-        assertThat(readContent(), is(newContent));
+        byte[] actualContent = Files.readAllBytes(source);
+        assertArrayEquals(actualContent, newContent);
+    }
+
+    @Test (expected = RuntimeException.class)
+    public void throwAnyFilterError() throws IOException {
+        Path source = createFileInTempDir("x", new byte[] { 1, 2 });
+        FileOps.rewrite(source, (in, out) -> { throw new RuntimeException(); });
     }
 
 }
