@@ -47,5 +47,10 @@ public class ProfilesTest {
         
         assertArrayEquals(expected, actual);
     }
+
+    @Test
+    public void ctor() {
+        new Profiles();  // only to get 100% coverage.
+    }
     
 }
