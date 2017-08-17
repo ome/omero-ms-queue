@@ -15,7 +15,8 @@ public class CryptoAlgoSpecTest {
 
     @Test
     public void checkAesCanonicalName() {
-        assertThat(AES.canonicalName(), is("AES"));
+        CryptoAlgoSpec aes = CryptoAlgoSpec.valueOf("AES");
+        assertThat(aes.canonicalName(), is("AES"));
     }
 
     @Test
@@ -26,7 +27,8 @@ public class CryptoAlgoSpecTest {
 
     @Test
     public void checkAES_ECB_PKCS5PaddingCanonicalName() {
-        assertThat(AES_ECB_PKCS5Padding.canonicalName(), is("AES"));
+        CryptoAlgoSpec aes_ = CryptoAlgoSpec.valueOf("AES_ECB_PKCS5Padding");
+        assertThat(aes_.canonicalName(), is("AES"));
     }
 
 }

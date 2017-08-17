@@ -24,6 +24,10 @@ public class BaseFileOpsTest {
         return target;
     }
 
+    public Path createDirInTempDir(String name) throws IOException {
+        return tempDir.newFolder(name).toPath();
+    }
+
     public Path tempDirPath() {
         return tempDir.getRoot().toPath().toAbsolutePath();
     }
