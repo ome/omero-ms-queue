@@ -40,8 +40,18 @@ public class ScheduleTask<QM extends HasSchedule, T>
 
     private QMsgBuilder<QM> messageBuilder(FutureTimepoint when) {
         QMsgBuilder<QM> dm = QMsgFactory::durableMessage;
-        return dm.with(scheduledDelivery(when));
+        return dm.with(scheduledDelivery(when))
+                ::apply;
     }
+    /* If Java had better type inference the code above could be
+     *
+     *      return Builder.make(QMsgFactory::durableMessage)
+     *                    .with(scheduledDelivery(when))
+     *                    ::apply;
+     *
+     *  and if we had type aliases QMsgBuilder<QM> would be just an alias
+     *  to Builder<..> so the ::apply at the end wouldn't be needed either.
+     */
 
     /**
      * Sends the message so that the channel will only deliver it to consumers

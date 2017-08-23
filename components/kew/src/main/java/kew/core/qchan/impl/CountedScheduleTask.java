@@ -40,8 +40,19 @@ public class CountedScheduleTask<QM extends HasSchedule & HasProps, T>
     private QMsgBuilder<QM> messageBuilder(CountedSchedule metadata) {
         QMsgBuilder<QM> dm = QMsgFactory::durableMessage;
         return dm.with(scheduledDelivery(metadata.when()))
-                 .with(scheduleCount(metadata.count()));
+                 .with(scheduleCount(metadata.count()))
+                ::apply;
     }
+    /* If Java had better type inference the code above could be
+     *
+     *      return Builder.make(QMsgFactory::durableMessage)
+     *                    .with(scheduledDelivery(metadata.when()))
+     *                    .with(scheduleCount(metadata.count()))
+     *                    ::apply;
+     *
+     *  and if we had type aliases QMsgBuilder<QM> would be just an alias
+     *  to Builder<..> so the ::apply at the end wouldn't be needed either.
+     */
 
     @Override
     public void send(ChannelMessage<CountedSchedule, T> msg) throws Exception {
