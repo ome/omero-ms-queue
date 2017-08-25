@@ -17,7 +17,7 @@ import util.types.PositiveN;
  * acceptor and a matching connector so that you can connect to Artemis from
  * within the same JVM process in which Artemis is embedded.
  */
-public class EmbeddedBrokerTransportConfig {
+public class EmbeddedServerTransportConfig {
 
     private static final AtomicInteger currentServerId = new AtomicInteger();
 
@@ -32,7 +32,7 @@ public class EmbeddedBrokerTransportConfig {
     /**
      * Creates a new instance.
      */
-    public EmbeddedBrokerTransportConfig() {
+    public EmbeddedServerTransportConfig() {
         embeddedServerId = nextServerId();
         embeddedAcceptor = makeTransport(embeddedServerId);
         embeddedConnector = makeTransport(embeddedServerId);

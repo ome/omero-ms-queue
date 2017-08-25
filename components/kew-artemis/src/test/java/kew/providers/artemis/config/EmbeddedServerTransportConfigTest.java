@@ -12,7 +12,7 @@ import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 
-public class EmbeddedBrokerTransportConfigTest {
+public class EmbeddedServerTransportConfigTest {
 
     private static int getServerId(TransportConfiguration tc) {
         return (int) tc.getParams()
@@ -24,7 +24,7 @@ public class EmbeddedBrokerTransportConfigTest {
     public void generateSequentialServerIds() {
         int[] expected = new int[] { 1, 2, 3 };
 
-        IntUnaryOperator f = x -> new EmbeddedBrokerTransportConfig()
+        IntUnaryOperator f = x -> new EmbeddedServerTransportConfig()
                                         .embeddedServerId();
         int[] actual = IntStream.of(expected).map(f).toArray();
 
@@ -33,7 +33,7 @@ public class EmbeddedBrokerTransportConfigTest {
 
     @Test
     public void connectorAndAcceptorHaveSameServerId() {
-        EmbeddedBrokerTransportConfig cfg = new EmbeddedBrokerTransportConfig();
+        EmbeddedServerTransportConfig cfg = new EmbeddedServerTransportConfig();
         int serverId = cfg.embeddedServerId();
         int acceptorId = getServerId(cfg.embeddedAcceptor());
         int connectorId = getServerId(cfg.embeddedConnector());
@@ -44,7 +44,7 @@ public class EmbeddedBrokerTransportConfigTest {
 
     @Test
     public void configureConnectorAcceptorPair() {
-        EmbeddedBrokerTransportConfig tc = new EmbeddedBrokerTransportConfig();
+        EmbeddedServerTransportConfig tc = new EmbeddedServerTransportConfig();
         Configuration actual = CoreConfigFactory.empty()
                                                 .with(tc::embeddedTransport)
                                                 .apply(null);
