@@ -51,3 +51,12 @@ public class NetworkTransportProps {
     }
 
 }
+/* NOTE. Improving Type-Safety.
+ * Acceptors and connectors share most properties but not all. There are some
+ * props only applicable to acceptors and others only applicable to connectors.
+ * Look at TransportConstants.ALLOWABLE_ACCEPTOR_KEYS/ALLOWABLE_CONNECTOR_KEYS
+ * for the details. If we need to use a prop that is only applicable to an
+ * acceptor (connector) perhaps we should subclass NetworkTransportConfig to
+ * keep type-safety---i.e. avoid setting an acceptor's only prop on a connector
+ * or vice versa.
+ */
