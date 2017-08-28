@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public class BuilderTest {
 
     private static class Target extends HashMap<String, Integer> {
-        String seed;
+        final String seed;
         Target(String seed) {
             this.seed = seed;
         }
