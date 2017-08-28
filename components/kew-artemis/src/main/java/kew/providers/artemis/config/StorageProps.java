@@ -31,7 +31,8 @@ public class StorageProps {
 
     /**
      * A setter that enables queues being persisted to a journal of the
-     * specified type.
+     * specified type. Enabling persistence implicitly enables support
+     * for paging and large messages.
      * @param t the journal type.
      * @return the setter.
      * @throws NullPointerException if the argument is {@code null}.
@@ -48,7 +49,8 @@ public class StorageProps {
      * under a specified root data directory.
      * Specifically, we tell Artemis to use journal, large-messages, bindings,
      * and paging directories under the specified data directory. Artemis will
-     * create sub-directories as needed.
+     * create sub-directories as needed. Note that these directories are only
+     * used if Artemis persistence is enabled.
      * @param dataDir the root data directory.
      * @return the setter.
      * @throws NullPointerException if the argument is {@code null}.
