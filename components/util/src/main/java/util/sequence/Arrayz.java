@@ -64,9 +64,28 @@ public class Arrayz<A> {  // avoids conflicts with JDK Arrays class.
      * it has zero length, or some of its elements are {@code null}.
      */
     public static <T> void requireArray(T[] ts) {
-        if (isNullOrZeroLength(ts) || hasNulls(ts)) {
+        requireArrayOfMinLength(1, ts);
+    }
+
+    /**
+     * Ensures you have an array of length {@code len} at least with no
+     * {@code null} elements in it.
+     * @param len the required array minimum length.
+     * @param ts the array to test.
+     * @param <T> any type.
+     * @throws IllegalArgumentException if the given array is {@code null}, or
+     * its length is less than the required length, or some of its elements are
+     * {@code null}.
+     */
+    public static <T> void requireArrayOfMinLength(int len, T[] ts) {
+        if (ts == null || hasNulls(ts)) {
             throw new IllegalArgumentException(
-                "array of non-null objects of length at least 1 required.");
+                "non-null array with non-null elements required.");
+        }
+        if (ts.length < len) {
+            throw new IllegalArgumentException(
+                String.format("array of length at least %s required", len)
+            );
         }
     }
     

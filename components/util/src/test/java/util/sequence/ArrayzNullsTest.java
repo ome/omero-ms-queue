@@ -39,6 +39,11 @@ public class ArrayzNullsTest {
     }
 
     @Test
+    public void requireArrayOfMinLengthZero() {
+        Arrayz.requireArrayOfMinLength(0, new Object[] {});
+    }
+
+    @Test
     public void requireArray() {
         Integer[] ts = new Integer[] { 1 };
         Arrayz.requireArray(ts);
