@@ -54,6 +54,21 @@ public class Arrayz<A> {  // avoids conflicts with JDK Arrays class.
         }
         return false;
     }
+
+    /**
+     * Ensures you have an array of length one at least with no {@code null}
+     * elements in it.
+     * @param ts the array to test.
+     * @param <T> any type.
+     * @throws IllegalArgumentException if the given array is {@code null}, or
+     * it has zero length, or some of its elements are {@code null}.
+     */
+    public static <T> void requireArray(T[] ts) {
+        if (isNullOrZeroLength(ts) || hasNulls(ts)) {
+            throw new IllegalArgumentException(
+                "array of non-null objects of length at least 1 required.");
+        }
+    }
     
     /**
      * Collects the given array's elements into a list; if the array is 

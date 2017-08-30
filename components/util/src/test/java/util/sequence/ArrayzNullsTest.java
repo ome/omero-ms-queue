@@ -37,5 +37,32 @@ public class ArrayzNullsTest {
         assertThat(pruned.length, is(1));
         assertThat(pruned[0], is(""));
     }
-    
+
+    @Test
+    public void requireArray() {
+        Integer[] ts = new Integer[] { 1 };
+        Arrayz.requireArray(ts);
+
+        ts = new Integer[] { 1, 2 };
+        Arrayz.requireArray(ts);
+
+        ts = new Integer[] { 1, 2, 3 };
+        Arrayz.requireArray(ts);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void requireArrayThrowsIfNullArray() {
+        Arrayz.requireArray(null);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void requireArrayThrowsIfEmptyArray() {
+        Arrayz.requireArray(new Object[] {});
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void requireArrayThrowsIfArrayHasNulls() {
+        Arrayz.requireArray(new Object[] { new Object(), null, new Object() });
+    }
+
 }
