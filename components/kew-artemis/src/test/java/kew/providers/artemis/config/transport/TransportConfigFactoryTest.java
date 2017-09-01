@@ -2,7 +2,6 @@ package kew.providers.artemis.config.transport;
 
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class TransportConfigFactoryTest {
