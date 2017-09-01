@@ -4,7 +4,9 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import org.apache.activemq.artemis.api.core.TransportConfiguration;
+import kew.providers.artemis.config.transport.ConnectorConfig;
+import kew.providers.artemis.config.transport.EmbeddedConnectorConfig;
+import kew.providers.artemis.config.transport.NetworkConnectorConfig;
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 import org.junit.Before;
@@ -33,7 +35,7 @@ public class BaseClusterConfigFactoryTest
         customizerCalled = false;
     }
 
-    private Configuration buildConfig(TransportConfiguration...connectors) {
+    private Configuration buildConfig(ConnectorConfig...connectors) {
         Configuration config = CoreConfigFactory.empty().apply(null);
         clusterConfig(this, connectors).apply(config);
         return config;
@@ -51,8 +53,8 @@ public class BaseClusterConfigFactoryTest
 
     @Test
     public void buildAsManyClusterConfigAsInputConnectors() {
-        TransportConfiguration c1 = new NetworkTransportConfig().get();
-        TransportConfiguration c2 = new NetworkTransportConfig().get();
+        ConnectorConfig c1 = new NetworkConnectorConfig();
+        ConnectorConfig c2 = new NetworkConnectorConfig();
 
         Configuration config = buildConfig(c1);
         assertThat(config.getClusterConfigurations(), hasSize(1));
@@ -63,8 +65,8 @@ public class BaseClusterConfigFactoryTest
 
     @Test
     public void filterOutDuplicatedInputConnectors() {
-        TransportConfiguration c1 = new NetworkTransportConfig().get();
-        TransportConfiguration c2 = new NetworkTransportConfig().get();
+        ConnectorConfig c1 = new NetworkConnectorConfig();
+        ConnectorConfig c2 = new NetworkConnectorConfig();
 
         Configuration config = buildConfig(c1, c2, c1, c2);
         assertThat(config.getClusterConfigurations(), hasSize(2));
@@ -72,7 +74,7 @@ public class BaseClusterConfigFactoryTest
 
     @Test
     public void customizerCantOverrideLinkingOfConnector() {
-        TransportConfiguration connector = new NetworkTransportConfig().get();
+        ConnectorConfig connector = new NetworkConnectorConfig();
         Configuration config = buildConfig(connector);
 
         assertTrue(customizerCalled);
@@ -80,14 +82,15 @@ public class BaseClusterConfigFactoryTest
         ClusterConnectionConfiguration actual =
                 config.getClusterConfigurations().get(0);
         assertThat(actual.getName(), not(isEmptyOrNullString()));  // (*)
-        assertThat(actual.getConnectorName(), is(connector.getName()));  // (*)
+        assertThat(actual.getConnectorName(),
+                   is(connector.transport().getName()));  // (*)
     }
     // (*) customizer sets "", see implementation above.
 
     @Test
     public void clusterConfigsHaveUniqueNames() {
-        TransportConfiguration net = new NetworkTransportConfig().get();
-        TransportConfiguration inVm = new EmbeddedTransportConfig().get();
+        ConnectorConfig net = new NetworkConnectorConfig();
+        ConnectorConfig inVm = new EmbeddedConnectorConfig();
         Configuration config = buildConfig(net, inVm);
 
         Set<String> names = config.getClusterConfigurations()
@@ -104,15 +107,15 @@ public class BaseClusterConfigFactoryTest
 
     @Test (expected = IllegalArgumentException.class)
     public void clusterConfigThrowsIfNullConnectors() {
-        clusterConfig(c -> {}, (TransportConfiguration[]) null);
+        clusterConfig(c -> {}, (ConnectorConfig[]) null);
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void clusterConfigThrowsIfConnectorsHasNulls() {
         clusterConfig(c -> {},
-                new TransportConfiguration(),
+                new EmbeddedConnectorConfig(),
                 null,
-                new TransportConfiguration());
+                new NetworkConnectorConfig());
     }
 
 }

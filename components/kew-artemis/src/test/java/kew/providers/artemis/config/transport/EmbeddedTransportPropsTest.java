@@ -1,22 +1,24 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.transport;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static kew.providers.artemis.config.EmbeddedTransportProps.*;
+import static kew.providers.artemis.config.transport.EmbeddedTransportProps.*;
 
 import org.apache.activemq.artemis.core.remoting.impl.invm.TransportConstants;
 import org.junit.Test;
 import util.object.Builder;
 import util.types.PositiveN;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class EmbeddedTransportPropsTest {
 
-    private static void assertProp(Consumer<EmbeddedTransportConfig> setter,
-                                   String transportPropName,
-                                   Object expected) {
-        Object actual = Builder.make(EmbeddedTransportConfig::new)
+    private static void assertProp(
+            Function<EmbeddedConnectorConfig, EmbeddedConnectorConfig> setter,
+            String transportPropName,
+            Object expected) {
+        EmbeddedConnectorConfig connector = new EmbeddedConnectorConfig();
+        Object actual = Builder.make(() -> connector)
                                .with(setter)
                                .apply(null)
                                .params()

@@ -1,8 +1,9 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.transport;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import kew.providers.artemis.config.CoreConfigFactory;
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 import org.apache.activemq.artemis.core.remoting.impl.invm.TransportConstants;
@@ -12,7 +13,7 @@ import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 
-public class EmbeddedServerTransportConfigTest {
+public class EmbeddedServerEndpointsTest {
 
     private static int getServerId(TransportConfiguration tc) {
         return (int) tc.getParams()
@@ -24,7 +25,7 @@ public class EmbeddedServerTransportConfigTest {
     public void generateSequentialServerIds() {
         int[] expected = new int[] { 1, 2, 3 };
 
-        IntUnaryOperator f = x -> new EmbeddedServerTransportConfig()
+        IntUnaryOperator f = x -> new EmbeddedServerEndpoints()
                                         .embeddedServerId();
         int[] actual = IntStream.of(expected).map(f).toArray();
 
@@ -33,10 +34,10 @@ public class EmbeddedServerTransportConfigTest {
 
     @Test
     public void connectorAndAcceptorHaveSameServerId() {
-        EmbeddedServerTransportConfig cfg = new EmbeddedServerTransportConfig();
+        EmbeddedServerEndpoints cfg = new EmbeddedServerEndpoints();
         int serverId = cfg.embeddedServerId();
-        int acceptorId = getServerId(cfg.embeddedAcceptor());
-        int connectorId = getServerId(cfg.embeddedConnector());
+        int acceptorId = getServerId(cfg.acceptor().transport());
+        int connectorId = getServerId(cfg.connector().transport());
 
         assertThat(serverId, is(acceptorId));
         assertThat(serverId, is(connectorId));
@@ -44,7 +45,7 @@ public class EmbeddedServerTransportConfigTest {
 
     @Test
     public void configureConnectorAcceptorPair() {
-        EmbeddedServerTransportConfig tc = new EmbeddedServerTransportConfig();
+        EmbeddedServerEndpoints tc = new EmbeddedServerEndpoints();
         Configuration actual = CoreConfigFactory.empty()
                                                 .with(tc::embeddedTransport)
                                                 .apply(null);
@@ -52,11 +53,11 @@ public class EmbeddedServerTransportConfigTest {
         assertThat(actual.getAcceptorConfigurations().size(), is(1));
         assertTrue(
                 actual.getAcceptorConfigurations().contains(
-                        tc.embeddedAcceptor()
+                        tc.acceptor().transport()
                 ));
         assertThat(actual.getConnectorConfigurations().size(), is(1));
         assertThat(actual.getConnectorConfigurations().values().toArray()[0],
-                   is(tc.embeddedConnector()));
+                   is(tc.connector().transport()));
     }
 
 }

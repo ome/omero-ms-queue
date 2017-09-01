@@ -3,9 +3,10 @@ package kew.providers.artemis.config;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
+
+import kew.providers.artemis.config.transport.ConnectorConfig;
 
 /**
  * Builds functions to add cluster settings to a core Artemis configuration.
@@ -35,7 +36,7 @@ public interface ClusterConfigFactory {
      */
     Function<Configuration, Configuration> clusterConfig(
             Consumer<ClusterConnectionConfiguration> customizer,
-            TransportConfiguration...connectors);
+            ConnectorConfig...connectors);
 
     /**
      * Builds a function that adds cluster settings to a given Artemis core
@@ -49,14 +50,8 @@ public interface ClusterConfigFactory {
      * it has {@code null}s in it.
      */
     default Function<Configuration, Configuration> clusterConfig(
-            TransportConfiguration...connectors) {
+            ConnectorConfig...connectors) {
         return clusterConfig(c -> {}, connectors);
     }
 
 }
-/* NOTE. Improving Type-safety.
- * How do we know a TransportConfiguration is for a connector rather than an
- * acceptor? We don't. (See note about type-safety in NetworkTransportProps!)
- * Perhaps we could have Acceptor/Connector types to rule out configuration
- * mistakes...
- */

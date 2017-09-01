@@ -1,22 +1,23 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.transport;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static kew.providers.artemis.config.NetworkTransportProps.*;
+import static kew.providers.artemis.config.transport.NetworkTransportProps.*;
 
 import org.apache.activemq.artemis.core.remoting.impl.netty.TransportConstants;
 import org.junit.Test;
 import util.object.Builder;
 import util.types.PositiveN;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class NetworkTransportPropsTest {
 
-    private static void assertProp(Consumer<NetworkTransportConfig> setter,
-                                   String transportPropName,
-                                   Object expected) {
-        Object actual = Builder.make(NetworkTransportConfig::new)
+    private static void assertProp(
+            Function<NetworkAcceptorConfig, NetworkAcceptorConfig> setter,
+            String transportPropName,
+            Object expected) {
+        Object actual = Builder.make(NetworkAcceptorConfig::new)
                                .with(setter)
                                .apply(null)
                                .params()

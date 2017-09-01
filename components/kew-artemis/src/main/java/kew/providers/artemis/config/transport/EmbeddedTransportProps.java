@@ -1,11 +1,12 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.transport;
 
 import static java.util.Objects.requireNonNull;
 
-import org.apache.activemq.artemis.core.remoting.impl.invm.TransportConstants;
-import util.types.PositiveN;
+import java.util.function.Function;
 
-import java.util.function.Consumer;
+import org.apache.activemq.artemis.core.remoting.impl.invm.TransportConstants;
+
+import util.types.PositiveN;
 
 /**
  * Type-safe configuration properties for the connection parameters of an
@@ -13,12 +14,15 @@ import java.util.function.Consumer;
  */
 public class EmbeddedTransportProps {
 
-    private static <T> Consumer<EmbeddedTransportConfig>
-        connectionParam(String key, T value) {
+    private static <T extends EndpointConfig & HasEmbeddedProps, V>
+    Function<T, T> connectionParam(String key, V value) {
         requireNonNull(key, "key");
         requireNonNull(value, "value");
 
-        return etc -> etc.params().put(key, value);
+        return endpoint -> {
+            endpoint.params().put(key, value);
+            return endpoint;
+        };
     }
     /* NOTE. If you need to set properties other than those below, don't take
      * the shortcut and make this method public. Rather add the type-safe
@@ -30,7 +34,8 @@ public class EmbeddedTransportProps {
      * @param id the server ID.
      * @return the setter.
      */
-    public static Consumer<EmbeddedTransportConfig> serverId(PositiveN id) {
+    public static <T extends EndpointConfig & HasEmbeddedProps>
+    Function<T, T> serverId(PositiveN id) {
         requireNonNull(id, "id");
 
         return connectionParam(TransportConstants.SERVER_ID_PROP_NAME,

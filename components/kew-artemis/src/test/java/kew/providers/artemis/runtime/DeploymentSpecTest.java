@@ -18,9 +18,9 @@ public class DeploymentSpecTest {
         assertNotNull(target.config());
         assertNotNull(target.embeddedEndpoints());
         assertThat(target.config().getAcceptorConfigurations(),
-                   contains(target.embeddedEndpoints().embeddedAcceptor()));
+                   contains(target.embeddedEndpoints().acceptor().transport()));
         assertThat(target.config().getConnectorConfigurations().values(),
-                   contains(target.embeddedEndpoints().embeddedConnector()));
+                   contains(target.embeddedEndpoints().connector().transport()));
     }
 
     @Test

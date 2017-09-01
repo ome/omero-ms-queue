@@ -9,10 +9,10 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 
+import kew.providers.artemis.config.transport.ConnectorConfig;
 import util.types.UuidString;
 
 /**
@@ -24,13 +24,13 @@ public abstract class BaseClusterConfigFactory implements ClusterConfigFactory {
 
     protected ClusterConnectionConfiguration buildConnection(
             Consumer<ClusterConnectionConfiguration> customizer,
-            TransportConfiguration connector) {
+            ConnectorConfig connector) {
         ClusterConnectionConfiguration cfg =
                 new ClusterConnectionConfiguration();
 
         customizer.accept(cfg);  // (*)
         cfg.setName(new UuidString().id());
-        cfg.setConnectorName(connector.getName());
+        cfg.setConnectorName(connector.transport().getName());
 
         return cfg;
     }
@@ -41,7 +41,7 @@ public abstract class BaseClusterConfigFactory implements ClusterConfigFactory {
     protected Configuration buildConfig(
             Configuration cfg,
             Consumer<ClusterConnectionConfiguration> customizer,
-            Set<TransportConfiguration> connectors) {
+            Set<ConnectorConfig> connectors) {
         connectors.forEach(connector -> {
             ClusterConnectionConfiguration c = buildConnection(customizer,
                                                                connector);
@@ -53,12 +53,11 @@ public abstract class BaseClusterConfigFactory implements ClusterConfigFactory {
     @Override
     public Function<Configuration, Configuration> clusterConfig(
             Consumer<ClusterConnectionConfiguration> customizer,
-            TransportConfiguration...connectors) {
+            ConnectorConfig...connectors) {
         requireNonNull(customizer, "customizer");
         requireArrayOfMinLength(0, connectors);
 
-        Set<TransportConfiguration> cs = asStream(connectors)
-                                        .collect(toSet());
+        Set<ConnectorConfig> cs = asStream(connectors).collect(toSet());
         return cfg -> buildConfig(cfg, customizer, cs);
     }
 

@@ -3,7 +3,7 @@ package kew.providers.artemis.config;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import org.apache.activemq.artemis.api.core.TransportConfiguration;
+import kew.providers.artemis.config.transport.ConnectorConfig;
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 
@@ -16,12 +16,12 @@ import java.util.function.Function;
 public class ClusterConfigFactoryTest implements ClusterConfigFactory {
 
     private Consumer<ClusterConnectionConfiguration> customizer;
-    private TransportConfiguration[] connectors;
+    private ConnectorConfig[] connectors;
 
     @Override
     public Function<Configuration, Configuration> clusterConfig(
             Consumer<ClusterConnectionConfiguration> customizer,
-            TransportConfiguration... connectors) {
+            ConnectorConfig... connectors) {
         this.customizer = customizer;
         this.connectors = connectors;
         return null;

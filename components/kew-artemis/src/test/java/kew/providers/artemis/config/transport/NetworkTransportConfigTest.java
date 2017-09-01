@@ -1,15 +1,15 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.transport;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import org.apache.activemq.artemis.core.remoting.impl.invm.TransportConstants;
+import org.apache.activemq.artemis.core.remoting.impl.netty.TransportConstants;
 import org.junit.Test;
 
-public class EmbeddedTransportConfigTest {
+public class NetworkTransportConfigTest {
 
-    private static EmbeddedTransportConfig target() {
-        return new EmbeddedTransportConfig();
+    private static NetworkConnectorConfig target() {
+        return new NetworkConnectorConfig();
     }
 
     @Test
@@ -33,9 +33,15 @@ public class EmbeddedTransportConfigTest {
     }
 
     @Test
-    public void serverIdDefaultsToTransportConstant() {
-        assertThat(target().params().get(TransportConstants.SERVER_ID_PROP_NAME),
-                   is(TransportConstants.DEFAULT_SERVER_ID));
+    public void hostDefaultsToLocalHost() {
+        assertThat(target().params().get(TransportConstants.HOST_PROP_NAME),
+                   is("localhost"));
+    }
+
+    @Test
+    public void portDefaultsTo61616() {
+        assertThat(target().params().get(TransportConstants.PORT_PROP_NAME),
+                   is(61616));
     }
 
 }

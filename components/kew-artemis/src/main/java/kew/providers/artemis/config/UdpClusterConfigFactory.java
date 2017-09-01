@@ -12,6 +12,7 @@ import org.apache.activemq.artemis.api.core.*;
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 
+import kew.providers.artemis.config.transport.ConnectorConfig;
 import util.types.PositiveN;
 import util.types.UuidString;
 
@@ -50,9 +51,9 @@ public class UdpClusterConfigFactory extends BaseClusterConfigFactory {
     }
     // see parseBroadcastGroupConfiguration of FileConfigurationParser.
 
-    private static List<String> names(Set<TransportConfiguration> connectors) {
+    private static List<String> names(Set<ConnectorConfig> connectors) {
         return connectors.stream()
-                         .map(TransportConfiguration::getName)
+                         .map(c -> c.transport().getName())
                          .collect(toList());
     }
 
@@ -82,7 +83,7 @@ public class UdpClusterConfigFactory extends BaseClusterConfigFactory {
     @Override
     protected ClusterConnectionConfiguration buildConnection(
             Consumer<ClusterConnectionConfiguration> customizer,
-            TransportConfiguration connector) {
+            ConnectorConfig connector) {
         ClusterConnectionConfiguration cfg =
                 super.buildConnection(customizer, connector);
         cfg.setDiscoveryGroupName(discoveryGroup.getName());
@@ -94,7 +95,7 @@ public class UdpClusterConfigFactory extends BaseClusterConfigFactory {
     protected Configuration buildConfig(
             Configuration cfg,
             Consumer<ClusterConnectionConfiguration> customizer,
-            Set<TransportConfiguration> connectors) {
+            Set<ConnectorConfig> connectors) {
         cfg.addDiscoveryGroupConfiguration(discoveryGroup.getName(),
                                            discoveryGroup);
         BroadcastGroupConfiguration bgc =

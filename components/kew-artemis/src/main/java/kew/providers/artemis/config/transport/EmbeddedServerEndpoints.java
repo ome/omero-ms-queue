@@ -1,11 +1,11 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.transport;
 
 import static java.util.Objects.requireNonNull;
-import static kew.providers.artemis.config.EmbeddedTransportProps.serverId;
+import static kew.providers.artemis.config.transport.EmbeddedTransportProps.serverId;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
-import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 
 import util.object.Builder;
@@ -17,7 +17,7 @@ import util.types.PositiveN;
  * acceptor and a matching connector so that you can connect to Artemis from
  * within the same JVM process in which Artemis is embedded.
  */
-public class EmbeddedServerTransportConfig {
+public class EmbeddedServerEndpoints {
 
     private static final AtomicInteger currentServerId = new AtomicInteger();
 
@@ -26,20 +26,23 @@ public class EmbeddedServerTransportConfig {
     }
 
     private final int embeddedServerId;
-    private final EmbeddedTransportConfig embeddedAcceptor;
-    private final EmbeddedTransportConfig embeddedConnector;
+    private final EmbeddedAcceptorConfig embeddedAcceptor;
+    private final EmbeddedConnectorConfig embeddedConnector;
 
     /**
      * Creates a new instance.
      */
-    public EmbeddedServerTransportConfig() {
+    public EmbeddedServerEndpoints() {
         embeddedServerId = nextServerId();
-        embeddedAcceptor = makeTransport(embeddedServerId);
-        embeddedConnector = makeTransport(embeddedServerId);
+        embeddedAcceptor =
+                makeTransport(embeddedServerId, EmbeddedAcceptorConfig::new);
+        embeddedConnector =
+                makeTransport(embeddedServerId, EmbeddedConnectorConfig::new);
     }
 
-    private EmbeddedTransportConfig makeTransport(int embeddedServerId) {
-        return Builder.make(EmbeddedTransportConfig::new)
+    private <T extends EndpointConfig & HasEmbeddedProps>
+    T makeTransport(int embeddedServerId, Supplier<T> ctor) {
+        return Builder.make(ctor)
                       .with(serverId(PositiveN.of(embeddedServerId)))
                       .apply(null);
     }
@@ -54,15 +57,15 @@ public class EmbeddedServerTransportConfig {
     /**
      * @return the embedded acceptor.
      */
-    public TransportConfiguration embeddedAcceptor() {
-        return embeddedAcceptor.get();
+    public EmbeddedAcceptorConfig acceptor() {
+        return embeddedAcceptor;
     }
 
     /**
      * @return the embedded connector.
      */
-    public TransportConfiguration embeddedConnector() {
-        return embeddedConnector.get();
+    public EmbeddedConnectorConfig connector() {
+        return embeddedConnector;
     }
 
     /**
@@ -75,9 +78,9 @@ public class EmbeddedServerTransportConfig {
     public Configuration embeddedTransport(Configuration cfg) {
         requireNonNull(cfg, "cfg");
 
-        cfg.addAcceptorConfiguration(embeddedAcceptor());
-        cfg.addConnectorConfiguration(embeddedConnector().getName(),
-                                      embeddedConnector());
+        cfg.addAcceptorConfiguration(acceptor().transport());
+        cfg.addConnectorConfiguration(connector().transport().getName(),
+                                      connector().transport());
         return cfg;
     }
 

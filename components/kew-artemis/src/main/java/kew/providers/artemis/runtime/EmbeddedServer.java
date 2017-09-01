@@ -48,7 +48,8 @@ public class EmbeddedServer {
      */
     public ServerConnector startClientSession() throws Exception {
         TransportConfiguration connector = deploymentSpec.embeddedEndpoints()
-                                                         .embeddedConnector();
+                                                         .connector()
+                                                         .transport();
         ServerLocator locator =
                 ActiveMQClient.createServerLocatorWithoutHA(connector);  // (*)
 

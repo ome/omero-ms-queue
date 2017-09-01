@@ -3,6 +3,10 @@ package kew.providers.artemis.config;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import kew.providers.artemis.config.transport.ConnectorConfig;
+import kew.providers.artemis.config.transport.EmbeddedConnectorConfig;
+import kew.providers.artemis.config.transport.EndpointConfig;
+import kew.providers.artemis.config.transport.NetworkConnectorConfig;
 import org.apache.activemq.artemis.api.core.BroadcastGroupConfiguration;
 import org.apache.activemq.artemis.api.core.DiscoveryGroupConfiguration;
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
@@ -19,7 +23,7 @@ import java.util.stream.Stream;
 
 public class UdpClusterConfigFactoryTest {
 
-    private Configuration buildConfig(TransportConfiguration...connectors) {
+    private Configuration buildConfig(ConnectorConfig...connectors) {
         Configuration config = CoreConfigFactory.empty().apply(null);
 
         return new UdpClusterConfigFactory("231.7.7.7", PositiveN.of(9876))
@@ -29,8 +33,8 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void buildOnlyOneBroadcastGroup() {
-        TransportConfiguration net = new NetworkTransportConfig().get();
-        TransportConfiguration inVm = new EmbeddedTransportConfig().get();
+        ConnectorConfig net = new NetworkConnectorConfig();
+        ConnectorConfig inVm = new EmbeddedConnectorConfig();
         Configuration config = buildConfig(net, inVm);
 
         assertThat(config.getBroadcastGroupConfigurations(), hasSize(1));
@@ -38,8 +42,8 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void buildOnlyOneDiscoveryGroup() {
-        TransportConfiguration net = new NetworkTransportConfig().get();
-        TransportConfiguration inVm = new EmbeddedTransportConfig().get();
+        ConnectorConfig net = new NetworkConnectorConfig();
+        ConnectorConfig inVm = new EmbeddedConnectorConfig();
         Configuration config = buildConfig(net, inVm);
 
         assertNotNull(config.getDiscoveryGroupConfigurations());
@@ -49,8 +53,8 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void linkConnectorsToBroadcastGroup() {
-        TransportConfiguration net = new NetworkTransportConfig().get();
-        TransportConfiguration inVm = new EmbeddedTransportConfig().get();
+        ConnectorConfig net = new NetworkConnectorConfig();
+        ConnectorConfig inVm = new EmbeddedConnectorConfig();
         Configuration config = buildConfig(net, inVm);
 
         Set<String> actualConnectorNames = new HashSet<>(
@@ -60,6 +64,7 @@ public class UdpClusterConfigFactoryTest {
         );
         Set<String> expectedConnectorNames =
                 Stream.of(net, inVm)
+                      .map(EndpointConfig::transport)
                       .map(TransportConfiguration::getName)
                       .collect(Collectors.toSet());
 
@@ -68,7 +73,7 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void useMutableListOfConnectorNamesInBroadcastGroup() {
-        TransportConfiguration net = new NetworkTransportConfig().get();
+        ConnectorConfig net = new NetworkConnectorConfig();
         Configuration config = buildConfig(net);
 
         List<String> connectorNames = config.getBroadcastGroupConfigurations()
@@ -82,7 +87,7 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void discoveryAndBroadcastGroupsHaveSameEndpoint() {
-        TransportConfiguration net = new NetworkTransportConfig().get();
+        ConnectorConfig net = new NetworkConnectorConfig();
         Configuration config = buildConfig(net);
 
         BroadcastGroupConfiguration broadcast =
