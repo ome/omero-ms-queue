@@ -8,6 +8,7 @@ import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
 import org.apache.activemq.artemis.api.core.client.ServerLocator;
 import org.junit.Test;
 
+
 public class ServerConnectorTest {
 
     public static ServerConnector newConnector() throws Exception {
@@ -18,6 +19,10 @@ public class ServerConnectorTest {
         when(locator.createSessionFactory()).thenReturn(factory);
         when(factory.createSession(anyBoolean(), anyBoolean(), anyInt()))
                 .thenReturn(session);
+        doAnswer(invocation -> {
+            session.close();
+            return null;
+        }).when(factory).close();
 
         return new ServerConnector(locator);
     }

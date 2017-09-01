@@ -16,11 +16,22 @@ public class ServerConnector implements Disconnectable {
 
     private static ClientSession startSession(ClientSessionFactory csf) 
             throws ActiveMQException {
-        ClientSession session = csf.createSession(true, true, 0);  // (*)
-        session.start();
-        return session;
+        boolean created = false;
+        try {
+            ClientSession session = csf.createSession(true, true, 0);  // (1)
+            session.start();
+            created = true;
+
+            return session;
+        } finally {
+            if (!created) {    // (2)
+                csf.close();
+            }
+        }
     }
-    /* (*) Removal of messages from the queue.
+    /* NOTES
+     * -----
+     * 1. Removal of messages from the queue.
      * When using the Artemis core API, consumed messages have to be explicitly
      * acknowledged for them to be removed from the queue. However, the core API
      * will batch ACK's and send them in one go when the configured batch size
@@ -38,6 +49,15 @@ public class ServerConnector implements Disconnectable {
      *
      * which sends the ack when m messages for a total bytes of t > batch size
      * have been accumulated.
+     *
+     * 2. Client session factory clean up.
+     * We need to close the factory explicitly if we're not using it anymore,
+     * otherwise we're leaking resources. In fact, we don't close it, Artemis
+     * complain loudly on shut down to make us aware of the leak:
+     *
+     *   WARN: AMQ212008: I am closing a core ClientSessionFactory you left
+     *         open. Please make sure you close all ClientSessionFactories
+     *        explicitly before letting them go out of scope!
      */
     
     private final ClientSessionFactory factory;
@@ -71,7 +91,7 @@ public class ServerConnector implements Disconnectable {
      */
     @Override
     public void close() throws Exception {
-        session.close();
+        factory.close();  // closes the session too.
     }
 
 }
