@@ -70,8 +70,10 @@ public class BasicStandaloneEmbeddedServerTest {
 
         try (ServerConnector session = target.startClientSession()) {
             fail("shouldn't have allowed the connection!");
+            session.close();  // (*)
         }
     }
+    // (*) gets rid of warning about session var never being used.
 
     @Test
     public void sendReceiveMessage() throws Exception {
