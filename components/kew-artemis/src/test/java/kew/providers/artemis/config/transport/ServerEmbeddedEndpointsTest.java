@@ -9,11 +9,11 @@ import org.apache.activemq.artemis.core.config.Configuration;
 import org.apache.activemq.artemis.core.remoting.impl.invm.TransportConstants;
 import org.junit.Test;
 
-import java.util.function.IntUnaryOperator;
-import java.util.stream.IntStream;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-
-public class EmbeddedServerEndpointsTest {
+public class ServerEmbeddedEndpointsTest {
 
     private static int getServerId(TransportConfiguration tc) {
         return (int) tc.getParams()
@@ -22,19 +22,17 @@ public class EmbeddedServerEndpointsTest {
 
 
     @Test
-    public void generateSequentialServerIds() {
-        int[] expected = new int[] { 1, 2, 3 };
-
-        IntUnaryOperator f = x -> new EmbeddedServerEndpoints()
-                                        .embeddedServerId();
-        int[] actual = IntStream.of(expected).map(f).toArray();
-
-        assertArrayEquals(expected, actual);
+    public void generateUniqueServerIds() {
+        Set<Integer> actual = Stream.of(1, 2, 3)
+                                    .map(x -> new ServerEmbeddedEndpoints()
+                                             .embeddedServerId())
+                                    .collect(Collectors.toSet());
+        assertThat(actual, hasSize(3));
     }
 
     @Test
     public void connectorAndAcceptorHaveSameServerId() {
-        EmbeddedServerEndpoints cfg = new EmbeddedServerEndpoints();
+        ServerEmbeddedEndpoints cfg = new ServerEmbeddedEndpoints();
         int serverId = cfg.embeddedServerId();
         int acceptorId = getServerId(cfg.acceptor().transport());
         int connectorId = getServerId(cfg.connector().transport());
@@ -45,7 +43,7 @@ public class EmbeddedServerEndpointsTest {
 
     @Test
     public void configureConnectorAcceptorPair() {
-        EmbeddedServerEndpoints tc = new EmbeddedServerEndpoints();
+        ServerEmbeddedEndpoints tc = new ServerEmbeddedEndpoints();
         Configuration actual = CoreConfigFactory.empty()
                                                 .with(tc::transportConfig)
                                                 .apply(null);

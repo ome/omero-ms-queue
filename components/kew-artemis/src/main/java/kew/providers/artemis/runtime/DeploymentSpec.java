@@ -10,7 +10,7 @@ import org.apache.activemq.artemis.core.config.Configuration;
 import org.apache.activemq.artemis.spi.core.security.ActiveMQJAASSecurityManager;
 import org.apache.activemq.artemis.spi.core.security.ActiveMQSecurityManager;
 
-import kew.providers.artemis.config.transport.EmbeddedServerEndpoints;
+import kew.providers.artemis.config.transport.ServerEmbeddedEndpoints;
 import util.object.Builder;
 
 /**
@@ -19,13 +19,13 @@ import util.object.Builder;
 public class DeploymentSpec {
 
     private final Configuration config;
-    private final EmbeddedServerEndpoints embeddedEndpoints;
+    private final ServerEmbeddedEndpoints embeddedEndpoints;
     private final ActiveMQSecurityManager securityManager;
     private final MBeanServer mBeanServer;
 
     /**
      * Creates a new instance.
-     * This constructor automatically adds {@link EmbeddedServerEndpoints
+     * This constructor automatically adds {@link ServerEmbeddedEndpoints
      * embedded transport endpoints} to the Artemis core configuration and
      * uses Artemis's default security manager and MBean server if none are
      * provided.
@@ -43,7 +43,7 @@ public class DeploymentSpec {
         requireNonNull(securityManager, "securityManager");
         requireNonNull(mBeanServer, "mBeanServer");
 
-        this.embeddedEndpoints = new EmbeddedServerEndpoints();
+        this.embeddedEndpoints = new ServerEmbeddedEndpoints();
         this.config = configBuilder
                      .with(embeddedEndpoints::transportConfig)
                      .apply(null);
@@ -67,7 +67,7 @@ public class DeploymentSpec {
      * @return the embedded acceptor and connector that were automatically
      * added to the core configuration.
      */
-    public EmbeddedServerEndpoints embeddedEndpoints() {
+    public ServerEmbeddedEndpoints embeddedEndpoints() {
         return embeddedEndpoints;
     }
 
