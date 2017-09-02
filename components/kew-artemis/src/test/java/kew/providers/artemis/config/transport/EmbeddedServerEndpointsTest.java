@@ -47,7 +47,7 @@ public class EmbeddedServerEndpointsTest {
     public void configureConnectorAcceptorPair() {
         EmbeddedServerEndpoints tc = new EmbeddedServerEndpoints();
         Configuration actual = CoreConfigFactory.empty()
-                                                .with(tc::embeddedTransport)
+                                                .with(tc::transportConfig)
                                                 .apply(null);
 
         assertThat(actual.getAcceptorConfigurations().size(), is(1));

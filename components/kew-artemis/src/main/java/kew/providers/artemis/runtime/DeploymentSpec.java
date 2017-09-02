@@ -45,7 +45,7 @@ public class DeploymentSpec {
 
         this.embeddedEndpoints = new EmbeddedServerEndpoints();
         this.config = configBuilder
-                     .with(embeddedEndpoints::embeddedTransport)
+                     .with(embeddedEndpoints::transportConfig)
                      .apply(null);
         this.securityManager = securityManager    // (1)
                               .orElseGet(ActiveMQJAASSecurityManager::new);
