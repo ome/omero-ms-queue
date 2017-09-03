@@ -97,6 +97,12 @@ public class ServerNetworkEndpointsTest {
      * in an inconsistent state.
      */
 
+    @Test
+    public void useLocalhost() {
+        ServerNetworkEndpoints target = ServerNetworkEndpoints.localhost(1);
+        assertThat(target.ipOrHostName(), is("localhost"));
+    }
+
     @Test (expected = IllegalArgumentException.class)
     public void ctorThrowsIfNullHost() {
         new ServerNetworkEndpoints(null, PositiveN.of(1));

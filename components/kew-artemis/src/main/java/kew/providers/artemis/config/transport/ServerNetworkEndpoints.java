@@ -15,6 +15,18 @@ import util.types.PositiveN;
  */
 public class ServerNetworkEndpoints implements ServerEndpointPair {
 
+    /**
+     * Factory method to instantiate an acceptor/connector pair bound to
+     * "localhost" on the specified port.
+     * @param port the port number for the acceptor/connector pair.
+     * @return the acceptor/connector pair.
+     * @throws IllegalArgumentException if the port isn't positive.
+     */
+    public static ServerNetworkEndpoints localhost(int port) {
+        return new ServerNetworkEndpoints("localhost", PositiveN.of(port));
+    }
+
+
     private final NetworkAcceptorConfig networkAcceptor;
     private final NetworkConnectorConfig networkConnector;
     private final String ipOrHostName;
