@@ -58,4 +58,22 @@ public class ServerEmbeddedEndpointsTest {
                    is(tc.connector().transport()));
     }
 
+    @Test
+    public void accidentallyOverrideServerId() {
+        ServerEmbeddedEndpoints tc = new ServerEmbeddedEndpoints();
+        int initialId = tc.embeddedServerId();
+        int override = initialId + 1;
+
+        tc.acceptor().params().put(TransportConstants.SERVER_ID_PROP_NAME,
+                                   override);
+
+        assertThat(getServerId(tc.acceptor().transport()), is(override));
+        assertThat(getServerId(tc.connector().transport()), is(initialId));
+    }
+    /* NOTE. Mutability.
+     * This test is just a reminder that we're not yet enforcing invariants
+     * at the type-level. (See note about it in ServerEmbeddedEndpoints.)
+     * The test shows that it's possible to get the ServerEmbeddedEndpoints
+     * in an inconsistent state.
+     */
 }

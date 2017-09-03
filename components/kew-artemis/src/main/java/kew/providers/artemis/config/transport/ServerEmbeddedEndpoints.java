@@ -51,20 +51,24 @@ public class ServerEmbeddedEndpoints implements ServerEndpointPair {
         return embeddedServerId;
     }
 
-    /**
-     * @return the embedded acceptor.
-     */
     @Override
     public AcceptorConfig acceptor() {
         return embeddedAcceptor;
     }
 
-    /**
-     * @return the embedded connector.
-     */
     @Override
     public ConnectorConfig connector() {
         return embeddedConnector;
     }
 
 }
+/* NOTE. Mutability.
+ * Ideally we'd like to maintain these invariants:
+ * - the acceptor/connector name is unique and never changes.
+ * - the server ID of the acceptor = that of connector and never changes.
+ * But you can always get hold of the underlying transport and shoot yourself
+ * in the foot cos it's a mutable object. We could try to enforce these
+ * invariants at the type-level but it's just too much work, so will rely on
+ * clients behaving themselves and never change the name and server ID of the
+ * underlying transport...
+ */

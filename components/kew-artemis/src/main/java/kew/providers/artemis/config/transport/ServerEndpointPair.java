@@ -6,6 +6,11 @@ import org.apache.activemq.artemis.core.config.Configuration;
 
 /**
  * A matching acceptor/connector configuration pair for an Artemis server.
+ * Implementing classes create an acceptor and connector with the same initial
+ * transport properties, e.g. with the same host and port. However, since you
+ * can still get hold of the underlying Artemis transport (mutable!) object,
+ * if you do (e.g. to add more transport props), you'll have to be careful to
+ * never override any of the initial props set by the implementing class.
  */
 public interface ServerEndpointPair {
 
