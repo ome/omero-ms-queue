@@ -1,17 +1,21 @@
 package kew.providers.artemis.runtime;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static util.sequence.Arrayz.array;
 
 import org.apache.activemq.artemis.core.config.Configuration;
 import org.apache.activemq.artemis.core.server.ActiveMQServer;
+import org.junit.Before;
 import org.junit.Test;
 import util.types.PositiveN;
 
 import java.time.Duration;
 import java.util.stream.Stream;
 
-public class ClusterWaitingRoomTest {
+
+public class ClusterWaitingRoomTest extends ClusterWaitingRoom {
 
     /* Ideally we should be using the code below, but the Topology and
      * ClusterManager classes are final and our version of Mockito can't
@@ -84,6 +88,69 @@ public class ClusterWaitingRoomTest {
         when(server.getConfiguration()).thenReturn(config);
 
         return server;
+    }
+
+    Stream<Integer>[] topologyQueries;
+    int toplogyQueriesCount;
+
+    public ClusterWaitingRoomTest() {
+        super(newServer(true));
+    }
+
+    @Before
+    public void setup() {
+        topologyQueries = null;
+        toplogyQueriesCount = 0;
+    }
+
+    @Override
+    protected Stream<Integer> countClusterMembersOnEachConnection() {
+        if (++toplogyQueriesCount <= topologyQueries.length) {
+            return topologyQueries[toplogyQueriesCount - 1];
+        }
+        return Stream.empty();
+    }
+
+    @Test
+    public void hasMinMembersOfReturnsTrueIfExistsConnWithAtLeastMinMembers() {
+        topologyQueries = array(Stream.of(1, 2, 1, 3));
+        boolean actual = hasMinMembersOf(PositiveN.of(2));
+        assertTrue(actual);
+    }
+
+    @Test
+    public void hasMinMembersOfReturnsFalseIfNoConnHasAtLeastMinMembers() {
+        topologyQueries = array(Stream.of(1, 2, 1, 3));
+        boolean actual = hasMinMembersOf(PositiveN.of(4));
+        assertFalse(actual);
+    }
+
+    @Test
+    public void waitForClusterFormingTriesUntilThresholdReached() {
+        topologyQueries = array(
+                Stream.empty(), Stream.of(1, 1, 1, 1), Stream.of(1, 2, 1, 3));
+        boolean actual = waitForClusterForming(
+                            PositiveN.of(3),
+                            Stream.of(Duration.ofMillis(1),
+                                      Duration.ofMillis(1),
+                                      Duration.ofMillis(1),
+                                      Duration.ofMillis(1)));
+        assertTrue(actual);
+        assertThat(toplogyQueriesCount, is(3));
+    }
+
+    @Test
+    public void waitForClusterFormingGivesUpAfterAllIntervalsElapsed() {
+        topologyQueries = array(
+                Stream.empty(), Stream.of(1, 1), Stream.of(1, 1));
+        boolean actual = waitForClusterForming(
+                            PositiveN.of(3),
+                            Stream.of(Duration.ofMillis(1),
+                                      Duration.ofMillis(1),
+                                      Duration.ofMillis(1),
+                                      Duration.ofMillis(1)));
+        assertFalse(actual);
+        assertThat(toplogyQueriesCount, is(4));
     }
 
     @Test

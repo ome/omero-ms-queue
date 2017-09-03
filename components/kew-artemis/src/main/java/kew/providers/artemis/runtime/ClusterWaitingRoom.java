@@ -1,6 +1,7 @@
 package kew.providers.artemis.runtime;
 
 import static java.util.Objects.requireNonNull;
+import static util.error.Exceptions.throwAsIfUnchecked;
 import static util.sequence.Streams.pruneNull;
 
 import java.time.Duration;
@@ -14,7 +15,6 @@ import org.apache.activemq.artemis.core.server.ActiveMQServer;
 import org.apache.activemq.artemis.core.server.cluster.ClusterConnection;
 import org.apache.activemq.artemis.core.server.cluster.ClusterManager;
 
-import util.lambda.FunctionE;
 import util.types.PositiveN;
 
 /**
@@ -22,6 +22,14 @@ import util.types.PositiveN;
  * join the cluster your embedded server is in.
  */
 public class ClusterWaitingRoom {
+
+    private static void sleep(Duration delay) {
+        try {
+            Thread.sleep(delay.toMillis());
+        } catch (InterruptedException e) {
+            throwAsIfUnchecked(e);
+        }
+    }
 
     private static void checkServerIsConfiguredToBeInACluster(
             ActiveMQServer clusterMember) {
@@ -65,12 +73,13 @@ public class ClusterWaitingRoom {
                        .map(Collection::size);
     }
 
-    private Stream<Integer> countClusterMembersOnEachConnection() {
+    protected Stream<Integer> countClusterMembersOnEachConnection() {
         return clusterConnections()
               .map(this::countTopologyMembers)
               .filter(Optional::isPresent)
               .map(Optional::get);
     }
+    // this method is protected to ease testing, ideally it should be private.
 
     /**
      * Does the cluster currently have at least {@code min} members?
@@ -79,9 +88,7 @@ public class ClusterWaitingRoom {
      */
     public boolean hasMinMembersOf(PositiveN min) {
         return countClusterMembersOnEachConnection()
-              .map(n -> min.get() <= n)
-              .findAny()
-              .orElse(false);
+              .anyMatch(n -> min.get() <= n);
     }
     /* NOTE. Laziness.
      * The check will succeed on retrieving the first Topology which has at
@@ -116,14 +123,11 @@ public class ClusterWaitingRoom {
         requireNonNull(serversThreshold, "serversThreshold");
         requireNonNull(waitIntervals, "waitIntervals");
 
-        FunctionE<Duration, Boolean> delayedCheck = d -> {
-            Thread.sleep(d.toMillis());  // can throw InterruptedException
-            return hasMinMembersOf(serversThreshold);
-        };
         return pruneNull(waitIntervals)
-              .map(delayedCheck)
-              .findAny()
-              .orElse(false);
+              .anyMatch(d -> {
+                  sleep(d);  // can throw InterruptedException
+                  return hasMinMembersOf(serversThreshold);
+              });
     }
 
 }
