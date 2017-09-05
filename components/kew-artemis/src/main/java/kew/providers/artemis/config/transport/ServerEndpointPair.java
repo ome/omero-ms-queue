@@ -34,9 +34,9 @@ public interface ServerEndpointPair {
     default Configuration transportConfig(Configuration cfg) {
         requireNonNull(cfg, "cfg");
 
-        cfg.addAcceptorConfiguration(acceptor().transport());
-        cfg.addConnectorConfiguration(connector().transport().getName(),
-                                      connector().transport());
+        acceptor().transportConfig(cfg);
+        connector().transportConfig(cfg);
+
         return cfg;
     }
 
