@@ -27,7 +27,7 @@ public class IntQ {
     }
 
     public static CoreQueueConfiguration qConfig() {
-        String address = "test/intq";
+        String address = "jms/test/intq";
         return new CoreQueueConfiguration()
               .setName(address)
               .setAddress(address)

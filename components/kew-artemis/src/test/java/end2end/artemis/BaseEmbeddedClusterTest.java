@@ -2,114 +2,70 @@ package end2end.artemis;
 
 import static org.junit.Assert.*;
 
-import kew.providers.artemis.config.CoreConfigFactory;
-import kew.providers.artemis.config.StaticClusterConfigFactory;
-import kew.providers.artemis.config.transport.ConnectorConfig;
-import kew.providers.artemis.config.transport.ServerEndpointPair;
-import kew.providers.artemis.config.transport.ServerNetworkEndpoints;
-import kew.providers.artemis.runtime.ClusterWaitingRoom;
-import kew.providers.artemis.runtime.DeploymentSpec;
-import kew.providers.artemis.runtime.EmbeddedServer;
-import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
-import org.apache.activemq.artemis.core.config.Configuration;
-import org.apache.activemq.artemis.core.server.cluster.impl.MessageLoadBalancingType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.rules.TemporaryFolder;
-import util.object.Builder;
-import util.types.PositiveN;
 
 import java.nio.file.Path;
 import java.time.Duration;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static kew.providers.artemis.config.SecurityProps.securityEnabled;
-import static kew.providers.artemis.config.StorageProps.defaultStorageSettings;
+import org.apache.activemq.artemis.api.core.TransportConfiguration;
+import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
+import org.apache.activemq.artemis.api.core.client.ServerLocator;
 
+import kew.providers.artemis.ServerConnector;
+import kew.providers.artemis.config.transport.NetworkConnectorConfig;
+import kew.providers.artemis.config.transport.ServerNetworkEndpoints;
+import kew.providers.artemis.runtime.ClusterWaitingRoom;
+import kew.providers.artemis.runtime.DeploymentSpec;
+import kew.providers.artemis.runtime.EmbeddedServer;
+import util.types.PositiveN;
+
+/**
+ * Starts an embedded Artemis broker that will be part of our test cluster.
+ * The test cluster is made up of this embedded broker and an external one
+ * running in a separate JVM which is started in the Gradle build file.
+ * @see ClusterMember
+ */
 public class BaseEmbeddedClusterTest {
-
-    private static final AtomicBoolean clusterStarted = new AtomicBoolean(false);
 
     @ClassRule
     public static final TemporaryFolder tempDir = new TemporaryFolder();
 
-    protected static EmbeddedServer server1;
-    protected static EmbeddedServer server2;
+    private static final AtomicBoolean clusterStarted = new AtomicBoolean(false);
 
-    private static Consumer<ClusterConnectionConfiguration>
-    roundRobinLoadBalancing() {
-        return cfg -> {
-            cfg.setMaxHops(1);
-            cfg.setMessageLoadBalancingType(MessageLoadBalancingType.STRICT);
-        };
-    }
+    private static final ServerNetworkEndpoints embeddedServerEndpoints =
+            ServerNetworkEndpoints.localhost(61616);
+    private static final NetworkConnectorConfig externalServerConnector =
+            ServerNetworkEndpoints.localhost(61617).connector();
 
-    private static Function<Configuration, Configuration> clusteringConfig(
-            ConnectorConfig member, ConnectorConfig topologyMaster) {
-        return new StaticClusterConfigFactory(topologyMaster)
-              .clusterConfig(roundRobinLoadBalancing(), member);
-    }
+    private static EmbeddedServer server;
 
-    private static Builder<Void, Configuration>
-    embeddedSymClusterWithIntQConfigBuilder(
-            ServerEndpointPair memberEndpoints,
-            ConnectorConfig topologyMaster)
-                throws Exception {
+    // IMPORTANT: this spec's data goes hand in hand with the values used in
+    // the Gradle build file to start the external broker process.
+    private static DeploymentSpec clusterSpec() throws Exception {
+        String clusterPassword = "clustpass";
         Path dataDir = tempDir.newFolder().toPath();
 
-        return CoreConfigFactory
-              .empty()
-              .with(defaultStorageSettings(dataDir))
-              .with(securityEnabled(false))
-              .with(memberEndpoints::transportConfig)
-              .with(clusteringConfig(memberEndpoints.connector(),
-                                     topologyMaster))
-              .with(IntQ::deploy);
+        ClusterSpecFactory factory = new ClusterSpecFactory(
+                embeddedServerEndpoints, externalServerConnector,
+                clusterPassword, dataDir);
+        return factory.makeSpec();
     }
-
-    private static DeploymentSpec embeddedSymClusterWithIntQ(
-            ServerEndpointPair memberEndpoints,
-            ConnectorConfig topologyMaster)
-                throws Exception {
-        return new DeploymentSpec(
-                embeddedSymClusterWithIntQConfigBuilder(memberEndpoints,
-                                                        topologyMaster),
-                Optional.empty(),
-                Optional.empty());
-    }
-
-    protected static ServerNetworkEndpoints endpoints1;
-    protected static ServerNetworkEndpoints endpoints2;
 
     private static boolean doStartCluster() throws Exception {
-        //ServerNetworkEndpoints endpoints1 =
-        endpoints1 =
-                ServerNetworkEndpoints.localhost(61616);
-        //ServerNetworkEndpoints endpoints2 =
-        endpoints2 =
-                ServerNetworkEndpoints.localhost(61617);
+        server = EmbeddedServer.start(clusterSpec());
 
-        server1 = EmbeddedServer.start(
-                embeddedSymClusterWithIntQ(endpoints1,
-                                           endpoints2.connector()));
-        server2 = EmbeddedServer.start(
-                embeddedSymClusterWithIntQ(endpoints2,
-                                           endpoints1.connector()));
-/*
-        return new ClusterWaitingRoom(server2.instance())
+        return new ClusterWaitingRoom(server.instance())
               .waitForClusterForming(PositiveN.of(2),
                                      Stream.of(
                                              Duration.ofMillis(200),
-                                             Duration.ofMillis(1 * 1000),
-                                             Duration.ofMillis(2 * 1000),
-                                             Duration.ofMillis(5 * 1000)));
-                                             */
-        return true;
+                                             Duration.ofMillis(1000),
+                                             Duration.ofMillis(2000),
+                                             Duration.ofMillis(5000)));
     }
 
     @BeforeClass
@@ -120,7 +76,7 @@ public class BaseEmbeddedClusterTest {
                     clusterStarted.set(true);
 
                     boolean started = doStartCluster();
-                    //assertTrue(started);
+                    assertTrue("cluster hasn't formed yet!", started);
                 }
             }
         }
@@ -135,12 +91,33 @@ public class BaseEmbeddedClusterTest {
                 if (clusterStarted.get()) {
                     clusterStarted.set(false);
 
-                    server1.stop();
-                    server2.stop();
+                    server.stop();
                 }
             }
         }
     }
     /* (*) NB JUnit may run tests concurrently.
      */
+
+    protected static ServerConnector startClientSessionWithEmbeddedServer()
+            throws Exception {
+        return server.startClientSession();  // (*)
+        // NB using an in-vm connector is supposed to work even if the
+        //return startClientSession(embeddedServerEndpoints.connector());
+    }
+    /* (*) Embedded Connector.
+     * We use an "in-vm" connector here, instead of the network one we used
+     * for the clustering config. This is still supposed to work in the case
+     * of a clustered server and should avoid going through the loopback I/F.
+     */
+
+    protected static ServerConnector startClientSessionWithExternalServer()
+            throws Exception {
+        TransportConfiguration connector = externalServerConnector.transport();
+        ServerLocator locator =
+                ActiveMQClient.createServerLocatorWithHA(connector);
+
+        return new ServerConnector(locator);
+    }
+
 }

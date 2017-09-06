@@ -1,9 +1,16 @@
+import java.nio.file.Files
+import java.nio.file.Paths
+
+plugins {
+    id 'com.github.psxpaul.execfork' version '0.1.5'
+}
+
 apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 apply plugin: 'jacoco'
-
+apply plugin: 'gradle-execfork-plugin'
 
 dependencies {
     compile project(':kew')
@@ -24,3 +31,32 @@ jacocoTestReport {
         html.enabled true
     }
 }
+
+task clusterMemberDir {
+    ext.pwd = Files.createTempDirectory('kew-artemis-tests').toString()
+    ext.outLog = Paths.get(pwd, 'artemis-stdout').toString()
+    ext.errLog = Paths.get(pwd, 'artemis-stderr').toString()
+
+    doLast {
+        printf('>>> Test Cluster Member Working Dir: %s%n', pwd)
+    }
+    /* printing the path to the tmp dir just in case we need to inspect
+     * the logs after a test failure...
+     */
+}
+
+task startTestClusterMember(
+        type: com.github.psxpaul.task.JavaExecFork,
+        dependsOn: [testClasses, clusterMemberDir]) {
+    stopAfter = test
+
+    main = 'end2end.artemis.ClusterMember'
+    classpath = sourceSets.test.runtimeClasspath
+    args = ['61617', '61616', 'clustpass', clusterMemberDir.pwd]
+
+    workingDir = clusterMemberDir.pwd
+    standardOutput = clusterMemberDir.outLog
+    errorOutput = clusterMemberDir.errLog
+}
+
+test.dependsOn startTestClusterMember
