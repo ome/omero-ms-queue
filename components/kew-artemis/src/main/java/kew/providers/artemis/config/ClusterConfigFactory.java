@@ -6,7 +6,7 @@ import java.util.function.Function;
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 
-import kew.providers.artemis.config.transport.ConnectorConfig;
+import kew.providers.artemis.config.transport.ServerNetworkEndpoints;
 
 /**
  * Builds functions to add cluster settings to a core Artemis configuration.
@@ -22,13 +22,14 @@ public interface ClusterConfigFactory {
 
     /**
      * Builds a function that adds cluster settings to a given Artemis core
-     * configuration. If you pass in an empty list of connectors, then the
-     * returned function will do nothing. Any duplicated connectors will be
-     * automatically removed.
+     * configuration. For each endpoint pair, we add both the connector and
+     * acceptor to the core configuration and then use the connector to add
+     * a cluster configuration too. If you pass in an empty list of endpoints,
+     * then the returned function will do nothing.
      * @param customizer sets specific cluster connection parameters if the
      *                   default settings are not suitable.
-     * @param connectors one or more connectors other cluster members should
-     *                  use to connect to this server.
+     * @param endpointsPairs one or more acceptors/connectors other cluster
+     *                       members should use to connect to this server.
      * @return the function to add cluster settings.
      * @throws NullPointerException if the customizer is {@code null}.
      * @throws IllegalArgumentException if the connectors is {@code null} or
@@ -36,22 +37,23 @@ public interface ClusterConfigFactory {
      */
     Function<Configuration, Configuration> clusterConfig(
             Consumer<ClusterConnectionConfiguration> customizer,
-            ConnectorConfig...connectors);
+            ServerNetworkEndpoints...endpointsPairs);
 
     /**
      * Builds a function that adds cluster settings to a given Artemis core
-     * configuration. If you pass in an empty list of connectors, then the
-     * returned function will do nothing. Any duplicated connectors will be
-     * automatically removed.
-     * @param connectors one or more connectors other cluster members should
-     *                  use to connect to this server.
+     * configuration. For each endpoint pair, we add both the connector and
+     * acceptor to the core configuration and then use the connector to add
+     * a cluster configuration too. If you pass in an empty list of endpoints,
+     * then the returned function will do nothing.
+     * @param endpointsPairs one or more acceptors/connectors other cluster
+     *                       members should use to connect to this server.
      * @return the function to add cluster settings.
      * @throws IllegalArgumentException if the connectors is {@code null} or
      * it has {@code null}s in it.
      */
     default Function<Configuration, Configuration> clusterConfig(
-            ConnectorConfig...connectors) {
-        return clusterConfig(c -> {}, connectors);
+            ServerNetworkEndpoints...endpointsPairs) {
+        return clusterConfig(c -> {}, endpointsPairs);
     }
 
 }

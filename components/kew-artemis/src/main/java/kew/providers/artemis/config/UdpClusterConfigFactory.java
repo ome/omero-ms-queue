@@ -5,14 +5,14 @@ import static java.util.stream.Collectors.toList;
 import static util.string.Strings.requireString;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import org.apache.activemq.artemis.api.core.*;
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 
-import kew.providers.artemis.config.transport.ConnectorConfig;
+import kew.providers.artemis.config.transport.NetworkConnectorConfig;
+import kew.providers.artemis.config.transport.ServerNetworkEndpoints;
 import util.types.PositiveN;
 import util.types.UuidString;
 
@@ -51,10 +51,12 @@ public class UdpClusterConfigFactory extends BaseClusterConfigFactory {
     }
     // see parseBroadcastGroupConfiguration of FileConfigurationParser.
 
-    private static List<String> names(Set<ConnectorConfig> connectors) {
-        return connectors.stream()
-                         .map(c -> c.transport().getName())
-                         .collect(toList());
+    private static List<String> connectorNames(
+            List<ServerNetworkEndpoints> endpointsPairs) {
+        return endpointsPairs.stream()
+                             .map(ServerNetworkEndpoints::connector)
+                             .map(c -> c.transport().getName())
+                             .collect(toList());
     }
 
 
@@ -83,7 +85,7 @@ public class UdpClusterConfigFactory extends BaseClusterConfigFactory {
     @Override
     protected ClusterConnectionConfiguration buildConnection(
             Consumer<ClusterConnectionConfiguration> customizer,
-            ConnectorConfig connector) {
+            NetworkConnectorConfig connector) {
         ClusterConnectionConfiguration cfg =
                 super.buildConnection(customizer, connector);
         cfg.setDiscoveryGroupName(discoveryGroup.getName());
@@ -95,16 +97,16 @@ public class UdpClusterConfigFactory extends BaseClusterConfigFactory {
     protected Configuration buildConfig(
             Configuration cfg,
             Consumer<ClusterConnectionConfiguration> customizer,
-            Set<ConnectorConfig> connectors) {
+            List<ServerNetworkEndpoints> endpointsPairs) {
         cfg.addDiscoveryGroupConfiguration(discoveryGroup.getName(),
                                            discoveryGroup);
         BroadcastGroupConfiguration bgc =
                 makeBroadcastGroup(ipAddress,
                                    port.get().intValue(),
-                                   names(connectors));
+                                   connectorNames(endpointsPairs));
         cfg.addBroadcastGroupConfiguration(bgc);
 
-        return super.buildConfig(cfg, customizer, connectors);
+        return super.buildConfig(cfg, customizer, endpointsPairs);
     }
 
 }

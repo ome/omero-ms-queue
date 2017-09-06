@@ -3,13 +3,9 @@ package kew.providers.artemis.config;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import kew.providers.artemis.config.transport.ConnectorConfig;
-import kew.providers.artemis.config.transport.EmbeddedConnectorConfig;
-import kew.providers.artemis.config.transport.EndpointConfig;
-import kew.providers.artemis.config.transport.NetworkConnectorConfig;
+import kew.providers.artemis.config.transport.*;
 import org.apache.activemq.artemis.api.core.BroadcastGroupConfiguration;
 import org.apache.activemq.artemis.api.core.DiscoveryGroupConfiguration;
-import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.api.core.UDPBroadcastEndpointFactory;
 import org.apache.activemq.artemis.core.config.Configuration;
 import org.junit.Test;
@@ -23,7 +19,7 @@ import java.util.stream.Stream;
 
 public class UdpClusterConfigFactoryTest {
 
-    private Configuration buildConfig(ConnectorConfig...connectors) {
+    private Configuration buildConfig(ServerNetworkEndpoints...connectors) {
         Configuration config = CoreConfigFactory.empty().apply(null);
 
         return new UdpClusterConfigFactory("231.7.7.7", PositiveN.of(9876))
@@ -33,18 +29,18 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void buildOnlyOneBroadcastGroup() {
-        ConnectorConfig net = new NetworkConnectorConfig();
-        ConnectorConfig inVm = new EmbeddedConnectorConfig();
-        Configuration config = buildConfig(net, inVm);
+        ServerNetworkEndpoints e1 = ServerNetworkEndpoints.localhost(1);
+        ServerNetworkEndpoints e2 = ServerNetworkEndpoints.localhost(2);
+        Configuration config = buildConfig(e1, e2);
 
         assertThat(config.getBroadcastGroupConfigurations(), hasSize(1));
     }
 
     @Test
     public void buildOnlyOneDiscoveryGroup() {
-        ConnectorConfig net = new NetworkConnectorConfig();
-        ConnectorConfig inVm = new EmbeddedConnectorConfig();
-        Configuration config = buildConfig(net, inVm);
+        ServerNetworkEndpoints e1 = ServerNetworkEndpoints.localhost(1);
+        ServerNetworkEndpoints e2 = ServerNetworkEndpoints.localhost(2);
+        Configuration config = buildConfig(e1, e2);
 
         assertNotNull(config.getDiscoveryGroupConfigurations());
         assertThat(config.getDiscoveryGroupConfigurations().values(),
@@ -53,9 +49,9 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void linkConnectorsToBroadcastGroup() {
-        ConnectorConfig net = new NetworkConnectorConfig();
-        ConnectorConfig inVm = new EmbeddedConnectorConfig();
-        Configuration config = buildConfig(net, inVm);
+        ServerNetworkEndpoints e1 = ServerNetworkEndpoints.localhost(1);
+        ServerNetworkEndpoints e2 = ServerNetworkEndpoints.localhost(2);
+        Configuration config = buildConfig(e1, e2);
 
         Set<String> actualConnectorNames = new HashSet<>(
                 config.getBroadcastGroupConfigurations()
@@ -63,9 +59,8 @@ public class UdpClusterConfigFactoryTest {
                       .getConnectorInfos()
         );
         Set<String> expectedConnectorNames =
-                Stream.of(net, inVm)
-                      .map(EndpointConfig::transport)
-                      .map(TransportConfiguration::getName)
+                Stream.of(e1, e2)
+                      .map(e -> e.connector().transport().getName())
                       .collect(Collectors.toSet());
 
         assertThat(actualConnectorNames, is(expectedConnectorNames));
@@ -73,8 +68,8 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void useMutableListOfConnectorNamesInBroadcastGroup() {
-        ConnectorConfig net = new NetworkConnectorConfig();
-        Configuration config = buildConfig(net);
+        ServerNetworkEndpoints sne = ServerNetworkEndpoints.localhost(1);
+        Configuration config = buildConfig(sne);
 
         List<String> connectorNames = config.getBroadcastGroupConfigurations()
                                             .get(0)
@@ -87,8 +82,8 @@ public class UdpClusterConfigFactoryTest {
 
     @Test
     public void discoveryAndBroadcastGroupsHaveSameEndpoint() {
-        ConnectorConfig net = new NetworkConnectorConfig();
-        Configuration config = buildConfig(net);
+        ServerNetworkEndpoints sne = ServerNetworkEndpoints.localhost(1);
+        Configuration config = buildConfig(sne);
 
         BroadcastGroupConfiguration broadcast =
                 config.getBroadcastGroupConfigurations().get(0);

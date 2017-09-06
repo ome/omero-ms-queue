@@ -1,18 +1,18 @@
 package kew.providers.artemis.config;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toSet;
-import static util.sequence.Arrayz.asStream;
+import static util.sequence.Arrayz.asList;
 import static util.sequence.Arrayz.requireArrayOfMinLength;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;
 
-import kew.providers.artemis.config.transport.ConnectorConfig;
+import kew.providers.artemis.config.transport.NetworkConnectorConfig;
+import kew.providers.artemis.config.transport.ServerNetworkEndpoints;
 import util.types.UuidString;
 
 /**
@@ -24,7 +24,7 @@ public abstract class BaseClusterConfigFactory implements ClusterConfigFactory {
 
     protected ClusterConnectionConfiguration buildConnection(
             Consumer<ClusterConnectionConfiguration> customizer,
-            ConnectorConfig connector) {
+            NetworkConnectorConfig connector) {
         ClusterConnectionConfiguration cfg =
                 new ClusterConnectionConfiguration();
 
@@ -41,10 +41,11 @@ public abstract class BaseClusterConfigFactory implements ClusterConfigFactory {
     protected Configuration buildConfig(
             Configuration cfg,
             Consumer<ClusterConnectionConfiguration> customizer,
-            Set<ConnectorConfig> connectors) {
-        connectors.forEach(connector -> {
-            ClusterConnectionConfiguration c = buildConnection(customizer,
-                                                               connector);
+            List<ServerNetworkEndpoints> endpointsPairs) {
+        endpointsPairs.forEach(endpoint -> {
+            endpoint.transportConfig(cfg);
+            ClusterConnectionConfiguration c =
+                    buildConnection(customizer, endpoint.connector());
             cfg.addClusterConfiguration(c);
         });
         return cfg;
@@ -53,12 +54,11 @@ public abstract class BaseClusterConfigFactory implements ClusterConfigFactory {
     @Override
     public Function<Configuration, Configuration> clusterConfig(
             Consumer<ClusterConnectionConfiguration> customizer,
-            ConnectorConfig...connectors) {
+            ServerNetworkEndpoints...endpointsPairs) {
         requireNonNull(customizer, "customizer");
-        requireArrayOfMinLength(0, connectors);
+        requireArrayOfMinLength(0, endpointsPairs);
 
-        Set<ConnectorConfig> cs = asStream(connectors).collect(toSet());
-        return cfg -> buildConfig(cfg, customizer, cs);
+        return cfg -> buildConfig(cfg, customizer, asList(endpointsPairs));
     }
 
 }
