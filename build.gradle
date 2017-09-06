@@ -1,3 +1,29 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.4.RELEASE")
+    }
+}
+
+plugins {
+    id 'com.github.psxpaul.execfork' version '0.1.5'
+    // id 'org.springframework.boot' version '1.5.4.RELEASE'
+    /* Ideally we'd use this line instead of the buildscript block above.
+     * However if I get rid of it, then the build fails with
+     *
+     *     Execution failed for task ':bootRepackage'.
+     *     > Unable to find main class
+     *
+     * Even if I keep the buildscript block with the repositories and just
+     * delete the dependencies, I still get the same error!
+     * Also note that version 2 of the plugin replaced bootRepackage with
+     * bootJar and bootWar. So it's probably best to tackle this issue when
+     * upgrading to version 2.
+     */
+}
+
 allprojects {
     group = 'ome'
     version = '1.1.0'
@@ -5,15 +31,6 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-    }
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.4.RELEASE")
     }
 }
 

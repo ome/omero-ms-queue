@@ -1,10 +1,6 @@
 import java.nio.file.Files
 import java.nio.file.Paths
 
-plugins {
-    id 'com.github.psxpaul.execfork' version '0.1.5'
-}
-
 apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
