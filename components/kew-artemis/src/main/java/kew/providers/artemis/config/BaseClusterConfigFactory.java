@@ -28,13 +28,26 @@ public abstract class BaseClusterConfigFactory implements ClusterConfigFactory {
         ClusterConnectionConfiguration cfg =
                 new ClusterConnectionConfiguration();
 
-        customizer.accept(cfg);  // (*)
+        cfg.setAddress("");      // (1)
+        customizer.accept(cfg);  // (2)
         cfg.setName(new UuidString().id());
         cfg.setConnectorName(connector.transport().getName());
 
         return cfg;
     }
-    /* (*) we call the customizer first to avoid it accidentally overriding
+    /* NOTES
+     * 1. Address defaults to "jms" which means the clustering connection only
+     * applies to queues whose address starts with "jms". In other words if
+     * you deploy a queue with an address of "my/queue" on each cluster node
+     * but don't change the default cluster connection address, then that
+     * queue will only ever get messages sent directly to a cluster member,
+     * Artemis won't redistribute messages among cluster members. To avoid
+     * people banging their forehead against the monitor (which is what I
+     * did) to figure out why messages aren't load-balanced, we default
+     * cluster connections to accept messages with any address. However,
+     * the customizer is applied afterward, so our default can be changed
+     * easily.
+     * 2. We call the customizer first to avoid it accidentally overriding
      * the linking of the connector.
      */
 

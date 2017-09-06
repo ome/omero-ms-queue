@@ -116,6 +116,15 @@ public class BaseClusterConfigFactoryTest
         assertThat(names, hasSize(2));
     }
 
+    @Test
+    public void clusterConnectionDefaultsToDeliverMessagesToAnyQueue() {
+        ServerNetworkEndpoints sne = ServerNetworkEndpoints.localhost(1);
+        Configuration config = buildConfig(sne);
+
+        assertThat(config.getClusterConfigurations().get(0).getAddress(),
+                   is(""));
+    }
+
     @Test (expected = NullPointerException.class)
     public void clusterConfigThrowsIfNullCustomizer() {
         clusterConfig((Consumer<ClusterConnectionConfiguration>) null);

@@ -31,7 +31,7 @@ public class QReceiveBuffer<T> implements ChannelSink<T> {
             Thread.sleep(delay);
         }
         throw new IllegalStateException(
-                String.format("waited for %s ms but only received %s messages",
+                String.format("waited for %sms and received %s messages",
                         maxDelayInMs, msgSequence.size()));
     }
 
