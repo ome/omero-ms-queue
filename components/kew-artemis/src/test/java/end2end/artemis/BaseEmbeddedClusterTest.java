@@ -101,6 +101,7 @@ public class BaseEmbeddedClusterTest {
 
     protected static ServerConnector startClientSessionWithEmbeddedServer()
             throws Exception {
+        return server.startClientSession();  // (*)
     }
     /* (*) Embedded Connector.
      * We use an "in-vm" connector here, instead of the network one we used
