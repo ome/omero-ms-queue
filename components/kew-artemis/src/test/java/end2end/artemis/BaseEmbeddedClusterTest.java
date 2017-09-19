@@ -2,6 +2,7 @@ package end2end.artemis;
 
 import static org.junit.Assert.*;
 
+import kew.providers.artemis.runtime.ClientSessions;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -115,7 +116,7 @@ public class BaseEmbeddedClusterTest {
         ServerLocator locator =
                 ActiveMQClient.createServerLocatorWithHA(connector);
 
-        return new ServerConnector(locator);
+        return new ServerConnector(locator, ClientSessions.defaultSession());
     }
 
 }

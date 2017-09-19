@@ -53,7 +53,7 @@ public class EmbeddedServer {
         ServerLocator locator =
                 ActiveMQClient.createServerLocatorWithoutHA(connector);  // (*)
 
-        return new ServerConnector(locator);
+        return new ServerConnector(locator, ClientSessions.defaultSession());
     }
     /* (*) Even if the server is clustered we don't need HA anyway cos the
      * client lives in the same process as the server and there's no network

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import kew.providers.artemis.ServerConnector;
-
+import kew.providers.artemis.runtime.ClientSessions;
 
 /**
  * Singleton beans for Artemis client resources that have to be shared and
@@ -22,7 +22,7 @@ public class ArtemisWiring {
             throws Exception {
         ActiveMQConnectionFactory factory = (ActiveMQConnectionFactory) cf;
         ServerLocator locator = factory.getServerLocator();
-        return new ServerConnector(locator);
+        return new ServerConnector(locator, ClientSessions.defaultSession());
     }
 
 }

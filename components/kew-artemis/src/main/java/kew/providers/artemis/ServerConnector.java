@@ -8,52 +8,36 @@ import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
 import org.apache.activemq.artemis.api.core.client.ServerLocator;
 
 import util.io.Disconnectable;
+import util.lambda.FunctionE;
 
 /**
  * Establishes a connection and client session with the Artemis server.
  */
 public class ServerConnector implements Disconnectable {
 
-    private static ClientSession startSession(ClientSessionFactory csf) 
-            throws ActiveMQException {
+    private static ClientSession startSession(
+            ClientSessionFactory csf,
+            FunctionE<ClientSessionFactory, ClientSession> createSession)
+                throws ActiveMQException {
         boolean created = false;
         try {
-            ClientSession session = csf.createSession(true, true, 0);  // (1)
+            ClientSession session = createSession.apply(csf);
             session.start();
             created = true;
 
             return session;
         } finally {
-            if (!created) {    // (2)
+            if (!created) {    // (1)
                 csf.close();
             }
         }
     }
     /* NOTES
      * -----
-     * 1. Removal of messages from the queue.
-     * When using the Artemis core API, consumed messages have to be explicitly
-     * acknowledged for them to be removed from the queue. However, the core API
-     * will batch ACK's and send them in one go when the configured batch size
-     * is reached. This may cause consumed and acknowledged messages to linger
-     * in the queue; by setting the ACK batch size to 0, we ensure messages will
-     * be removed as soon as they are acknowledged.
-     *
-     * In fact this works exactly the same as it used to in HornetQ.
-     * See
-     * - http://stackoverflow.com/questions/6452505/hornetq-messages-still-remaining-in-queue-after-consuming-using-core-api
-     *
-     * The Artemis code that does that is in the acknowledge method of
-     *
-     *     org.apache.activemq.artemis.core.client.impl.ClientConsumerImpl
-     *
-     * which sends the ack when m messages for a total bytes of t > batch size
-     * have been accumulated.
-     *
-     * 2. Client session factory clean up.
+     * 1. Client session factory clean up.
      * We need to close the factory explicitly if we're not using it anymore,
-     * otherwise we're leaking resources. In fact, we don't close it, Artemis
-     * complain loudly on shut down to make us aware of the leak:
+     * otherwise we're leaking resources. In fact, if you don't close it,
+     * Artemis will complain loudly about the leak on shut down:
      *
      *   WARN: AMQ212008: I am closing a core ClientSessionFactory you left
      *         open. Please make sure you close all ClientSessionFactories
@@ -66,14 +50,20 @@ public class ServerConnector implements Disconnectable {
     /**
      * Connects to the Artemis server and starts a client session.
      * @param locator locates the Artemis server.
+     * @param createSession factory method to create a new session.
      * @throws Exception if the connection could not be established or the
      * session could not be started.
+     * @throws NullPointerException if any argument is {@code null}.
      */
-    public ServerConnector(ServerLocator locator) throws Exception {
+    public ServerConnector(
+            ServerLocator locator,
+            FunctionE<ClientSessionFactory, ClientSession> createSession)
+                throws Exception {
         requireNonNull(locator, "locator");
+        requireNonNull(createSession, "createSession");
         
         this.factory = locator.createSessionFactory();
-        this.session = startSession(factory);
+        this.session = startSession(factory, createSession);
     }
 
     /**
