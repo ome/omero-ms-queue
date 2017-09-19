@@ -29,7 +29,7 @@ public class ArtemisQChannelFactory<T>
         requireNonNull(connector, "connector");
         requireNonNull(qConfig, "qConfig");
 
-        qConnector = new ArtemisQConnector(qConfig, connector.getSession());
+        qConnector = new ArtemisQConnector(qConfig, connector.session());
     }
 
     @Override

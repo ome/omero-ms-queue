@@ -79,7 +79,7 @@ public class ServerConnector implements Disconnectable {
     /**
      * @return the current Artemis session.
      */
-    public ClientSession getSession() {
+    public ClientSession session() {
         return session;
     }
 

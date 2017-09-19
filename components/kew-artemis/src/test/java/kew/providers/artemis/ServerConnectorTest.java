@@ -30,7 +30,7 @@ public class ServerConnectorTest {
     @Test
     public void createSessionOnInstantiation() throws Exception {
         ServerConnector target = newConnector();
-        assertNotNull(target.getSession());
+        assertNotNull(target.session());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class ServerConnectorTest {
         ServerConnector target = newConnector();
         target.close();
 
-        ClientSession session = target.getSession();
+        ClientSession session = target.session();
         verify(session).close();
     }
 
