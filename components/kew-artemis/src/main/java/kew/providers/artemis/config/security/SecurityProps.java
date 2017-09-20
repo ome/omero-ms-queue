@@ -1,10 +1,11 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.security;
 
 import static util.string.Strings.requireString;
 
 import java.util.function.Function;
 
 import org.apache.activemq.artemis.core.config.Configuration;
+import kew.providers.artemis.config.CoreConfigFactory;
 
 /**
  * Type-safe configuration properties for security settings of an underlying

@@ -2,7 +2,7 @@ package end2end.artemis;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static kew.providers.artemis.config.SecurityProps.securityEnabled;
+import static kew.providers.artemis.config.security.SecurityProps.securityEnabled;
 import static kew.providers.artemis.config.StorageProps.defaultStorageSettings;
 import static util.error.Exceptions.unchecked;
 

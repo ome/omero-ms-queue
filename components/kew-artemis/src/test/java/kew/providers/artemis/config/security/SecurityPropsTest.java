@@ -1,9 +1,10 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.security;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static kew.providers.artemis.config.SecurityProps.*;
+import static kew.providers.artemis.config.security.SecurityProps.*;
 
+import kew.providers.artemis.config.CoreConfigFactory;
 import org.apache.activemq.artemis.core.config.Configuration;
 
 import org.junit.Test;

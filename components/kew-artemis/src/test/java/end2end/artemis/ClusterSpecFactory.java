@@ -1,6 +1,6 @@
 package end2end.artemis;
 
-import static kew.providers.artemis.config.SecurityProps.*;
+import static kew.providers.artemis.config.security.SecurityProps.*;
 import static kew.providers.artemis.config.StorageProps.defaultStorageSettings;
 
 import java.nio.file.Path;
