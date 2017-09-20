@@ -61,14 +61,16 @@ public class ClientSessions {
      * @param username the username to authenticate the session. Must
      *                 have at least length one.
      * @param password the password to authenticate the session. May
-     *                 be {@code null} or empty.
+     *                 be empty but not {@code null}.
      * @return the factory method.
      * @throws IllegalArgumentException if the username is {@code null}
      * or empty.
+     * @throws NullPointerException if the password is {@code null}.
      */
     public static FunctionE<ClientSessionFactory, ClientSession>
     defaultAuthenticatedSession(String username, String password) {
         requireString(username, "username");
+        requireNonNull(password, "password");
         return factory -> createSession(factory,
                                         username,
                                         password,
@@ -110,5 +112,11 @@ public class ClientSessions {
  * ClientSessionFactory::createSession method we call. Also note that most
  * createSession methods don't have username and password parameters, the
  * implementation in ClientSessionFactoryImpl calls createSessionInternal
- * passing in null for username and password.
+ * passing in null for username and password. However, if you want to have
+ * an authenticated session, using a null or empty username makes no sense,
+ * so we check for that. When it comes to the password, you could use an
+ * empty password, but it can't be null since security configuration gets
+ * stashed away in SecurityConfiguration (*.core.config.impl package) which
+ * doesn't let you use a null password or user. So we also check the password
+ * isn't null in the case of authenticated sessions.
  */

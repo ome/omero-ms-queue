@@ -41,10 +41,11 @@ public class ClientSessionsTest {
     }
 
     @Test
-    public void createDefaultAuthenticatedSessionWithNoPass() throws Exception {
+    public void createDefaultAuthenticatedSessionWithEmptyPass()
+            throws Exception {
         ClientSessionFactory csf = mockClientSessionFactory();
         ClientSession s = ClientSessions.defaultAuthenticatedSession(
-                                                "user", null)
+                                                "user", "")
                                         .apply(csf);
         assertNotNull(s);
     }
@@ -75,14 +76,17 @@ public class ClientSessionsTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void defaultAuthenticatedSessionThrowsIfNullUsername() {
-        assertNotNull(
-                ClientSessions.defaultAuthenticatedSession(null, "pass"));
+        ClientSessions.defaultAuthenticatedSession(null, "pass");
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void defaultAuthenticatedSessionThrowsIfEmptyUsername() {
-        assertNotNull(
-                ClientSessions.defaultAuthenticatedSession("", "pass"));
+        ClientSessions.defaultAuthenticatedSession("", "pass");
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void defaultAuthenticatedSessionThrowsIfNullPassword() {
+        ClientSessions.defaultAuthenticatedSession("user", null);
     }
 
     @Test
