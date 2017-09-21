@@ -1,10 +1,11 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.cluster;
 
 import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import kew.providers.artemis.config.CoreConfigFactory;
 import kew.providers.artemis.config.transport.ServerNetworkEndpoints;
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.config.ClusterConnectionConfiguration;

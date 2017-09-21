@@ -1,4 +1,4 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.cluster;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.cluster;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

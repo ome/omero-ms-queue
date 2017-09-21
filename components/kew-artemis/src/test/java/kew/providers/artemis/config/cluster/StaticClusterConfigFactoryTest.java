@@ -1,8 +1,9 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.cluster;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import kew.providers.artemis.config.CoreConfigFactory;
 import kew.providers.artemis.config.transport.*;
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.config.Configuration;

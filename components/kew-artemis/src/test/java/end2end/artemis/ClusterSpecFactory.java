@@ -13,7 +13,7 @@ import org.apache.activemq.artemis.core.config.Configuration;
 import org.apache.activemq.artemis.core.server.cluster.impl.MessageLoadBalancingType;
 
 import kew.providers.artemis.config.CoreConfigFactory;
-import kew.providers.artemis.config.StaticClusterConfigFactory;
+import kew.providers.artemis.config.cluster.StaticClusterConfigFactory;
 import kew.providers.artemis.config.transport.NetworkConnectorConfig;
 import kew.providers.artemis.config.transport.ServerNetworkEndpoints;
 import kew.providers.artemis.runtime.DeploymentSpec;

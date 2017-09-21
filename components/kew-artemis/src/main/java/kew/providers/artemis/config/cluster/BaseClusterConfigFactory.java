@@ -1,4 +1,4 @@
-package kew.providers.artemis.config;
+package kew.providers.artemis.config.cluster;
 
 import static java.util.Objects.requireNonNull;
 import static util.sequence.Arrayz.asList;
