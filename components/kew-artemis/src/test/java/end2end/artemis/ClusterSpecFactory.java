@@ -1,5 +1,6 @@
 package end2end.artemis;
 
+import static kew.providers.artemis.config.security.SecurityManagerProps.*;
 import static kew.providers.artemis.config.security.SecurityProps.*;
 import static kew.providers.artemis.config.StorageProps.defaultStorageSettings;
 
@@ -66,7 +67,7 @@ public class ClusterSpecFactory {
 
     public DeploymentSpec makeSpec() throws Exception {
         return new DeploymentSpec(makeBuilder(),
-                                  Optional.empty(),
+                                  defaultSecurityManager(),
                                   Optional.empty());
     }
 

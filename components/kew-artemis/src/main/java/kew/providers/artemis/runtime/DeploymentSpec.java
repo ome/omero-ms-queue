@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.management.MBeanServer;
 
 import org.apache.activemq.artemis.core.config.Configuration;
-import org.apache.activemq.artemis.spi.core.security.ActiveMQJAASSecurityManager;
 import org.apache.activemq.artemis.spi.core.security.ActiveMQSecurityManager;
 
 import kew.providers.artemis.config.transport.ServerEmbeddedEndpoints;
@@ -30,31 +29,28 @@ public class DeploymentSpec {
      * uses Artemis's default security manager and MBean server if none are
      * provided.
      * @param configBuilder builds the core configuration.
-     * @param securityManager the security manager to install or empty to use
-     *                        Artemis's default.
+     * @param securityManagerBuilder builds the security manager to install.
      * @param mBeanServer the MBean server to install or empty to use Artemis's
      *                    default.
      * @throws NullPointerException if any argument is {@code null}.
      */
-    public DeploymentSpec(Builder<Void, Configuration> configBuilder,
-                          Optional<ActiveMQSecurityManager> securityManager,
-                          Optional<MBeanServer> mBeanServer) {
+    public <T extends ActiveMQSecurityManager> DeploymentSpec(
+            Builder<Void, Configuration> configBuilder,
+            Builder<Void, T> securityManagerBuilder,
+            Optional<MBeanServer> mBeanServer) {
         requireNonNull(configBuilder, "configBuilder");
-        requireNonNull(securityManager, "securityManager");
+        requireNonNull(securityManagerBuilder, "securityManagerBuilder");
         requireNonNull(mBeanServer, "mBeanServer");
 
         this.embeddedEndpoints = new ServerEmbeddedEndpoints();
         this.config = configBuilder
                      .with(embeddedEndpoints::transportConfig)
                      .apply(null);
-        this.securityManager = securityManager    // (1)
-                              .orElseGet(ActiveMQJAASSecurityManager::new);
-        this.mBeanServer = mBeanServer            // (2)
+        this.securityManager = securityManagerBuilder.apply(null);
+        this.mBeanServer = mBeanServer            // (*)
                           .orElseGet(ManagementFactory::getPlatformMBeanServer);
     }
-    /* (1) same default as in EmbeddedActiveMQ
-     * (2) same default as in ActiveMQServerImpl
-     */
+    // (*) same default as in ActiveMQServerImpl
 
     /**
      * @return the Artemis core configuration.

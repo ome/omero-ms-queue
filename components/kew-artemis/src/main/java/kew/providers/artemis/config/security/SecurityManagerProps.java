@@ -20,8 +20,11 @@ public class SecurityManagerProps {
      */
     public static Builder<Void, ActiveMQJAASSecurityManagerAdapter>
     defaultSecurityManager() {
-        return Builder.make(ActiveMQJAASSecurityManagerAdapter::new);
+        return Builder.make(ActiveMQJAASSecurityManagerAdapter::new);  // (*)
     }
+    /* (*) Same default as in EmbeddedActiveMQ, i.e. they create a new instance
+     * with no "domain" or "certificate-domain" set.
+     */
 
     /**
      * A setter to specify the Artemis "domain" entry in the JAAS

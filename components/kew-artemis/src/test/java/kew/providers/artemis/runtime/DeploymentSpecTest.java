@@ -1,5 +1,6 @@
 package kew.providers.artemis.runtime;
 
+import static kew.providers.artemis.config.security.SecurityManagerProps.defaultSecurityManager;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -13,7 +14,8 @@ public class DeploymentSpecTest {
     @Test
     public void automaticallyConfigureEmbeddedEndpoints() {
         DeploymentSpec target = new DeploymentSpec(
-                CoreConfigFactory.empty(), Optional.empty(), Optional.empty());
+                CoreConfigFactory.empty(), defaultSecurityManager(),
+                Optional.empty());
 
         assertNotNull(target.config());
         assertNotNull(target.embeddedEndpoints());
@@ -24,22 +26,24 @@ public class DeploymentSpecTest {
     }
 
     @Test
-    public void useDefaultSecurityManagerIfNoneSpecified() {
+    public void buildSecurityManager() {
         DeploymentSpec target = new DeploymentSpec(
-                CoreConfigFactory.empty(), Optional.empty(), Optional.empty());
+                CoreConfigFactory.empty(), defaultSecurityManager(),
+                Optional.empty());
         assertNotNull(target.securityManager());
     }
 
     @Test
     public void useDefaultMBeanServerIfNoneSpecified() {
         DeploymentSpec target = new DeploymentSpec(
-                CoreConfigFactory.empty(), Optional.empty(), Optional.empty());
+                CoreConfigFactory.empty(), defaultSecurityManager(),
+                Optional.empty());
         assertNotNull(target.mBeanServer());
     }
 
     @Test (expected = NullPointerException.class)
     public void ctorThrowsIfNullConfig() {
-        new DeploymentSpec(null, Optional.empty(), Optional.empty());
+        new DeploymentSpec(null, defaultSecurityManager(), Optional.empty());
     }
 
     @Test (expected = NullPointerException.class)
@@ -49,7 +53,8 @@ public class DeploymentSpecTest {
 
     @Test (expected = NullPointerException.class)
     public void ctorThrowsIfNullMBeanServer() {
-        new DeploymentSpec(CoreConfigFactory.empty(), Optional.empty(), null);
+        new DeploymentSpec(CoreConfigFactory.empty(), defaultSecurityManager(),
+                           null);
     }
 
 }
