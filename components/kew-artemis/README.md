@@ -18,7 +18,9 @@ API.
 
 Each package can be used just on its own or in combination with the others.
 We look at each of them in detail below and then explain how to configure
-Artemis logging and security.
+Artemis logging and security. Much of what we say below assumes you're
+already familiar with Artemis; if you aren't, I'd recommend to at least
+skim through [Artemis manual][artemis-man]!
 
 
 Messaging Channels
@@ -35,13 +37,15 @@ Before you can send and receive messages on a queue, you'll have to have
 deployed that queue in Artemis. Assuming you've done that, the next step
 is to establish a client session with the Artemis server:
 
-        // Use Artemis core API to connect to the server.
-        TransportConfiguration connector = ...
-        ServerLocator locator =
-                ActiveMQClient.createServerLocatorWithHA(connector);
+```java
+// Use Artemis core API to connect to the server.
+TransportConfiguration connector = ...
+ServerLocator locator =
+        ActiveMQClient.createServerLocatorWithHA(connector);
 
-        // Create our session wrapper; it automatically starts the session.
-        ServerConnector session = ServerConnector(locator);
+// Create our session wrapper; it automatically starts the session.
+ServerConnector session = ServerConnector(locator);
+```
 
 Note that there are many ways to create a server locator, depending on
 whether you're running an Artemis standalone server or you have a cluster
@@ -50,29 +54,33 @@ instead. The example above assumes you're running a cluster.
 Now you can create a factory to build messaging channels to send/receive
 typed messages to/from your queue:
 
-        // Use Artemis core API to specify how to get hold of your queue.
-        CoreQueueConfiguration qConfig = new CoreQueueConfiguration()
-                                        .setName("my/q")
-                                        .setAddress("my/q");
+```java
+// Use Artemis core API to specify how to get hold of your queue.
+CoreQueueConfiguration qConfig = new CoreQueueConfiguration()
+                                .setName("my/q")
+                                .setAddress("my/q");
 
-        // Create a factory to exchange MyClass message instances.
-        QChannelFactory<ArtemisMessage, MyClass> factory =
+// Create a factory to exchange MyClass message instances.
+QChannelFactory<ArtemisMessage, MyClass> factory =
             new ArtemisQChannelFactory<>(session, qConfig);
+```
 
 To send a `MyClass` message you first have to build a message source.
 Likewise for receiving you need a sink. Here's an example of building
 both a source and a sink.
 
-        // To build a source you have to specify how to serialize MyClass.
-        // You could have e.g. generic Json serializers or whatever suits you.
-        SinkWriter<MyClass, OutputStream> serializer = ...
-        ChannelSource<MyClass> source = factory.buildSource(serializer);
+```java
+// To build a source you have to specify how to serialize MyClass.
+// You could have e.g. generic Json serializers or whatever suits you.
+SinkWriter<MyClass, OutputStream> serializer = ...
+ChannelSource<MyClass> source = factory.buildSource(serializer);
 
-        // To build a sink you have to specify how to deserialize MyClass.
-        SourceReader<InputStream, MyClass> deserializer = ...
-        ChannelSink<MyClass> consumer = ...
-        MessageSink<ArtemisMessage, InputStream> sink =
+// To build a sink you have to specify how to deserialize MyClass.
+SourceReader<InputStream, MyClass> deserializer = ...
+ChannelSink<MyClass> consumer = ...
+MessageSink<ArtemisMessage, InputStream> sink =
             factory.buildSink(consumer, deserializer);
+```
 
 Both source and sink should be reused to send/receive as many messages as
 possible and can be shared among threads. You'd typically set them up
@@ -82,8 +90,10 @@ available for the entire lifetime of Smuggler's process.
 
 With your source you can send `MyClass` messages asynchronously
 
-        MyClass msg = ...
-        source.send(msg);  // returns immediately
+```java
+MyClass msg = ...
+source.send(msg);  // returns immediately
+```
 
 whereas your consumer gets fed the message on arrival. Note that producer,
 consumer, and Artemis server can each live in a separate process. (But see
@@ -132,11 +142,11 @@ API for programmatic configuration. Either way you'll have to be careful
 not to make silly mistakes like specifying transport properties not suitable
 for a connector or acceptor, mismatching acceptor/connector pairs, omitting
 a transport in a cluster configuration, and so on. Some of these mistakes
-can be prevented by using a more typed configuration, which is what our
-`config` package attempts to provide. While on the one hand, this package
-avoids you making the mistakes that costed me hours of debugging, on the
+can be avoided by using a more typed configuration, which is what our
+`config` package attempts to provide. On the one hand, this package tries
+to stop you making the mistakes that costed me hours of debugging, on the
 other hand it also simplifies configuration quite a bit, especially when
-it comes to clustering. As an added benefit, this package lets use both
+it comes to clustering. As an added benefit, this package lets you use both
 XML and programmatic configuration at the same time so that, for example,
 you could read in XML configuration and then tweak it programmatically.
 
@@ -194,6 +204,8 @@ TODO!!!
 
 
 
+[artemis-man]: https://activemq.apache.org/artemis/docs/latest/
+    "Apache ActiveMQ Artemis User Manual"
 [jboss-log-docs]: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.0/html/development_guide/logging_for_developers
     "JBoss EAP - Logging"
 [jboss-logger-providers]: https://github.com/jboss-logging/jboss-logging/blob/master/src/main/java/org/jboss/logging/LoggerProviders.java
