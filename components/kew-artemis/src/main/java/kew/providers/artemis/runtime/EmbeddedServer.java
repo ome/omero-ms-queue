@@ -4,11 +4,14 @@ import static java.util.Objects.requireNonNull;
 
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.api.core.client.ActiveMQClient;
+import org.apache.activemq.artemis.api.core.client.ClientSession;
+import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
 import org.apache.activemq.artemis.api.core.client.ServerLocator;
 import org.apache.activemq.artemis.core.server.ActiveMQServer;
 import org.apache.activemq.artemis.core.server.impl.ActiveMQServerImpl;
 
 import kew.providers.artemis.ServerConnector;
+import util.lambda.FunctionE;
 
 /**
  * Embeds an Artemis server instance in the current process.
@@ -42,18 +45,34 @@ public class EmbeddedServer {
     }
 
     /**
-     * Starts a client session with this embedded server.
+     * Starts a default, non-authenticated client session with this embedded
+     * server.
      * @return the server connector which holds the session.
      * @throws Exception if an error occurs while starting the session.
      */
     public ServerConnector startClientSession() throws Exception {
+        return startClientSession(ClientSessions.defaultSession());
+    }
+
+    /**
+     * Starts a client session with this embedded server.
+     * @param sessionFactory a factory to instantiate the Artemis session.
+     * @return the server connector which holds the session.
+     * @throws NullPointerException if the argument is {@code null}.
+     * @throws Exception if an error occurs while starting the session.
+     */
+    public ServerConnector startClientSession(
+            FunctionE<ClientSessionFactory, ClientSession> sessionFactory)
+                throws Exception {
+        requireNonNull(sessionFactory, "sessionFactory");
+
         TransportConfiguration connector = deploymentSpec.embeddedEndpoints()
                                                          .connector()
                                                          .transport();
         ServerLocator locator =
                 ActiveMQClient.createServerLocatorWithoutHA(connector);  // (*)
 
-        return new ServerConnector(locator, ClientSessions.defaultSession());
+        return new ServerConnector(locator, sessionFactory);
     }
     /* (*) Even if the server is clustered we don't need HA anyway cos the
      * client lives in the same process as the server and there's no network

@@ -2,8 +2,6 @@ package kew.providers.artemis.config.security;
 
 import java.util.function.Consumer;
 
-import org.apache.activemq.artemis.spi.core.security.ActiveMQSecurityManager;
-
 import util.object.Builder;
 
 /**
