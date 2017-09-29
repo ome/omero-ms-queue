@@ -199,13 +199,65 @@ handled by JBoss's LogManager.)
 
 Security
 --------
-TODO!!!
+Artemis offers role-based access control (authentication and authorisation)
+for queue addresses while network connections can be secured through SSL/TSL.
+We're going to sum up Artemis security configuration key points below and
+explain how to secure an embedded Artemis instance.
+
+### Authentication
+Authentication happens through [JAAS][jazz]. In the JAAS `*login.config`
+file, you define an application entry (usually named `activemq`) with the
+login modules to use for authenticating users. To make JAAS use your config
+file, you have to set a system property as in the example below:
+
+    java.security.auth.login.config = /path/to/your/login.config
+
+Typically this is done through a JVM `-D` startup argument, but you can
+also do it programmatically during the early phase of application startup
+if embedding Artemis. The next step is to tell Artemis to use the configured
+JAAS app entry by specifying its name (e.g. `activemq`) as the value of
+the `domain` attribute of the `jaas-security` tag in the `bootstrap.xml`
+file. Additionally, when using SSL/TSL, you can have Artemis use SSL/TSL
+certificates to authenticate clients connecting through SSL/TSL. To do
+this, you have to add another application entry to `*login.config` and
+then set its name as the value of the `certificate-domain` attribute of
+the `jaas-security` tag in `bootstrap.xml`. Note that when embedding Artemis,
+you can't use a `bootstrap.xml` file, so the setting of those XML `*domain`
+attributes has to be done in code by instantiating the embedded server
+with a suitable security manager---e.g. `ActiveMQJAASSecurityManager` lets
+you set both attributes. Our `config` package lets you set both attributes
+too and might be a better alternative to using a concrete security manager
+implementation directly.
+
+### Authorisation
+Authorisation is specified through Artemis core configuration by granting
+access permissions to roles on specific addresses. You can do this in XML
+by editing the `broker.xml` main configuration file or do it programmatically,
+e.g. using our `config` package, if embedding Artemis in your own app.
+
+### Examples
+The Artemis distribution comes with an `artemis` script you can use to
+create a directory with scripts and initial configuration to run an Artemis
+server instance. If you have a look at the launch script in the generated
+`bin` directory, you'll see the script starts a JVM to run the server with
+a `-D` argument pointing to the JASS `login.config` in `etc/` where you'll
+also find property files defining users and roles as well as `bootstrap.xml`
+and `broker.xml` files. In `bootstrap.xml` you should be able to see the
+setting of the `domain` attribute whereas `broker.xml` should have a
+`security-settings` section with access permissions. Also, the `examples`
+directory is packed with lots of examples you might want to look at.
+
+Our tests in the `end2end` package come with a complete example of a secured
+embedded Artemis instance configured programmatically using the `config`
+package.
 
 
 
 
 [artemis-man]: https://activemq.apache.org/artemis/docs/latest/
     "Apache ActiveMQ Artemis User Manual"
+[jazz]: https://en.wikipedia.org/wiki/Java_Authentication_and_Authorization_Service
+    "Java Authentication and Authorization Service"
 [jboss-log-docs]: https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.0/html/development_guide/logging_for_developers
     "JBoss EAP - Logging"
 [jboss-logger-providers]: https://github.com/jboss-logging/jboss-logging/blob/master/src/main/java/org/jboss/logging/LoggerProviders.java
