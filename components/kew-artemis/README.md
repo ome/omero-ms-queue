@@ -245,7 +245,8 @@ also find property files defining users and roles as well as `bootstrap.xml`
 and `broker.xml` files. In `bootstrap.xml` you should be able to see the
 setting of the `domain` attribute whereas `broker.xml` should have a
 `security-settings` section with access permissions. Also, the `examples`
-directory is packed with lots of examples you might want to look at.
+directory in the Artemis distribution is packed with lots of examples you
+might want to look at.
 
 Our tests in the `end2end` package come with a complete example of a secured
 embedded Artemis instance configured programmatically using the `config`
