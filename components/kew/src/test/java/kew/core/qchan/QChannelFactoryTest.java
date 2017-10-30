@@ -3,9 +3,12 @@ package kew.core.qchan;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import kew.core.msg.RepeatAction;
 import kew.core.qchan.spi.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Collections;
 
 public class QChannelFactoryTest
         <QM extends HasReceiptAck & HasSchedule & HasProps> {
@@ -17,7 +20,6 @@ public class QChannelFactoryTest
     public void setup() throws Exception {
         QConnector<QM> connector = mock(QConnector.class);
         QProducer<QM> producer = mock(QProducer.class);
-        QConsumer<QM> consumer = mock(QConsumer.class);
 
         when(connector.newProducer()).thenReturn(producer);
 
@@ -77,6 +79,14 @@ public class QChannelFactoryTest
     public void canBuildReschedulableSinkWithNoRedelivery() throws Exception {
         Object x = target.buildReschedulableSink(
                 (cs, d) -> null, (d, out) -> {}, in -> "", false);
+        assertNotNull(x);
+    }
+
+    @Test
+    public void canBuildRepeatSink() throws Exception {
+        Object x = target.buildRepeatSink(
+                d -> RepeatAction.Repeat, Collections.emptyList(),
+                d -> {}, (d, out) -> {}, in -> "");
         assertNotNull(x);
     }
 

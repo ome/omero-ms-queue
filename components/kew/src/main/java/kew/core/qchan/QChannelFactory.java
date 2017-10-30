@@ -2,6 +2,9 @@ package kew.core.qchan;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Duration;
+import java.util.List;
+import java.util.function.Consumer;
 
 import kew.core.msg.*;
 import kew.core.qchan.impl.*;
@@ -207,6 +210,37 @@ public interface QChannelFactory
                 buildCountedScheduleSource(serializer);
         ReschedulingSink<T> sink = new ReschedulingSink<>(consumer, loopback);
         return buildCountedScheduleSink(sink, deserializer, redeliverOnRecovery);
+    }
+
+    /**
+     * Builds a message sink to receive messages and pass them on as {@code
+     * T}-values to the specified repeat consumer.
+     * If the process terminates abnormally (e.g. segfault, power failure)
+     * while the consumer is busy processing a message, the message will be
+     * delivered again once the process is rebooted.
+     * @param processor consumes data received from the queue.
+     * @param retryIntervals intervals at which to re-deliver a message the
+     *                       processor failed to consume successfully.
+     * @param failureHandler handles a message the processor wasn't able to
+     *                       consume successfully after trying for the number
+     *                       of times specified by the retry intervals.
+     * @param serializer serialises the message data, a {@code T}-value.
+     * @param deserializer de-serialises the message data, a {@code T}-value.
+     * @return the message sink.
+     * @throws NullPointerException if any argument is {@code null}.
+     * @throws Exception if this sink couldn't be connected to the underlying
+     * queue.
+     */
+    default MessageSink<QM, InputStream> buildRepeatSink(
+            RepeatConsumer<T> processor,
+            List<Duration> retryIntervals,
+            Consumer<T> failureHandler,
+            SinkWriter<T, OutputStream> serializer,
+            SourceReader<InputStream, T> deserializer) throws Exception {
+        Reschedulable<T> consumer =
+                ReschedulableFactory.buildForRepeatConsumer(
+                        processor, retryIntervals, failureHandler);
+        return buildReschedulableSink(consumer, serializer, deserializer);
     }
 
 }
