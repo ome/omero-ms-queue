@@ -1,4 +1,4 @@
-package ome.smuggler.config.wiring;
+package ome.smuggler.config.wiring.artemis;
 
 import static util.sequence.Arrayz.asMutableList;
 

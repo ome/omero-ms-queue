@@ -1,4 +1,4 @@
-package ome.smuggler.config.wiring;
+package ome.smuggler.config.wiring.artemis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

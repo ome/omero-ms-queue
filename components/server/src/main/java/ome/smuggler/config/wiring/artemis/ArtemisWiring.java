@@ -1,4 +1,4 @@
-package ome.smuggler.config.wiring;
+package ome.smuggler.config.wiring.artemis;
 
 import javax.jms.ConnectionFactory;
 
