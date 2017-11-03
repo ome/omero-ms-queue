@@ -2,17 +2,14 @@ package ome.smuggler.config.wiring.imports;
 
 import java.io.InputStream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import kew.core.qchan.QChannelFactory;
 import kew.core.msg.ChannelSource;
 import kew.core.msg.MessageSink;
-import kew.core.msg.Reschedulable;
-import kew.core.msg.ReschedulableFactory;
+import kew.core.qchan.QChannelFactoryAdapter;
 import kew.providers.artemis.qchan.ArtemisMessage;
-import kew.providers.artemis.qchan.ArtemisQChannelFactory;
+import kew.providers.artemis.qchan.ArtemisQChannel;
 import kew.providers.artemis.ServerConnector;
 
 import ome.smuggler.config.wiring.crypto.SerializationFactory;
@@ -29,35 +26,33 @@ import ome.smuggler.core.types.QueuedImport;
 @Configuration
 public class ImportQBeans {
 
-    @Autowired
-    private SerializationFactory sf;
-
     @Bean
-    public QChannelFactory<ArtemisMessage, QueuedImport> importChannelFactory(
-            ServerConnector connector, ImportQConfig qConfig) {
-        return new ArtemisQChannelFactory<>(connector, qConfig);
+    public QChannelFactoryAdapter<ArtemisMessage, QueuedImport>
+    importChannelFactory(ServerConnector connector,
+                         ImportQConfig qConfig,
+                         SerializationFactory sf) {
+        return new ArtemisQChannel<>(connector,
+                                     qConfig,
+                                     sf.serializer(),
+                                     sf.deserializer(QueuedImport.class));
     }
     
     @Bean
     public ChannelSource<QueuedImport> importSourceChannel(
-            QChannelFactory<ArtemisMessage, QueuedImport> factory)
+            QChannelFactoryAdapter<ArtemisMessage, QueuedImport> factory)
             throws Exception {
-        return factory.buildSource(sf.serializer());
+        return factory.buildSource();
     }
     
     @Bean
     public MessageSink<ArtemisMessage, InputStream> dequeueImportTask(
-            QChannelFactory<ArtemisMessage, QueuedImport> factory,
+            QChannelFactoryAdapter<ArtemisMessage, QueuedImport> factory,
             ImportConfigSource importConfig,
             ImportProcessor processor,
             FailedImportHandler failureHandler) throws Exception {
-        Reschedulable<QueuedImport> consumer = 
-                ReschedulableFactory.buildForRepeatConsumer(processor, 
-                        importConfig.retryIntervals(), failureHandler);
-        return factory.buildReschedulableSink(
-                consumer,
-                sf.serializer(),
-                sf.deserializer(QueuedImport.class));
+        return factory.buildRepeatSink(processor,
+                                       importConfig.retryIntervals(),
+                                       failureHandler);
     }
     
 }

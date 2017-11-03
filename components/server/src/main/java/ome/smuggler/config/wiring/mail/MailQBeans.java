@@ -6,14 +6,12 @@ import java.io.OutputStream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import kew.core.qchan.QChannelFactory;
 import kew.core.msg.ChannelSource;
 import kew.core.msg.MessageSink;
-import kew.core.msg.Reschedulable;
-import kew.core.msg.ReschedulableFactory;
-import kew.providers.artemis.qchan.ArtemisMessage;
-import kew.providers.artemis.qchan.ArtemisQChannelFactory;
+import kew.core.qchan.QChannelFactoryAdapter;
 import kew.providers.artemis.ServerConnector;
+import kew.providers.artemis.qchan.ArtemisMessage;
+import kew.providers.artemis.qchan.ArtemisQChannel;
 import util.io.SinkWriter;
 import util.io.SourceReader;
 
@@ -41,30 +39,30 @@ public class MailQBeans {
     }
 
     @Bean
-    public QChannelFactory<ArtemisMessage, QueuedMail> mailChannelFactory(
-            ServerConnector connector, MailQConfig qConfig) {
-        return new ArtemisQChannelFactory<>(connector, qConfig);
+    public QChannelFactoryAdapter<ArtemisMessage, QueuedMail>
+    mailChannelFactory(ServerConnector connector, MailQConfig qConfig) {
+        return new ArtemisQChannel<>(connector,
+                                     qConfig,
+                                     serializer(),
+                                     deserializer());
     }
     
     @Bean
     public ChannelSource<QueuedMail> mailSourceChannel(
-            QChannelFactory<ArtemisMessage, QueuedMail> factory)
+            QChannelFactoryAdapter<ArtemisMessage, QueuedMail> factory)
             throws Exception {
-        return factory.buildSource(serializer());
+        return factory.buildSource();
     }
     
     @Bean
     public MessageSink<ArtemisMessage, InputStream> dequeueMailTask(
-            QChannelFactory<ArtemisMessage, QueuedMail> factory,
+            QChannelFactoryAdapter<ArtemisMessage, QueuedMail> factory,
             MailConfigSource mailConfig,
             MailProcessor processor,
             FailedMailHandler failureHandler) throws Exception {
-        Reschedulable<QueuedMail> consumer = 
-                ReschedulableFactory.buildForRepeatConsumer(processor, 
-                        mailConfig.retryIntervals(), failureHandler);
-        return factory.buildReschedulableSink(consumer,
-                                              serializer(),
-                                              deserializer());
+        return factory.buildRepeatSink(processor,
+                                       mailConfig.retryIntervals(),
+                                       failureHandler);
     }
 
 }

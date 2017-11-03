@@ -6,12 +6,12 @@ import java.io.OutputStream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import kew.core.qchan.QChannelFactory;
 import kew.core.msg.ChannelSource;
 import kew.core.msg.MessageSink;
 import kew.core.msg.Reschedulable;
+import kew.core.qchan.QChannelFactoryAdapter;
 import kew.providers.artemis.qchan.ArtemisMessage;
-import kew.providers.artemis.qchan.ArtemisQChannelFactory;
+import kew.providers.artemis.qchan.ArtemisQChannel;
 import kew.providers.artemis.ServerConnector;
 import util.io.SinkWriter;
 import util.io.SourceReader;
@@ -41,31 +41,32 @@ public class SessionQBeans {
     }
 
     @Bean
-    public QChannelFactory<ArtemisMessage, QueuedOmeroKeepAlive>
+    public QChannelFactoryAdapter<ArtemisMessage, QueuedOmeroKeepAlive>
         sessionChannelFactory(
             ServerConnector connector, OmeroSessionQConfig qConfig) {
-        return new ArtemisQChannelFactory<>(connector, qConfig);
+        return new ArtemisQChannel<>(connector,
+                                     qConfig,
+                                     serializer(),
+                                     deserializer());
     }
 
     @Bean
     public ChannelSource<QueuedOmeroKeepAlive> sessionSourceChannel(
-            QChannelFactory<ArtemisMessage, QueuedOmeroKeepAlive> factory)
+        QChannelFactoryAdapter<ArtemisMessage, QueuedOmeroKeepAlive> factory)
             throws Exception {
-        return factory.buildSource(serializer());
+        return factory.buildSource();
     }
 
     @Bean
     public MessageSink<ArtemisMessage, InputStream>
         dequeueSessionTask(
-                QChannelFactory<ArtemisMessage, QueuedOmeroKeepAlive> factory,
-                OmeroEnv env,
-                SessionService service)
-            throws Exception {
+            QChannelFactoryAdapter<ArtemisMessage, QueuedOmeroKeepAlive> factory,
+            OmeroEnv env,
+            SessionService service)
+                throws Exception {
         Reschedulable<QueuedOmeroKeepAlive> consumer =
                 new SessionKeepAliveHandler(env, service);
-        return factory.buildReschedulableSink(consumer,
-                                              serializer(),
-                                              deserializer());
+        return factory.buildReschedulableSink(consumer);
     }
 
 }
