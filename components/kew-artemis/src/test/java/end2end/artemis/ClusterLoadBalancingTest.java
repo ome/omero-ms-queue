@@ -22,14 +22,14 @@ public class ClusterLoadBalancingTest extends BaseEmbeddedClusterTest {
 
 
         IntQ q1 = new IntQ(embeddedSession);
-        ChannelSource<Integer> producer = q1.sourceChannel();
+        ChannelSource<Integer> producer = q1.buildSource();
 
         QReceiveBuffer<Integer> consumer1 = new QReceiveBuffer<>();
-        q1.sinkChannel(consumer1);
+        q1.buildSink(consumer1);
 
         IntQ q2 = new IntQ(externalSession);
         QReceiveBuffer<Integer> consumer2 = new QReceiveBuffer<>();
-        q2.sinkChannel(consumer2);
+        q2.buildSink(consumer2);
 
         Set<Integer> data = Stream.of(1, 2, 3, 4)
                                   .collect(Collectors.toSet());

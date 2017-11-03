@@ -76,7 +76,7 @@ public class BasicSecurityTest extends BaseStandaloneEmbeddedServerTest {
 
         try (ServerConnector session = startReadOnlyClientSession()) {
             IntQ q = new IntQ(session);
-            ChannelSource<Integer> producer = q.sourceChannel();
+            ChannelSource<Integer> producer = q.buildSource();
             producer.send(123);
         }
     }
@@ -92,12 +92,12 @@ public class BasicSecurityTest extends BaseStandaloneEmbeddedServerTest {
             int message = 123;
 
             IntQ rwQ = new IntQ(rwSession);
-            ChannelSource<Integer> producer = rwQ.sourceChannel();
+            ChannelSource<Integer> producer = rwQ.buildSource();
             producer.send(message);
 
             IntQ roQ = new IntQ(roSession);
             QReceiveBuffer<Integer> consumer = new QReceiveBuffer<>();
-            roQ.sinkChannel(consumer);
+            roQ.buildSink(consumer);
             Set<Integer> received = consumer.waitForMessages(1, 30000);
 
             assertThat(received, hasItem(message));
@@ -114,11 +114,11 @@ public class BasicSecurityTest extends BaseStandaloneEmbeddedServerTest {
             int message = 123;
 
             IntQ q = new IntQ(session);
-            ChannelSource<Integer> producer = q.sourceChannel();
+            ChannelSource<Integer> producer = q.buildSource();
             producer.send(message);
 
             QReceiveBuffer<Integer> consumer = new QReceiveBuffer<>();
-            q.sinkChannel(consumer);
+            q.buildSink(consumer);
             Set<Integer> received = consumer.waitForMessages(1, 30000);
 
             assertThat(received, hasItem(message));

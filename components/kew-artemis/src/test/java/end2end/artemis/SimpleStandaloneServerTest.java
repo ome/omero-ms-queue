@@ -33,10 +33,10 @@ public class SimpleStandaloneServerTest
         ServerConnector session = startClientSession();
 
         IntQ q = new IntQ(session);
-        ChannelSource<Integer> producer = q.sourceChannel();
+        ChannelSource<Integer> producer = q.buildSource();
 
         QReceiveBuffer<Integer> consumer = new QReceiveBuffer<>();
-        q.sinkChannel(consumer);
+        q.buildSink(consumer);
 
         Set<Integer> data = Stream.of(1, 2, 3).collect(Collectors.toSet());
         data.forEach(unchecked(producer::send));
