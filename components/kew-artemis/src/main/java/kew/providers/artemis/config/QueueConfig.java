@@ -1,8 +1,11 @@
 package kew.providers.artemis.config;
 
+import static util.sequence.Arrayz.requireArray;
+
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.activemq.artemis.core.config.Configuration;
 import org.apache.activemq.artemis.core.config.CoreQueueConfiguration;
@@ -33,14 +36,17 @@ public class QueueConfig {
     }
 
     /**
-     * A setter to add a queue configuration to the core configuration.
-     * @param qConfig the queue configuration.
+     * A setter to add queue configurations to the core configuration.
+     * @param qConfig the queue(s) to deploy.
      * @return the setter.
      * @throws NullPointerException if the argument is {@code null}.
      */
     public static Function<Configuration, Configuration> q(
-            CoreQueueConfiguration qConfig) {
-        return q(() -> qConfig);
+            CoreQueueConfiguration...qConfig) {
+        requireArray(qConfig);
+        return cfg -> Stream.of(qConfig)
+                            .map(cfg::addQueueConfiguration)
+                            .reduce(cfg, (x, y) -> x);
     }
 
 }
