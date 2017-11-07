@@ -23,6 +23,22 @@ public class StoragePropsTest {
     }
 
     @Test
+    public void enablePersistence() {
+        Configuration actual = CoreConfigFactory.empty()
+                                                .with(persistenceEnabled(true))
+                                                .apply(null);
+        assertTrue(actual.isPersistenceEnabled());
+    }
+
+    @Test
+    public void disablePersistence() {
+        Configuration actual = CoreConfigFactory.empty()
+                                                .with(persistenceEnabled(false))
+                                                .apply(null);
+        assertFalse(actual.isPersistenceEnabled());
+    }
+
+    @Test
     public void storageOnSetsDirectories() {
         String dataDirName = "artemis-data";
         Path dataDir = Paths.get(dataDirName);

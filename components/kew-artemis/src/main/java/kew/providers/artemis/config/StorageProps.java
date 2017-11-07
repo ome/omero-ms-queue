@@ -16,6 +16,17 @@ import org.apache.activemq.artemis.core.server.JournalType;
 public class StorageProps {
 
     /**
+     * A setter to enable Artemis persistence.
+     * @param enable {@code true} to enable persistence, {@code false} to
+     *               disable it.
+     * @return the setter.
+     */
+    public static Function<Configuration, Configuration>
+    persistenceEnabled(boolean enable) {
+        return cfg -> cfg.setPersistenceEnabled(enable);
+    }
+
+    /**
      * A setter for commonly used storage settings.
      * Specifically, it configures Artemis to create the storage directories
      * under a specified root data directory and use persistence with a NIO
