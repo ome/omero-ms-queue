@@ -130,9 +130,21 @@ to assemble the outputs that the "map" task would put on the "reduce" queue.
 Again, all this mostly boils down to specifying a suitable Artemis cluster
 configuration.
 
+### Examples
 The tests in the `end2end` package come with a complete example of a two-node
 cluster with a shared queue where messages are distributed round-robin between
-the two nodes.
+the two nodes as well as a simpler example of embedding a standalone Artemis
+instance. These tests use the classes in our `config` and `runtime` packages
+to configure and embed Artemis.
+
+You can find yet another example of an embedded standalone server in Smuggler
+(`*.config.wiring.artemis` package) which also uses our `config` and `runtime`
+packages. For a variation on the theme, you can [go back in time][smugs] and
+look at how Smuggler used to embed Artemis using SpringBoot: there you'll see
+we only used the `config` package to customise the Artemis JMS instance
+auto-configured by SpringBoot. (To see how Artemis auto-configuration works
+in SpringBoot, look at the `org.springframework.boot.autoconfigure.jms.artemis`
+package.)
 
 
 Core Configuration
@@ -265,3 +277,5 @@ package.
     "LoggerProviders class"
 [jboss-logmanager]: https://github.com/jboss-logging/jboss-logmanager
     "JBoss LogManager on GitHub"
+[smugs]: https://github.com/c0c0n3/omero-ms-queue/commit/cda8e0898e3d2bfb1a0ddeeb49c13bf25d7a7597
+    "commit cda8e08: use kew-artemis embedded server instead of spingboot's."
