@@ -17,8 +17,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("com.google.code.gson:gson:2.8.1")
-    compile("org.springframework.boot:spring-boot-starter-artemis")
-    compile("org.apache.activemq:artemis-jms-server")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-mail")
     
