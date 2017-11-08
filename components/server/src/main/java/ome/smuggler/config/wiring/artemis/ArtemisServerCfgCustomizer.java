@@ -1,15 +1,20 @@
 package ome.smuggler.config.wiring.artemis;
 
-import static util.sequence.Arrayz.asMutableList;
+import static kew.providers.artemis.config.QueueConfig.q;
+import static kew.providers.artemis.config.StorageProps.defaultStorageSettings;
+import static kew.providers.artemis.config.StorageProps.persistenceEnabled;
+import static kew.providers.artemis.config.security.SecurityProps.securityEnabled;
 
-import ome.smuggler.config.items.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.activemq.artemis.core.config.Configuration;
-import org.apache.activemq.artemis.core.server.JournalType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jms.artemis.ArtemisConfigurationCustomizer;
 import org.springframework.stereotype.Component;
 
+import ome.smuggler.config.items.*;
+import util.object.Builder;
 
 /**
  * Implements the Spring Boot auto-configuration hook to customize the Artemis
@@ -33,25 +38,21 @@ public class ArtemisServerCfgCustomizer
 
     @Autowired
     private OmeroSessionQConfig omeroSessionQ;
-    
-    private void configurePersistence(Configuration cfg) {
-        cfg.setPersistenceEnabled(params.isPersistenceEnabled());
-        cfg.setJournalType(JournalType.NIO);
-        cfg.setJournalDirectory(params.getJournalDirPath());
-        cfg.setLargeMessagesDirectory(params.getLargeMessagesDirPath());
-        cfg.setBindingsDirectory(params.getBindingsDirPath());
-        cfg.setPagingDirectory(params.getPagingDirPath());
-    }
-    
-    private void configureQueues(Configuration cfg) {
-        cfg.setQueueConfigurations(
-                asMutableList(importQ, importGcQ, mailQ, omeroSessionQ));
+
+    private Builder<Void, Configuration> configBuilder(Configuration cfg) {
+        Path dataDir = Paths.get(params.getDataDirPath());
+        boolean enablePersistence = params.isPersistenceEnabled();
+
+        return Builder.make(() -> cfg)
+                      .with(securityEnabled(false))
+                      .with(defaultStorageSettings(dataDir))
+                      .with(persistenceEnabled(enablePersistence))
+                      .with(q(importQ, importGcQ, mailQ, omeroSessionQ));
     }
     
     @Override
     public void customize(Configuration cfg) {
-        configurePersistence(cfg);
-        configureQueues(cfg);
+        configBuilder(cfg).apply(null);
     }
 
 }

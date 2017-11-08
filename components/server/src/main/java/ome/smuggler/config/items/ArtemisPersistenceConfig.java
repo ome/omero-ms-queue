@@ -11,10 +11,7 @@ public class ArtemisPersistenceConfig {
      */ 
 
     private boolean persistenceEnabled;
-    private String journalDirPath;
-    private String largeMessagesDirPath;
-    private String bindingsDirPath;
-    private String pagingDirPath;
+    private String dataDirPath;
     
     public boolean isPersistenceEnabled() {
         return persistenceEnabled;
@@ -23,37 +20,13 @@ public class ArtemisPersistenceConfig {
     public void setPersistenceEnabled(boolean persistenceEnabled) {
         this.persistenceEnabled = persistenceEnabled;
     }
-    
-    public String getJournalDirPath() {
-        return journalDirPath;
+
+    public String getDataDirPath() {
+        return dataDirPath;
     }
 
-    public void setJournalDirPath(String journalDirPath) {
-        this.journalDirPath = journalDirPath;
-    }
-
-    public String getLargeMessagesDirPath() {
-        return largeMessagesDirPath;
-    }
-
-    public void setLargeMessagesDirPath(String largeMessagesDirPath) {
-        this.largeMessagesDirPath = largeMessagesDirPath;
-    }
-
-    public String getBindingsDirPath() {
-        return bindingsDirPath;
-    }
-
-    public void setBindingsDirPath(String bindingsDirPath) {
-        this.bindingsDirPath = bindingsDirPath;
-    }
-
-    public String getPagingDirPath() {
-        return pagingDirPath;
-    }
-
-    public void setPagingDirPath(String pagingDirPath) {
-        this.pagingDirPath = pagingDirPath;
+    public void setDataDirPath(String dataDirPath) {
+        this.dataDirPath = dataDirPath;
     }
     
     @Override
@@ -74,9 +47,8 @@ public class ArtemisPersistenceConfig {
     
     @Override
     public String toString() {
-        return String.format("%s | %s | %s | %s | %s", 
-                persistenceEnabled, journalDirPath, largeMessagesDirPath, 
-                bindingsDirPath, pagingDirPath);
+        return String.format("%s | %s",
+                             persistenceEnabled, dataDirPath);
     }
     
 }
