@@ -1,6 +1,6 @@
 language: java
 jdk: oraclejdk8
-script: bundle exec ./gradlew -Dtest.profile=travis check
+script: ./gradlew -Dtest.profile=travis check
 after_success:
   - ./gradlew -Dtest.profile=travis test jacocoTestReport
   - bash <(curl -s https://codecov.io/bash)
