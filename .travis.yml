@@ -1,5 +1,5 @@
 language: java
 jdk: oraclejdk8
 after_success:
-  - ./gradlew test jacocoTestReport
+  - ./gradlew -Dtest.profile=travis test jacocoTestReport
   - bash <(curl -s https://codecov.io/bash)
