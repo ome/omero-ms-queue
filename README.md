@@ -2,8 +2,8 @@ OME Smuggler
 ============
 > Sneakily imports image goodies into OMERO without paying MRI session duties.
 
-[![Build Status](https://travis-ci.org/c0c0n3/ome-smuggler.svg?branch=master)](https://travis-ci.org/c0c0n3/ome-smuggler)
-[![codecov](https://codecov.io/gh/c0c0n3/ome-smuggler/branch/master/graph/badge.svg)](https://codecov.io/gh/c0c0n3/ome-smuggler)
+[![Build Status](https://api.travis-ci.org/openmicroscopy/omero-ms-queue.svg?branch=master)](https://travis-ci.org/openmicroscopy/omero-ms-queue)
+[![codecov](https://codecov.io/gh/openmicroscopy/omero-ms-queue/branch/master/graph/badge.svg)](https://codecov.io/gh/openmicroscopy/omero-ms-queue)
 
 
 Idea

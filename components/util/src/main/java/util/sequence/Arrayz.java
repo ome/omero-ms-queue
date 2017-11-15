@@ -2,10 +2,7 @@ package util.sequence;
 
 import static java.util.Objects.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -56,6 +53,40 @@ public class Arrayz<A> {  // avoids conflicts with JDK Arrays class.
             }
         }
         return false;
+    }
+
+    /**
+     * Ensures you have an array of length one at least with no {@code null}
+     * elements in it.
+     * @param ts the array to test.
+     * @param <T> any type.
+     * @throws IllegalArgumentException if the given array is {@code null}, or
+     * it has zero length, or some of its elements are {@code null}.
+     */
+    public static <T> void requireArray(T[] ts) {
+        requireArrayOfMinLength(1, ts);
+    }
+
+    /**
+     * Ensures you have an array of length {@code len} at least with no
+     * {@code null} elements in it.
+     * @param len the required array minimum length.
+     * @param ts the array to test.
+     * @param <T> any type.
+     * @throws IllegalArgumentException if the given array is {@code null}, or
+     * its length is less than the required length, or some of its elements are
+     * {@code null}.
+     */
+    public static <T> void requireArrayOfMinLength(int len, T[] ts) {
+        if (ts == null || hasNulls(ts)) {
+            throw new IllegalArgumentException(
+                "non-null array with non-null elements required.");
+        }
+        if (ts.length < len) {
+            throw new IllegalArgumentException(
+                String.format("array of length at least %s required", len)
+            );
+        }
     }
     
     /**
@@ -318,7 +349,7 @@ public class Arrayz<A> {  // avoids conflicts with JDK Arrays class.
      */
     public A[] pruneNull(A[] list) {
         if (list == null) return generator.apply(0);
-        return filter(x -> x != null, list);
+        return filter(Objects::nonNull, list);
     }
     
     /**

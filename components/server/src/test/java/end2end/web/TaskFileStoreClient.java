@@ -66,7 +66,7 @@ public class TaskFileStoreClient<T extends Identifiable> {
     }
     
     public boolean exists(T taskId) {
-        return loadTaskIds().filter(taskId::equals).findFirst().isPresent();
+        return loadTaskIds().anyMatch(taskId::equals);
     }
     
     public Optional<String> download(T taskId) {

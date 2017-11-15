@@ -60,7 +60,7 @@ public class IdentifiableHashTest {
     }
 
     static Stream<Integer> range(int a, int b) {
-        return IntStream.range(a, b).mapToObj(x -> x);
+        return IntStream.range(a, b).boxed();
     }
 
     static <T> void assertConstantFunction(Map<Integer, List<H<T>>> buckets) {
@@ -75,9 +75,7 @@ public class IdentifiableHashTest {
     static <T> void assertSameFunction(Map<Integer, List<H<T>>> f,
                                        Map<Integer, List<H<T>>> g) {
         assertThat(f.keySet(), is(g.keySet()));
-        f.keySet().forEach(k -> {
-            assertSameBucket(f.get(k), g.get(k));
-        });
+        f.keySet().forEach(k -> assertSameBucket(f.get(k), g.get(k)));
     }
 
     @DataPoints
@@ -94,9 +92,7 @@ public class IdentifiableHashTest {
     @Theory
     public void spreadInputsEvenly(Integer bucketSize) {
         buckets(3, range(0, bucketSize*3))
-                .forEach((h, ids) -> {
-                    assertThat(ids.size(), is(bucketSize));
-                });
+                .forEach((h, ids) -> assertThat(ids.size(), is(bucketSize)));
     }
 
     @Test

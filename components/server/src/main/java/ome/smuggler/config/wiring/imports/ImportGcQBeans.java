@@ -1,60 +1,59 @@
 package ome.smuggler.config.wiring.imports;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.InputStream;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import kew.core.msg.MessageSink;
+import kew.core.msg.SchedulingSource;
+import kew.core.qchan.QChannelFactoryAdapter;
+import kew.providers.artemis.qchan.ArtemisMessage;
+import kew.providers.artemis.qchan.ArtemisQChannel;
+import kew.providers.artemis.ServerConnector;
+
 import ome.smuggler.config.wiring.crypto.SerializationFactory;
 import ome.smuggler.config.items.ImportGcQConfig;
-import ome.smuggler.core.msg.Reschedulable;
-import ome.smuggler.core.msg.ReschedulableFactory;
-import ome.smuggler.core.msg.SchedulingSource;
 import ome.smuggler.core.service.imports.FailedFinalisationHandler;
 import ome.smuggler.core.service.imports.ImportFinaliser;
 import ome.smuggler.core.types.ImportConfigSource;
 import ome.smuggler.core.types.ProcessedImport;
-import ome.smuggler.providers.q.DequeueTask;
-import ome.smuggler.providers.q.QChannelFactory;
-import ome.smuggler.providers.q.ServerConnector;
 
 /**
- * Singleton beans for HornetQ client resources that have to be shared and
+ * Singleton beans for Artemis client resources that have to be shared and
  * reused. 
  */
 @Configuration
 public class ImportGcQBeans {
 
-    @Autowired
-    private SerializationFactory sf;
-
     @Bean
-    public QChannelFactory<ProcessedImport> importGcChannelFactory(
-            ServerConnector connector, ImportGcQConfig qConfig) {
-        return new QChannelFactory<>(connector, qConfig);
+    public QChannelFactoryAdapter<ArtemisMessage, ProcessedImport>
+        importGcChannelFactory(ServerConnector connector,
+                               ImportGcQConfig qConfig,
+                               SerializationFactory sf) {
+        return new ArtemisQChannel<>(connector,
+                                     qConfig,
+                                     sf.serializer(),
+                                     sf.deserializer(ProcessedImport.class));
     }
     
     @Bean
     public SchedulingSource<ProcessedImport> importGcSourceChannel(
-            QChannelFactory<ProcessedImport> factory) throws ActiveMQException {
-        return factory.buildSchedulingSource(sf.serializer());
+        QChannelFactoryAdapter<ArtemisMessage, ProcessedImport> factory)
+            throws Exception {
+        return factory.buildSchedulingSource();
     }
     
     @Bean
-    public DequeueTask<ProcessedImport> dequeueImportFinaliserTask(
-            QChannelFactory<ProcessedImport> factory,
+    public MessageSink<ArtemisMessage, InputStream>
+        dequeueImportFinaliserTask(
+            QChannelFactoryAdapter<ArtemisMessage, ProcessedImport> factory,
             ImportConfigSource importConfig,
             ImportFinaliser finaliser,
-            FailedFinalisationHandler failureHandler) throws ActiveMQException {
-        Reschedulable<ProcessedImport> consumer =
-                ReschedulableFactory.buildForRepeatConsumer(
-                        finaliser,
-                        importConfig.retryIntervals(),
-                        failureHandler);
-        return factory.buildReschedulableSink(
-                consumer,
-                sf.serializer(),
-                sf.deserializer(ProcessedImport.class));
+            FailedFinalisationHandler failureHandler) throws Exception {
+        return factory.buildRepeatSink(finaliser,
+                                       importConfig.retryIntervals(),
+                                       failureHandler);
     }
 
 }

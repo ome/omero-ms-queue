@@ -22,13 +22,10 @@ public class DefaultArtemisPersistenceConfig
         
         Path d = baseDir.resolve(RootDir);
         ArtemisPersistenceConfig cfg = new ArtemisPersistenceConfig();
-        
+
         cfg.setPersistenceEnabled(true);
-        cfg.setBindingsDirPath(d.resolve("bindings").toString());
-        cfg.setJournalDirPath(d.resolve("journal").toString());
-        cfg.setLargeMessagesDirPath(d.resolve("largemessages").toString());
-        cfg.setPagingDirPath(d.resolve("paging").toString());
-        
+        cfg.setDataDirPath(d.toString());
+
         return cfg;
     }
 

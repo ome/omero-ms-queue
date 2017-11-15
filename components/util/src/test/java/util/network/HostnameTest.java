@@ -47,4 +47,9 @@ public class HostnameTest {
         assertThat(actual, is(expected));
     }
 
+    @Test
+    public void ctor() {
+        new Hostname();  // only to get 100% coverage.
+    }
+
 }

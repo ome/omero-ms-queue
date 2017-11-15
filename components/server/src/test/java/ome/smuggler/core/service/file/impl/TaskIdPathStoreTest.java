@@ -136,4 +136,9 @@ public class TaskIdPathStoreTest {
         });
     }
 
+    @Test (expected = IllegalArgumentException.class)
+    public void replaceThrowsIfNonExistingTaskId() {
+        target.replace(new UuidString(), x -> x);
+    }
+
 }

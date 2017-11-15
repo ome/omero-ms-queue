@@ -17,7 +17,7 @@ public class UuidString
 
     /**
      * Creates a new instance with the specified UUID.
-     * @param uuid
+     * @param uuid the UUID to use.
      * @throws IllegalArgumentException if the argument is {@code null}
      * or empty.
      */

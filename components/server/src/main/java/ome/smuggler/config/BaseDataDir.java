@@ -1,5 +1,6 @@
 package ome.smuggler.config;
 
+import util.config.BaseDir;
 
 /**
  * The base directory where we keep all the import, mail, and HornetQ data.

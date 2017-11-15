@@ -1,6 +1,6 @@
 package ome.smuggler.core.service.imports.impl;
 
-import ome.smuggler.core.msg.RepeatAction;
+import kew.core.msg.RepeatAction;
 import ome.smuggler.core.service.imports.ImportFinaliser;
 import ome.smuggler.core.types.ImportFinalisationPhase;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class FinaliserEventConsumerTest {
 
     class TestFinaliser extends Finaliser {
 
-        RepeatAction outcome;
+        final RepeatAction outcome;
 
         TestFinaliser(RepeatAction outcome) {
             super(dummyImportEnv());

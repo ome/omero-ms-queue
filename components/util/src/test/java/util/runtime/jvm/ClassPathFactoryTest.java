@@ -45,7 +45,7 @@ public class ClassPathFactoryTest {
         
         assertTrue(actual.isEmpty());
     }
-    
+
     @Test
     public void fromDir() throws IOException {
         Path base = ClassPathLocator.findBase(getClass()).get();
@@ -53,12 +53,12 @@ public class ClassPathFactoryTest {
         Path pathToParentDir = base.resolve(Paths.get(relPathToThisClass))
                                    .getParent();
         String actual = ClassPathFactory
-                       .fromDir(pathToParentDir, 
+                       .fromDir(pathToParentDir,
                                 file -> file.toString().endsWith(".class"))
                        .toString();
         assertThat(actual, containsString(relPathToThisClass));
     }
-    
+
     @Test (expected = NullPointerException.class)
     public void fromBasePathThrowsIfNullArg() {
         ClassPathFactory.fromBasePath(null);
@@ -78,5 +78,10 @@ public class ClassPathFactoryTest {
     public void fromDirThrowsIfNullSecondArg() throws IOException {
         ClassPathFactory.fromDir(Paths.get(""), null);
     }
-    
+
+    @Test
+    public void ctor() {
+        new ClassPathFactory();  // only to get 100% coverage.
+    }
+
 }

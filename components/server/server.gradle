@@ -7,21 +7,16 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'jacoco'
 
 
-repositories {
-    maven {
-        url "http://repository.jboss.org/nexus/content/groups/public"
-    }
-}
-
 dependencies {
-    compile project(":util")
+    compile project(":kew-artemis"), project(":util")
+    /* NOTE: the external libs util depends on are exactly the same as
+     * those brought in by the Spring Boot starters below.
+     */
 
     compile("org.springframework.boot:spring-boot-starter")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("com.google.code.gson:gson:2.8.1")
-    compile("org.springframework.boot:spring-boot-starter-artemis")
-    compile("org.apache.activemq:artemis-jms-server")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-starter-mail")
     

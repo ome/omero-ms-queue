@@ -52,5 +52,10 @@ public class JvmLocatorTest {
         assertTrue(java.isAbsolute());
         assertTrue(Files.exists(java));
     }
+
+    @Test
+    public void ctor() {
+        new JvmLocator();  // only to get 100% coverage.
+    }
     
 }

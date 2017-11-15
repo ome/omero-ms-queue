@@ -53,4 +53,9 @@ public class FunctionsApplyTest {
         apply(null, 1);
     }
 
+    @Test
+    public void ctor() {
+        new Functions();  // only to get 100% coverage.
+    }
+
 }

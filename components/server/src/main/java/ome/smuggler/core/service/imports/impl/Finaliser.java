@@ -1,10 +1,10 @@
 package ome.smuggler.core.service.imports.impl;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.msg.ChannelMessage.message;
+import static kew.core.msg.ChannelMessage.message;
 import static ome.smuggler.core.types.ProcessedImport.*;
 
-import ome.smuggler.core.msg.RepeatAction;
+import kew.core.msg.RepeatAction;
 import ome.smuggler.core.service.imports.ImportFinaliser;
 import ome.smuggler.core.types.ImportFinalisationPhase;
 import ome.smuggler.core.types.ProcessedImport;

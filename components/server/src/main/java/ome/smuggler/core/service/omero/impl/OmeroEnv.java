@@ -2,7 +2,7 @@ package ome.smuggler.core.service.omero.impl;
 
 import static java.util.Objects.requireNonNull;
 
-import ome.smuggler.core.msg.ChannelSource;
+import kew.core.msg.ChannelSource;
 import ome.smuggler.core.service.file.RemotePathResolver;
 import ome.smuggler.core.service.log.LogService;
 import ome.smuggler.core.types.OmeCliConfigSource;

@@ -2,6 +2,7 @@ package util.validation;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 import static util.object.Pair.pair;
 import static util.sequence.Arrayz.array;
 import static util.validation.ParserFactory.*;
@@ -14,6 +15,8 @@ import org.junit.runner.RunWith;
 
 import util.object.Either;
 import util.object.Pair;
+
+import java.util.stream.Stream;
 
 @RunWith(Theories.class)
 public class TwoTokenParserTest {
@@ -89,5 +92,18 @@ public class TwoTokenParserTest {
         assertTrue(parseResult.isRight());
         assertThat(parseResult.getRight(), is(pair(1, "y")));
     }
-    
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void parseReturnsLeftIfInputStreamReturnsNullArray() {
+        Stream<String> tokens = mock(Stream.class);
+        when(tokens.toArray(any())).thenReturn(null);
+
+        Either<String, Pair<Integer, String>> parseResult =
+                parser().parse(tokens);
+
+        assertNotNull(parseResult);
+        assertTrue(parseResult.isLeft());
+    }
+
 }

@@ -3,9 +3,9 @@ package util.io;
 import static util.error.Exceptions.unchecked;
 
 /**
- * Writes a value {@code V} to a data sink {@code S}.
- * For example, {@code S} could be an output stream and the value {@code V}
- * could be serialised into the stream. Or {@code V} could be the body of a
+ * Writes a value {@code T} to a data sink {@code S}.
+ * For example, {@code S} could be an output stream and the value {@code T}
+ * could be serialised into the stream. Or {@code T} could be the body of a
  * message to put on a queue {@code S}.
  * @see SourceReader
  */
@@ -21,7 +21,7 @@ public interface SinkWriter<T, S> {
     void write(S sink, T value) throws Exception;
     
     /**
-     * Calls the {@link #write(Object, Object)} write} method converting any
+     * Calls the {@link #write(Object, Object) write} method converting any
      * checked exception into an unchecked one that will bubble up without
      * requiring a {@code throws} clause on this method.
      * @param sink where to write the value to.

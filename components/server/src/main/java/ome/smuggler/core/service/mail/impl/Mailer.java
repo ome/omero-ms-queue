@@ -1,10 +1,9 @@
 package ome.smuggler.core.service.mail.impl;
 
 import static java.util.Objects.requireNonNull;
-import static ome.smuggler.core.msg.RepeatAction.Repeat;
-import static ome.smuggler.core.msg.RepeatAction.Stop;
+import static kew.core.msg.RepeatAction.*;
 
-import ome.smuggler.core.msg.RepeatAction;
+import kew.core.msg.RepeatAction;
 import ome.smuggler.core.service.mail.MailProcessor;
 import ome.smuggler.core.types.QueuedMail;
 

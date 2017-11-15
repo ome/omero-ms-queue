@@ -134,4 +134,9 @@ public class ClassPathLocatorTest {
         }
     }
 
+    @Test
+    public void ctor() {
+        new ClassPathLocator();  // only to get 100% coverage.
+    }
+
 }

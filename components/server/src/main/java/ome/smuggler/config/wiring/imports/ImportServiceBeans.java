@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import kew.core.msg.ChannelSource;
+import kew.core.msg.SchedulingSource;
 import ome.smuggler.config.wiring.crypto.SerializationFactory;
-import ome.smuggler.core.msg.ChannelSource;
-import ome.smuggler.core.msg.SchedulingSource;
 import ome.smuggler.core.service.file.KeyValueStore;
 import ome.smuggler.core.service.file.TaskFileStore;
 import ome.smuggler.core.service.file.impl.KeyValueFileStore;

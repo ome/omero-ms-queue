@@ -101,6 +101,34 @@ public class ClassPathTest {
     public void isNotEmptyAfterAddingNonEmptyPath() {
         assertFalse(new ClassPath().add(Paths.get("x")).isEmpty());
     }
+
+    @Test
+    public void equalsReturnsFalseIfNullInput() {
+        ClassPath target = new ClassPath();
+        assertFalse(target.equals(null));
+    }
+
+    @Test
+    public void equalsReturnsTrueIfSameRef() {
+        ClassPath target = new ClassPath();
+        assertTrue(target.equals(target));
+    }
+
+    @Test
+    public void equalsReturnsFalseIfDifferentType() {
+        ClassPath target = new ClassPath();
+        assertFalse(target.equals(new LinkedHashSet<Path>()));
+    }
+
+    @Test
+    public void equalObjectsHaveSameHash() {
+        ClassPath t1 = new ClassPath().add(Paths.get("/"));
+        ClassPath t2 = new ClassPath().add(Paths.get("/"));
+
+        assertTrue(t1.equals(t2));
+        assertThat(t1.hashCode(), is(t2.hashCode()));
+    }
+
     
     @Test(expected = NullPointerException.class)
     public void addThrowsIfNullStream() {

@@ -105,4 +105,9 @@ public class CryptoKeyFactoryTest {
         exportKey(null);
     }
 
+    @Test
+    public void ctor() {
+        new CryptoKeyFactory();  // only to get 100% coverage.
+    }
+
 }

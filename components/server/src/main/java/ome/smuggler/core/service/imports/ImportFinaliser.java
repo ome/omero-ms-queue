@@ -1,7 +1,7 @@
 package ome.smuggler.core.service.imports;
 
-import ome.smuggler.core.msg.RepeatAction;
-import ome.smuggler.core.msg.RepeatConsumer;
+import kew.core.msg.RepeatAction;
+import kew.core.msg.RepeatConsumer;
 import ome.smuggler.core.types.ProcessedImport;
 
 /**

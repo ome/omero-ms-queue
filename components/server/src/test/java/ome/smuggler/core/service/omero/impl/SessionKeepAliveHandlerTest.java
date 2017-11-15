@@ -9,8 +9,8 @@ import java.time.Duration;
 import java.util.Optional;
 
 import ome.smuggler.config.items.OmeCliConfig;
-import ome.smuggler.core.msg.ChannelSource;
-import ome.smuggler.core.msg.CountedSchedule;
+import kew.core.msg.ChannelSource;
+import kew.core.msg.CountedSchedule;
 import ome.smuggler.core.service.file.RemotePathResolver;
 import ome.smuggler.core.service.omero.SessionService;
 import util.types.FutureTimepoint;

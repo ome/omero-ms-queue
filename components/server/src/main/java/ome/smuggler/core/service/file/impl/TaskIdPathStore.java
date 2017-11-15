@@ -71,7 +71,7 @@ public class TaskIdPathStore<T extends Identifiable>
     public void replace(T taskId, StreamFilter filter) {
         requireNonNull(taskId, "taskId");
         requireNonNull(filter, "filter");
-        if (!listTaskIds().anyMatch(taskId::equals)) {
+        if (listTaskIds().noneMatch(taskId::equals)) {
             throw new IllegalArgumentException("no such taskId: " + taskId.id());
         }
 

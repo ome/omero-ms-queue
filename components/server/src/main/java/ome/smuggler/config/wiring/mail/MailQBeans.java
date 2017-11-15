@@ -3,29 +3,28 @@ package ome.smuggler.config.wiring.mail;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.activemq.artemis.api.core.ActiveMQException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import kew.core.msg.ChannelSource;
+import kew.core.msg.MessageSink;
+import kew.core.qchan.QChannelFactoryAdapter;
+import kew.providers.artemis.ServerConnector;
+import kew.providers.artemis.qchan.ArtemisMessage;
+import kew.providers.artemis.qchan.ArtemisQChannel;
+import util.io.SinkWriter;
+import util.io.SourceReader;
+
 import ome.smuggler.config.items.MailQConfig;
-import ome.smuggler.core.msg.ChannelSource;
-import ome.smuggler.core.msg.Reschedulable;
-import ome.smuggler.core.msg.ReschedulableFactory;
 import ome.smuggler.core.service.mail.FailedMailHandler;
 import ome.smuggler.core.service.mail.MailProcessor;
 import ome.smuggler.core.types.MailConfigSource;
 import ome.smuggler.core.types.QueuedMail;
 import ome.smuggler.providers.json.JsonInputStreamReader;
 import ome.smuggler.providers.json.JsonOutputStreamWriter;
-import ome.smuggler.providers.q.DequeueTask;
-import ome.smuggler.providers.q.QChannelFactory;
-import ome.smuggler.providers.q.ServerConnector;
-import util.io.SinkWriter;
-import util.io.SourceReader;
-
 
 /**
- * Singleton beans for HornetQ client resources that have to be shared and
+ * Singleton beans for Artemis client resources that have to be shared and
  * reused. 
  */
 @Configuration
@@ -40,29 +39,30 @@ public class MailQBeans {
     }
 
     @Bean
-    public QChannelFactory<QueuedMail> mailChannelFactory(
-            ServerConnector connector, MailQConfig qConfig) {
-        return new QChannelFactory<>(connector, qConfig);
+    public QChannelFactoryAdapter<ArtemisMessage, QueuedMail>
+    mailChannelFactory(ServerConnector connector, MailQConfig qConfig) {
+        return new ArtemisQChannel<>(connector,
+                                     qConfig,
+                                     serializer(),
+                                     deserializer());
     }
     
     @Bean
     public ChannelSource<QueuedMail> mailSourceChannel(
-            QChannelFactory<QueuedMail> factory) throws ActiveMQException {
-        return factory.buildSource(serializer());
+            QChannelFactoryAdapter<ArtemisMessage, QueuedMail> factory)
+            throws Exception {
+        return factory.buildSource();
     }
     
     @Bean
-    public DequeueTask<QueuedMail> dequeueMailTask(
-            QChannelFactory<QueuedMail> factory,
+    public MessageSink<ArtemisMessage, InputStream> dequeueMailTask(
+            QChannelFactoryAdapter<ArtemisMessage, QueuedMail> factory,
             MailConfigSource mailConfig,
             MailProcessor processor,
-            FailedMailHandler failureHandler) throws ActiveMQException {
-        Reschedulable<QueuedMail> consumer = 
-                ReschedulableFactory.buildForRepeatConsumer(processor, 
-                        mailConfig.retryIntervals(), failureHandler);
-        return factory.buildReschedulableSink(consumer,
-                                              serializer(),
-                                              deserializer());
+            FailedMailHandler failureHandler) throws Exception {
+        return factory.buildRepeatSink(processor,
+                                       mailConfig.retryIntervals(),
+                                       failureHandler);
     }
 
 }

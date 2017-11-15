@@ -3,7 +3,7 @@ package ome.smuggler.core.service.mail.impl;
 import static java.util.Objects.requireNonNull;
 import static util.io.FileOps.ensureDirectory;
 
-import ome.smuggler.core.msg.ChannelSource;
+import kew.core.msg.ChannelSource;
 import ome.smuggler.core.service.file.TaskFileStore;
 import ome.smuggler.core.service.log.LogService;
 import ome.smuggler.core.service.mail.MailClient;

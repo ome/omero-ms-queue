@@ -1,0 +1,25 @@
+apply plugin: 'java'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+apply plugin: 'jacoco'
+
+
+dependencies {
+    compile(project(':util')) {
+        transitive = false
+    }
+
+    testCompile libset.test_base
+}
+
+jar {
+    baseName = 'ome-kew'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}

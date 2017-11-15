@@ -2,10 +2,12 @@ package util.io.crypto;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 
@@ -49,7 +51,33 @@ public class CryptoSinkWriterTest {
         byte[] encrypted = sink.toByteArray();
 
         assertThat(encrypted.length, greaterThan(0));
-        assertThat(encrypted[0], is(not(value)));
+        if (encrypted.length == 1) {
+            assertThat(encrypted[0], is(not(value)));
+        }
+    }
+
+    @Test (expected = IOException.class)
+    public void writerExceptionBubblesUp() {
+        CryptoSinkWriter<Byte> target = new CryptoSinkWriter<>(
+                crypto(), (out, v) -> { throw new IOException(); });
+        ByteArrayOutputStream sink = new ByteArrayOutputStream();
+        byte value = 10;
+
+        target.uncheckedWrite(sink, value);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void streamCreationExceptionBubblesUp() {
+        CipherFactory factory = mock(CipherFactory.class);
+        when(factory.encryptionChipher())
+                .thenThrow(new IllegalArgumentException());
+
+        CryptoSinkWriter<Byte> target = new CryptoSinkWriter<>(
+                                                factory, OutputStream::write);
+        ByteArrayOutputStream sink = new ByteArrayOutputStream();
+        byte value = 10;
+
+        target.uncheckedWrite(sink, value);
     }
 
 }

@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static util.sequence.Arrayz.array;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 
@@ -86,4 +87,14 @@ public class SingleTokenParserAdapterTest {
         assertTrue(parseResult.isRight());
         assertThat(parseResult.getRight(), is(1));
     }
+
+    @Test
+    public void parseNonNullReturnsLeftOnEmptyStream() {
+        Either<String, Integer> parseResult = ParserFactory
+                                             .positiveIntParser()
+                                             .parseNonNull(Stream.empty());
+        assertNotNull(parseResult);
+        assertTrue(parseResult.isLeft());
+    }
+
 }
