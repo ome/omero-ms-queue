@@ -73,7 +73,7 @@ You can read more about Smuggler's high-level design [over here][smugs-hlv].
 
 
 
-[kew-artemis]: components/kew-artemis
+[kew-artemis]: /components/kew-artemis
     "Kew Artemis Component"
 [smugs-hlv]: http://c0c0n3.github.io/ome-smuggler/docs/content/design/high-level/index.html
     "High-Level View"
