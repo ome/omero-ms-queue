@@ -1,43 +1,62 @@
-OME Smuggler
-============
-> Sneakily imports image goodies into OMERO without paying MRI session duties.
+OMERA
+=====
+> OME Reactive Architecture.
 
 [![Build Status](https://api.travis-ci.org/openmicroscopy/omero-ms-queue.svg?branch=master)](https://travis-ci.org/openmicroscopy/omero-ms-queue)
 [![codecov](https://codecov.io/gh/openmicroscopy/omero-ms-queue/branch/master/graph/badge.svg)](https://codecov.io/gh/openmicroscopy/omero-ms-queue)
 
 
-Idea
-----
-The basic idea: a Web-based work queue to run tasks on behalf of OMERO clients.
-A task is queued, then run and as it runs a URL is available from which to get
-status updates. If the task fails, it may be retried. On completion, an email
-report is sent to the interested parties. This is Smuggler’s life purpose—at
-least for now. And for now, the only task Smuggler knows how to run is an OMERO
-import. But it should be possible to add any other task without too much sweat
-using the same run/retry/notify mechanism.
+Overview
+--------
+The basic idea: a framework to build scalable and resilient OMERO micro
+services.
+
+We use distributed, asynchronous message passing as a foundation for a
+[reactive architecture][rman] with scalable, resilient, and composable
+services. The below components provide the messaging functionality:
+
+* [kew][kew]: a strongly-typed messaging API that lets you plug in and
+use different back-end messaging systems such *Apache Artemis*, *RabbitMQ*,
+or even *Vert.x*.
+* [kew-artemis][kew-artemis]: an implementation of the messaging API backed
+by *Apache Artemis* which doubles up as a basic container for asynchronous,
+message-driven, micro services.
+
+The arrangement of these two components is similar to that in a Ports and
+Adaptors architecture (a.k.a. Hexagonal architecture): [kew][kew] defines
+the ports and [kew-artemis][kew-artemis] provides the adaptors.
+
+### Coming Soon
+We're busy adding support for distributed (*NoSQL*) state. The plan is to
+have an arrangement similar to the above with an abstract API backed by
+pluggable state providers so to keep service logic independent of the
+underlying framework. (The one provider we're definitely going to have
+is *Redis*.)
+
+A more ambitious plan is to leverage messaging and distributed state to
+build a minimalist, light-weight, distributed stream processing component
+that would let us easily string together OMERO tasks into a distributed
+computation. (See [these notes][dlp] for the details.) Or we might consider
+using a full-fledged framework such as *Apache Spark* instead...
+
+So watch this place!
 
 
 Contributing
 ------------
-Want to hack Smuggler to pieces? Or contribute a couple of tweaks or a bug fix?
-You're welcome to fork the repo and submit a pull request.
-If you're planning to do open-heart surgery, you may find it useful to read the
-developer docs over here:
-
-* [http://c0c0n3.github.io/ome-smuggler/](http://c0c0n3.github.io/ome-smuggler/)
-
-And by the way, if you're looking for the docs sources, we keep the whole lot
-in the `gh-pages` branch:
-
-* [https://github.com/c0c0n3/ome-smuggler/tree/gh-pages](https://github.com/c0c0n3/ome-smuggler/tree/gh-pages)
-
-The docs site is generated from the sources in the same branch so that GitHub
-can kindly publish it as a GitHub project site. To find out how, start from
-the README in the `gh-pages` branch...
+Want to hack this code to pieces? Or contribute a couple of tweaks or a bug
+fix? You're welcome to fork the repo and submit a pull request.
+If you're planning to do open-heart surgery, you may find it useful to read
+the README files (pun intended!) of the various components as well as the
+JavaDoc for the specific classes you'll be working on. Also each component
+comes with lots and lots of unit, integration, and end-to-end tests which
+may be worth looking at to get the hang of how each unit works. I suppose
+this was a long way to say: we still don't have a proper documentation site!
+Oh, did I mention you're welcome to contribute?
 
 
-Build & Run...for the loo
--------------------------
+Build System
+------------
 Build and test everything:
 
     ./gradlew build
@@ -56,12 +75,11 @@ run independently using `gradlew :<project>:<task>`; for example
 
     ./gradlew :server:test
 
-runs all the tests in the `server` project. If you feel adventurous and want
-to actually run Smuggler, take our [whirlwind tour](http://c0c0n3.github.io/ome-smuggler/docs/content/examples/whirlwind-tour.html)!
+runs all the tests in the `server` project.
 
 
-Tricksy Eclipsie, Have no IDEA!
--------------------------------
+IDE Support
+-----------
 Using Eclipse or IDEA? With recent versions you should be able to import the
 entire Gradle multi-project build seamlessly as a Gradle project. If that
 doesn't work for you, try adding the Gradle Eclipse or IDEA plugin to each
@@ -81,4 +99,16 @@ into Eclipse (IDEA) as an existing project.
 If you're unhappy with the result, you'll have to have a look at our build
 files and create the projects manually in your IDE. Give me a shout if you
 need help to get you going! (I'm deaf.)
+
+
+
+
+[dlp]: https://github.com/openmicroscopy/omero-ms-queue/issues/4
+    "Distributed List Processing"
+[kew]: components/kew
+    "Kew Component"
+[kew-artemis]: components/kew-artemis
+    "Kew Artemis Component"
+[rman]: https://www.reactivemanifesto.org/
+    "The Reactive Manifesto"
 
