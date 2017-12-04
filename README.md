@@ -39,7 +39,7 @@ that would let us easily string together OMERO tasks into a distributed
 computation. (See [these notes][dlp] for the details.) Or we might consider
 using a full-fledged framework such as *Apache Spark* instead...
 
-So watch this place!
+So watch this space!
 
 
 Contributing
