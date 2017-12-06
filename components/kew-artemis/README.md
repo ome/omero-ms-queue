@@ -11,7 +11,7 @@ This component provides three packages with distinct but related functionality:
 message queues as specified by the `kew.core.qchan.spi` interfaces.
 * `runtime`. Drop-in replacement for Artemis stock instance servers which
 also lets you embed a server in your own application, providing a basic
-container for asynchronous, message-driven micro-services architectures.
+container for asynchronous, message-driven, micro services.
 * `config`. Programmatic, better-typed Artemis configuration that aims
 to prevent some configuration pitfalls and simplify Artemis configuration
 API.
