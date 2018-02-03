@@ -2,7 +2,7 @@ package ome.smuggler.run;
 
 import java.util.List;
 
-import util.config.YamlConverter;
+import util.serialization.yaml.YamlConverter;
 import ome.smuggler.config.data.UndertowYmlFile;
 import ome.smuggler.config.items.UndertowConfig;
 

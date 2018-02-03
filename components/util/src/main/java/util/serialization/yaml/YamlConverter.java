@@ -1,4 +1,4 @@
-package util.config;
+package util.serialization.yaml;
 
 import static java.util.Objects.requireNonNull;
 import static util.sequence.Streams.asStream;

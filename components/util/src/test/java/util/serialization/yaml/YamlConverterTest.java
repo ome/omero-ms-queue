@@ -1,4 +1,4 @@
-package util.config;
+package util.serialization.yaml;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
