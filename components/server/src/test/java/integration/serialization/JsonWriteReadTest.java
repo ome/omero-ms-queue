@@ -11,8 +11,8 @@ import com.google.gson.reflect.TypeToken;
 
 import util.io.SinkWriter;
 import util.io.SourceReader;
-import ome.smuggler.providers.json.JsonSinkWriter;
-import ome.smuggler.providers.json.JsonSourceReader;
+import util.serialization.json.JsonSinkWriter;
+import util.serialization.json.JsonSourceReader;
 
 public class JsonWriteReadTest {
 

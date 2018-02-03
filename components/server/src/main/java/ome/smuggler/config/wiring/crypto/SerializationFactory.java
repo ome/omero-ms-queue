@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import ome.smuggler.core.types.CryptoConfigSource;
-import ome.smuggler.providers.json.JsonInputStreamReader;
-import ome.smuggler.providers.json.JsonOutputStreamWriter;
+import util.serialization.json.JsonInputStreamReader;
+import util.serialization.json.JsonOutputStreamWriter;
 
 import util.io.SinkWriter;
 import util.io.SourceReader;

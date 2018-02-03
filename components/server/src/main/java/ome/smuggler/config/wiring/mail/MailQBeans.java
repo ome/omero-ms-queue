@@ -20,8 +20,8 @@ import ome.smuggler.core.service.mail.FailedMailHandler;
 import ome.smuggler.core.service.mail.MailProcessor;
 import ome.smuggler.core.types.MailConfigSource;
 import ome.smuggler.core.types.QueuedMail;
-import ome.smuggler.providers.json.JsonInputStreamReader;
-import ome.smuggler.providers.json.JsonOutputStreamWriter;
+import util.serialization.json.JsonInputStreamReader;
+import util.serialization.json.JsonOutputStreamWriter;
 
 /**
  * Singleton beans for Artemis client resources that have to be shared and

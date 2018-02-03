@@ -21,8 +21,8 @@ import ome.smuggler.core.service.omero.SessionService;
 import ome.smuggler.core.service.omero.impl.OmeroEnv;
 import ome.smuggler.core.service.omero.impl.SessionKeepAliveHandler;
 import ome.smuggler.core.types.QueuedOmeroKeepAlive;
-import ome.smuggler.providers.json.JsonInputStreamReader;
-import ome.smuggler.providers.json.JsonOutputStreamWriter;
+import util.serialization.json.JsonInputStreamReader;
+import util.serialization.json.JsonOutputStreamWriter;
 
 
 /**
