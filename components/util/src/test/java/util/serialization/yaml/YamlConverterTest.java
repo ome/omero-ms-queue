@@ -88,7 +88,7 @@ public class YamlConverterTest {
 
     @Test (expected = NullPointerException.class)
     public void toYaml2ThrowsIfNullWriter() {
-        target.toYaml(1, null);
+        target.toYaml(1, (Writer)null);
     }
 
     @Test (expected = NullPointerException.class)
