@@ -43,7 +43,7 @@ public class YamlSerializationFactoryTest extends WriteReadTest {
     }
 
     @Test
-    public void jsonSerializeAndDeserialize() {
+    public void serializeAndDeserialize() {
         YamlSerializationFactoryTest initialValue =
                 new YamlSerializationFactoryTest();
         initialValue.x = true;
