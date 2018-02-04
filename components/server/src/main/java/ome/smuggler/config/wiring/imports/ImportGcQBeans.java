@@ -12,12 +12,12 @@ import kew.providers.artemis.qchan.ArtemisMessage;
 import kew.providers.artemis.qchan.ArtemisQChannel;
 import kew.providers.artemis.ServerConnector;
 
-import ome.smuggler.config.wiring.crypto.SerializationFactory;
 import ome.smuggler.config.items.ImportGcQConfig;
 import ome.smuggler.core.service.imports.FailedFinalisationHandler;
 import ome.smuggler.core.service.imports.ImportFinaliser;
 import ome.smuggler.core.types.ImportConfigSource;
 import ome.smuggler.core.types.ProcessedImport;
+import util.serialization.SerializationFactory;
 
 /**
  * Singleton beans for Artemis client resources that have to be shared and

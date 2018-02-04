@@ -1,7 +1,6 @@
 package ome.smuggler.config.wiring.omero;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,16 +12,14 @@ import kew.core.qchan.QChannelFactoryAdapter;
 import kew.providers.artemis.qchan.ArtemisMessage;
 import kew.providers.artemis.qchan.ArtemisQChannel;
 import kew.providers.artemis.ServerConnector;
-import util.io.SinkWriter;
-import util.io.SourceReader;
+import util.serialization.SerializationFactory;
+import util.serialization.json.JsonSerializationFactory;
 
 import ome.smuggler.config.items.OmeroSessionQConfig;
 import ome.smuggler.core.service.omero.SessionService;
 import ome.smuggler.core.service.omero.impl.OmeroEnv;
 import ome.smuggler.core.service.omero.impl.SessionKeepAliveHandler;
 import ome.smuggler.core.types.QueuedOmeroKeepAlive;
-import util.serialization.json.JsonInputStreamReader;
-import util.serialization.json.JsonOutputStreamWriter;
 
 
 /**
@@ -32,22 +29,15 @@ import util.serialization.json.JsonOutputStreamWriter;
 @Configuration
 public class SessionQBeans {
 
-    private SinkWriter<QueuedOmeroKeepAlive, OutputStream> serializer() {
-        return new JsonOutputStreamWriter<>();
-    }
-
-    private SourceReader<InputStream, QueuedOmeroKeepAlive> deserializer() {
-        return new JsonInputStreamReader<>(QueuedOmeroKeepAlive.class);
-    }
-
     @Bean
     public QChannelFactoryAdapter<ArtemisMessage, QueuedOmeroKeepAlive>
         sessionChannelFactory(
-            ServerConnector connector, OmeroSessionQConfig qConfig) {
+            ServerConnector connector, OmeroSessionQConfig qConfig,
+            SerializationFactory sf) {
         return new ArtemisQChannel<>(connector,
                                      qConfig,
-                                     serializer(),
-                                     deserializer());
+                                     sf.serializer(),
+                                     sf.deserializer(QueuedOmeroKeepAlive.class));
     }
 
     @Bean

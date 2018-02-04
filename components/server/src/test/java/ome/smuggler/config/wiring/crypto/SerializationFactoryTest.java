@@ -8,11 +8,11 @@ import ome.smuggler.config.data.CryptoYmlFile;
 import ome.smuggler.config.items.CryptoConfig;
 import ome.smuggler.core.types.CryptoConfigReader;
 import ome.smuggler.core.types.CryptoConfigSource;
-import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+import util.serialization.SerializationFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -36,8 +36,9 @@ public class SerializationFactoryTest {
     @Theory
     public void serializeThenDeserializeIsIdentity(CryptoConfigSource config,
                                                    String value)
-            throws Exception{
-        SerializationFactory sf = new SerializationFactory(config);
+            throws Exception {
+        SerializationFactory sf = new CryptoSerializationBeans()
+                                 .serializationFactory(config);
 
         ByteArrayOutputStream sink = new ByteArrayOutputStream();
         sf.serializer().write(sink, value);
@@ -47,11 +48,6 @@ public class SerializationFactoryTest {
         String deserialized = sf.deserializer(String.class).read(source);
 
         assertThat(deserialized, is(value));
-    }
-
-    @Test (expected = NullPointerException.class)
-    public void ctorThrowsIfNullConfig() {
-        new SerializationFactory(null);
     }
 
 }
