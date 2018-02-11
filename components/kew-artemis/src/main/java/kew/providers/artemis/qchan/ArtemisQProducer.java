@@ -52,7 +52,18 @@ public class ArtemisQProducer implements QProducer<ArtemisMessage> {
                                            .message();
         writeBody(msg, payloadWriter);
 
-        producer.send(msg);
+        synchronized (this) {  // (*)
+            producer.send(msg);
+        }
     }
-
+    /* NOTE. Artemis client sessions aren't thread-safe.
+     * If two threads try to send or ack a message concurrently, you might
+     * get this warning in the logs
+     *
+     *     AMQ212051: Invalid concurrent session usage. Sessions are not
+     *     supposed to be used by more than one thread concurrently.
+     *
+     * (Have a look at the startCall method of ClientSessionImpl in the
+     * org.apache.activemq.artemis.core.client.impl package!)
+     */
 }

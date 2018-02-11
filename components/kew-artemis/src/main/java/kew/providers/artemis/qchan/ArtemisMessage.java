@@ -88,8 +88,17 @@ public class ArtemisMessage implements HasProps, HasReceiptAck, HasSchedule {
     }
 
     @Override
-    public void removeFromQueue() throws Exception {
+    public synchronized void removeFromQueue() throws Exception {
         adaptee.acknowledge();
     }
-
+    /* NOTE. Artemis client sessions aren't thread-safe.
+     * If two threads try to send or ack a message concurrently, you might
+     * get this warning in the logs
+     *
+     *     AMQ212051: Invalid concurrent session usage. Sessions are not
+     *     supposed to be used by more than one thread concurrently.
+     *
+     * (Have a look at the startCall method of ClientSessionImpl in the
+     * org.apache.activemq.artemis.core.client.impl package!)
+     */
 }
