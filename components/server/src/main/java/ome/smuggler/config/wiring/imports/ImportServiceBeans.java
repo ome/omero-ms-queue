@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 import kew.core.msg.ChannelSource;
 import kew.core.msg.SchedulingSource;
-import ome.smuggler.config.wiring.crypto.SerializationFactory;
 import ome.smuggler.core.service.file.KeyValueStore;
 import ome.smuggler.core.service.file.TaskFileStore;
 import ome.smuggler.core.service.file.impl.KeyValueFileStore;
@@ -19,6 +18,7 @@ import ome.smuggler.core.service.omero.ImportService;
 import ome.smuggler.core.service.omero.SessionService;
 import ome.smuggler.core.types.*;
 import ome.smuggler.providers.log.LogAdapter;
+import util.serialization.SerializationFactory;
 
 /**
  * Spring bean wiring configuration for the import service interfaces.

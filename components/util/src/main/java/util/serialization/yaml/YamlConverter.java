@@ -1,10 +1,10 @@
-package util.config;
+package util.serialization.yaml;
 
 import static java.util.Objects.requireNonNull;
 import static util.sequence.Streams.asStream;
 
-import java.io.InputStream;
-import java.io.Writer;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -15,6 +15,21 @@ import org.yaml.snakeyaml.Yaml;
  * Simple (de-)serialization of objects (from) to YAML.
  */
 public class YamlConverter<T> {
+
+    /**
+     * Serializes the given object to a UTF8 stream.
+     * @param data the object to serialize.
+     * @param output the stream to write to.
+     * @throws NullPointerException if any argument is {@code null}.
+     */
+    public void toYaml(T data, OutputStream output) {
+        requireNonNull(data, "data");
+        requireNonNull(output, "output");
+
+        Writer writer = new BufferedWriter(
+                new OutputStreamWriter(output, StandardCharsets.UTF_8));
+        new Yaml().dump(data, writer);
+    }
 
     /**
      * Serializes the given object to a stream.

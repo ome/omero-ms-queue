@@ -4,7 +4,7 @@ import java.util.List;
 
 import ome.smuggler.config.data.MailYmlFile;
 import ome.smuggler.config.items.MailConfig;
-import util.config.YamlConverter;
+import util.serialization.yaml.YamlConverter;
 
 /**
  * Run this class redirecting {@code stdout} to {@code config/mail.yml} to 

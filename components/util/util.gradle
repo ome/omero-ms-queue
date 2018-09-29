@@ -10,8 +10,10 @@ dependencies {
     compile 'javax.servlet:javax.servlet-api:3.1.0'
     // only needed for util.spring.http:
     compile 'org.springframework:spring-web:4.3.9.RELEASE'
-    // only needed for util.config.YamlConverter:
+    // only needed for util.serialization.yaml.YamlConverter:
     compile 'org.yaml:snakeyaml:1.17'
+    // only needed for util.serialization.json
+    compile 'com.google.code.gson:gson:2.8.1'
 
     testCompile libset.test_base
 }

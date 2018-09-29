@@ -1,4 +1,4 @@
-package ome.smuggler.providers.json;
+package util.serialization.json;
 
 import static java.util.Objects.requireNonNull;
 
