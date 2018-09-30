@@ -10,7 +10,6 @@ import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientProducer;
 
 import kew.core.qchan.spi.QMsgBuilder;
-import kew.core.qchan.spi.QMsgFactory;
 import kew.core.qchan.spi.QProducer;
 import util.lambda.ConsumerE;
 
@@ -21,7 +20,7 @@ import util.lambda.ConsumerE;
 public class ArtemisQProducer implements QProducer<ArtemisMessage> {
 
     private final ClientProducer producer;
-    private final QMsgFactory<ArtemisMessage> msgFactory;
+    private final ArtemisQConnector msgFactory;
 
     /**
      * Creates a new instance.
@@ -32,7 +31,7 @@ public class ArtemisQProducer implements QProducer<ArtemisMessage> {
      * @throws NullPointerException if any argument is {@code null}.
      */
     public ArtemisQProducer(ClientProducer producer,
-                            QMsgFactory<ArtemisMessage> msgFactory)
+                            ArtemisQConnector msgFactory)
             throws ActiveMQException {
         requireNonNull(producer, "producer");
         requireNonNull(msgFactory, "msgFactory");
@@ -52,18 +51,7 @@ public class ArtemisQProducer implements QProducer<ArtemisMessage> {
                                            .message();
         writeBody(msg, payloadWriter);
 
-        synchronized (this) {  // (*)
-            producer.send(msg);
-        }
+        msgFactory.atomically(() -> producer.send(msg));
     }
-    /* NOTE. Artemis client sessions aren't thread-safe.
-     * If two threads try to send or ack a message concurrently, you might
-     * get this warning in the logs
-     *
-     *     AMQ212051: Invalid concurrent session usage. Sessions are not
-     *     supposed to be used by more than one thread concurrently.
-     *
-     * (Have a look at the startCall method of ClientSessionImpl in the
-     * org.apache.activemq.artemis.core.client.impl package!)
-     */
+
 }

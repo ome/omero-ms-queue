@@ -16,12 +16,14 @@ import java.util.Optional;
 public class ArtemisMessageTest {
 
     private ClientMessage mockAdaptee;
+    private ArtemisSessionSynchronizer mockSynchronizer;
     private ArtemisMessage target;
 
     @Before
     public void setup() {
         mockAdaptee = mock(ClientMessage.class);
-        target = new ArtemisMessage(mockAdaptee);
+        mockSynchronizer = mock(ArtemisSessionSynchronizer.class);
+        target = new ArtemisMessage(mockAdaptee, mockSynchronizer);
     }
 
     @Test
@@ -56,7 +58,12 @@ public class ArtemisMessageTest {
 
     @Test (expected = NullPointerException.class)
     public void ctorThrowsIfNullAdaptee() {
-        new ArtemisMessage(null);
+        new ArtemisMessage(null, mockSynchronizer);
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void ctorThrowsIfNullSynchronizer() {
+        new ArtemisMessage(mockAdaptee, null);
     }
 
     @Test (expected = NullPointerException.class)

@@ -23,16 +23,22 @@ import util.types.FutureTimepoint;
 public class ArtemisMessage implements HasProps, HasReceiptAck, HasSchedule {
 
     private final ClientMessage adaptee;
+    private final ArtemisSessionSynchronizer sessionSynchronizer;
 
     /**
      * Creates a new instance.
      * @param adaptee the underlying queue message that provides the
      *                actual functionality.
-     * @throws NullPointerException if the argument is {@code null}.
+     * @param sessionSynchronizer serial access to the Artemis session.
+     * @throws NullPointerException if any argument is {@code null}.
      */
-    public ArtemisMessage(ClientMessage adaptee) {
+    public ArtemisMessage(ClientMessage adaptee,
+                          ArtemisSessionSynchronizer sessionSynchronizer) {
         requireNonNull(adaptee, "adaptee");
+        requireNonNull(sessionSynchronizer, "sessionSynchronizer");
+
         this.adaptee = adaptee;
+        this.sessionSynchronizer = sessionSynchronizer;
     }
 
     private <T> Optional<T> getProp(String key, Function<String, T> getter) {
@@ -88,17 +94,7 @@ public class ArtemisMessage implements HasProps, HasReceiptAck, HasSchedule {
     }
 
     @Override
-    public synchronized void removeFromQueue() throws Exception {
-        adaptee.acknowledge();
+    public void removeFromQueue() throws Exception {
+        sessionSynchronizer.atomically(adaptee::acknowledge);
     }
-    /* NOTE. Artemis client sessions aren't thread-safe.
-     * If two threads try to send or ack a message concurrently, you might
-     * get this warning in the logs
-     *
-     *     AMQ212051: Invalid concurrent session usage. Sessions are not
-     *     supposed to be used by more than one thread concurrently.
-     *
-     * (Have a look at the startCall method of ClientSessionImpl in the
-     * org.apache.activemq.artemis.core.client.impl package!)
-     */
 }

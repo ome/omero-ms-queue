@@ -21,7 +21,8 @@ import util.lambda.BiConsumerE;
  * interface.
  */
 public class ArtemisQConnector
-        implements QConnector<ArtemisMessage>, QMsgFactory<ArtemisMessage> {
+        implements QConnector<ArtemisMessage>, QMsgFactory<ArtemisMessage>,
+        ArtemisSessionSynchronizer {
 
     private final CoreQueueConfiguration config;
     private final ClientSession session;
@@ -41,56 +42,50 @@ public class ArtemisQConnector
         this.session = session;
     }
 
-    /* NOTE. Artemis client sessions aren't thread-safe.
-     * If two threads try to send or ack a message concurrently, you might
-     * get this warning in the logs
-     *
-     *     AMQ212051: Invalid concurrent session usage. Sessions are not
-     *     supposed to be used by more than one thread concurrently.
-     *
-     * (Have a look at the startCall method of ClientSessionImpl in the
-     * org.apache.activemq.artemis.core.client.impl package!)
-     *
-     * So we used synchronized methods below when we access the session.
-     */
-
     @Override
-    public synchronized QConsumer<ArtemisMessage> newConsumer(
-            BiConsumerE<ArtemisMessage, InputStream> messageHandler)
-            throws ActiveMQException {
-        ClientConsumer consumer =
-                session.createConsumer(config.getName(), false);
-        return new ArtemisQConsumer(consumer, messageHandler);
+    public ClientSession session() {
+        return session;
     }
 
     @Override
-    public synchronized QConsumer<ArtemisMessage> newBrowser(
+    public QConsumer<ArtemisMessage> newConsumer(
             BiConsumerE<ArtemisMessage, InputStream> messageHandler)
             throws ActiveMQException {
-        ClientConsumer consumer =
-                session.createConsumer(config.getName(), true);
-        return new ArtemisQConsumer(consumer, messageHandler);
+        ClientConsumer consumer = atomically(
+                () -> session.createConsumer(config.getName(), false));
+        return new ArtemisQConsumer(consumer, messageHandler, this);
     }
 
     @Override
-    public synchronized QProducer<ArtemisMessage> newProducer()
+    public QConsumer<ArtemisMessage> newBrowser(
+            BiConsumerE<ArtemisMessage, InputStream> messageHandler)
             throws ActiveMQException {
-        ClientProducer producer = session.createProducer(config.getAddress());
+        ClientConsumer consumer = atomically(
+                () -> session.createConsumer(config.getName(), true));
+        return new ArtemisQConsumer(consumer, messageHandler, this);
+    }
+
+    @Override
+    public QProducer<ArtemisMessage> newProducer()
+            throws ActiveMQException {
+        ClientProducer producer = atomically(
+                () -> session.createProducer(config.getAddress()));
         return new ArtemisQProducer(producer, this);
     }
 
     @Override
-    public synchronized ArtemisMessage queueMessage(QMessageType t) {
+    public ArtemisMessage queueMessage(QMessageType t) {
         requireNonNull(t, "message type");
 
         Function<Boolean, ClientMessage> create = session::createMessage;
-        Function<Boolean, ArtemisMessage> builder =
-                create.andThen(ArtemisMessage::new);  // (2)
+        Function<ClientMessage, ArtemisMessage> adapt =
+                adaptee -> new ArtemisMessage(adaptee, this);
+        Function<Boolean, ArtemisMessage> builder = create.andThen(adapt);  // (2)
         switch (t) {
             case Durable:
-                return builder.apply(true);
+                return atomically(() -> builder.apply(true));
             case NonDurable:
-                return builder.apply(false);
+                return atomically(() -> builder.apply(false));
             default:  // (1)
                 throw new IllegalArgumentException("unsupported message type");
         }
