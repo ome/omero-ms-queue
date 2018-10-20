@@ -18,21 +18,24 @@ import java.io.InputStream;
 
 public class ArtemisQConsumerTest {
 
+    private ArtemisSessionSynchronizer mockSynchronizer;
     private ClientConsumer mockConsumer;
     private ArtemisQConsumer target;
 
     private ArtemisMessage receivedMessage;
     private InputStream receivedBody;
 
-    void handleMessage(ArtemisMessage msg, InputStream msgBody) {
+    private void handleMessage(ArtemisMessage msg, InputStream msgBody) {
         receivedMessage = msg;
         receivedBody = msgBody;
     }
 
     @Before
     public void setup() throws ActiveMQException {
+        mockSynchronizer = () -> null;
         mockConsumer = mock(ClientConsumer.class);
-        target = new ArtemisQConsumer(mockConsumer, this::handleMessage);
+        target = new ArtemisQConsumer(mockConsumer, this::handleMessage,
+                                      mockSynchronizer);
         receivedMessage = null;
         receivedBody = null;
     }
@@ -50,7 +53,7 @@ public class ArtemisQConsumerTest {
         assertNotNull(handler);
 
         ClientMessage msg = mock(ClientMessage.class);
-        ArtemisMessage adapter = new ArtemisMessage(msg);
+        ArtemisMessage adapter = new ArtemisMessage(msg, mockSynchronizer);
         InputStream body = new ByteArrayInputStream(new byte[0]);
         handler.accept(adapter, body);
 
@@ -71,12 +74,17 @@ public class ArtemisQConsumerTest {
 
     @Test (expected = NullPointerException.class)
     public void ctorThrowsIfNullConsumer() throws ActiveMQException {
-        new ArtemisQConsumer(null, (m, d) -> {});
+        new ArtemisQConsumer(null, (m, d) -> {}, mockSynchronizer);
     }
 
     @Test (expected = NullPointerException.class)
     public void ctorThrowsIfNullHandler() throws ActiveMQException {
-        new ArtemisQConsumer(mockConsumer, null);
+        new ArtemisQConsumer(mockConsumer, null, () -> null);
+    }
+
+    @Test (expected = NullPointerException.class)
+    public void ctorThrowsIfNullSynchronizer() throws ActiveMQException {
+        new ArtemisQConsumer(mockConsumer, (m, d) -> {}, null);
     }
 
 }

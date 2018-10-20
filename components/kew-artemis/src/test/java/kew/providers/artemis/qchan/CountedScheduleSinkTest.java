@@ -32,7 +32,7 @@ public class CountedScheduleSinkTest implements MessageSink<CountedSchedule, Lon
         when(qMsg.getLongProperty(MetaProps.ScheduleCountKey))
             .thenReturn(count);
 
-        ArtemisMessage adapterMsg = new ArtemisMessage(qMsg);
+        ArtemisMessage adapterMsg = new ArtemisMessage(qMsg, () -> null);
         return message(adapterMsg, hasProp ? count : DataWhenNoMetadata);
     }
     
