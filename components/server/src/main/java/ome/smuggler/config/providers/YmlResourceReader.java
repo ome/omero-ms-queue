@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
-import util.config.YamlConverter;
+import util.serialization.yaml.YamlConverter;
 import util.spring.io.ResourceReader;
 
 /**

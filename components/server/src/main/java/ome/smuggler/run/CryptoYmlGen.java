@@ -2,7 +2,7 @@ package ome.smuggler.run;
 
 import ome.smuggler.config.data.CryptoYmlFile;
 import ome.smuggler.config.items.CryptoConfig;
-import util.config.YamlConverter;
+import util.serialization.yaml.YamlConverter;
 
 import java.util.List;
 

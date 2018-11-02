@@ -1,4 +1,4 @@
-package ome.smuggler.providers.json;
+package util.serialization.json;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

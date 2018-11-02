@@ -10,7 +10,6 @@ import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientProducer;
 
 import kew.core.qchan.spi.QMsgBuilder;
-import kew.core.qchan.spi.QMsgFactory;
 import kew.core.qchan.spi.QProducer;
 import util.lambda.ConsumerE;
 
@@ -21,7 +20,7 @@ import util.lambda.ConsumerE;
 public class ArtemisQProducer implements QProducer<ArtemisMessage> {
 
     private final ClientProducer producer;
-    private final QMsgFactory<ArtemisMessage> msgFactory;
+    private final ArtemisQConnector msgFactory;
 
     /**
      * Creates a new instance.
@@ -32,7 +31,7 @@ public class ArtemisQProducer implements QProducer<ArtemisMessage> {
      * @throws NullPointerException if any argument is {@code null}.
      */
     public ArtemisQProducer(ClientProducer producer,
-                            QMsgFactory<ArtemisMessage> msgFactory)
+                            ArtemisQConnector msgFactory)
             throws ActiveMQException {
         requireNonNull(producer, "producer");
         requireNonNull(msgFactory, "msgFactory");
@@ -52,7 +51,7 @@ public class ArtemisQProducer implements QProducer<ArtemisMessage> {
                                            .message();
         writeBody(msg, payloadWriter);
 
-        producer.send(msg);
+        msgFactory.atomically(() -> producer.send(msg));
     }
 
 }

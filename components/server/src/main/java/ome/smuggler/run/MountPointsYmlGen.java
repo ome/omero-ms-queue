@@ -4,7 +4,7 @@ import java.util.List;
 
 import ome.smuggler.config.data.MountPointsYmlFile;
 import ome.smuggler.config.items.MountPointsConfig;
-import util.config.YamlConverter;
+import util.serialization.yaml.YamlConverter;
 
 
 /**

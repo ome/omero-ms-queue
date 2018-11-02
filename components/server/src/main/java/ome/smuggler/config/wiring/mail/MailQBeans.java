@@ -1,8 +1,8 @@
 package ome.smuggler.config.wiring.mail;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,16 +12,14 @@ import kew.core.qchan.QChannelFactoryAdapter;
 import kew.providers.artemis.ServerConnector;
 import kew.providers.artemis.qchan.ArtemisMessage;
 import kew.providers.artemis.qchan.ArtemisQChannel;
-import util.io.SinkWriter;
-import util.io.SourceReader;
+import util.serialization.SerializationFactory;
+import util.serialization.json.JsonSerializationFactory;
 
 import ome.smuggler.config.items.MailQConfig;
 import ome.smuggler.core.service.mail.FailedMailHandler;
 import ome.smuggler.core.service.mail.MailProcessor;
 import ome.smuggler.core.types.MailConfigSource;
 import ome.smuggler.core.types.QueuedMail;
-import ome.smuggler.providers.json.JsonInputStreamReader;
-import ome.smuggler.providers.json.JsonOutputStreamWriter;
 
 /**
  * Singleton beans for Artemis client resources that have to be shared and
@@ -30,21 +28,14 @@ import ome.smuggler.providers.json.JsonOutputStreamWriter;
 @Configuration
 public class MailQBeans {
 
-    private SinkWriter<QueuedMail, OutputStream> serializer() {
-        return new JsonOutputStreamWriter<>();
-    }
-
-    private SourceReader<InputStream, QueuedMail> deserializer() {
-        return new JsonInputStreamReader<>(QueuedMail.class);
-    }
-
     @Bean
     public QChannelFactoryAdapter<ArtemisMessage, QueuedMail>
-    mailChannelFactory(ServerConnector connector, MailQConfig qConfig) {
+    mailChannelFactory(ServerConnector connector, MailQConfig qConfig,
+                       SerializationFactory sf) {
         return new ArtemisQChannel<>(connector,
                                      qConfig,
-                                     serializer(),
-                                     deserializer());
+                                     sf.serializer(),
+                                     sf.deserializer(QueuedMail.class));
     }
     
     @Bean

@@ -23,16 +23,22 @@ import util.types.FutureTimepoint;
 public class ArtemisMessage implements HasProps, HasReceiptAck, HasSchedule {
 
     private final ClientMessage adaptee;
+    private final ArtemisSessionSynchronizer sessionSynchronizer;
 
     /**
      * Creates a new instance.
      * @param adaptee the underlying queue message that provides the
      *                actual functionality.
-     * @throws NullPointerException if the argument is {@code null}.
+     * @param sessionSynchronizer serial access to the Artemis session.
+     * @throws NullPointerException if any argument is {@code null}.
      */
-    public ArtemisMessage(ClientMessage adaptee) {
+    public ArtemisMessage(ClientMessage adaptee,
+                          ArtemisSessionSynchronizer sessionSynchronizer) {
         requireNonNull(adaptee, "adaptee");
+        requireNonNull(sessionSynchronizer, "sessionSynchronizer");
+
         this.adaptee = adaptee;
+        this.sessionSynchronizer = sessionSynchronizer;
     }
 
     private <T> Optional<T> getProp(String key, Function<String, T> getter) {
@@ -89,7 +95,6 @@ public class ArtemisMessage implements HasProps, HasReceiptAck, HasSchedule {
 
     @Override
     public void removeFromQueue() throws Exception {
-        adaptee.acknowledge();
+        sessionSynchronizer.atomically(adaptee::acknowledge);
     }
-
 }
