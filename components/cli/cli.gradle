@@ -19,6 +19,7 @@ dependencies {
         exclude group: 'org.testng', module: 'testng'
         exclude group: 'hsqldb', module: 'hsqldb'
     }
+    compile(group: 'gnu.getopt', name: 'java-getopt', version: '1.0.13')
 }
 
 springBoot {
