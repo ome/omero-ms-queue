@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     compile(group: 'org.openmicroscopy', name: 'omero-gateway', version: '5.5.4') {
-        //exclude group: 'org.springframework.ldap', module: 'spring-ldap'
+        exclude group: 'org.springframework.ldap', module: 'spring-ldap'
         exclude group: 'org.testng', module: 'testng'
         exclude group: 'hsqldb', module: 'hsqldb'
     }
