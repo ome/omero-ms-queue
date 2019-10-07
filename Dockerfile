@@ -26,7 +26,6 @@ USER root
 RUN apt-get update \
  && apt-get install -y ant gradle maven vim
 
-# openjdk:8 is "stretch" or Debian 9
 RUN id 1000 || useradd -u 1000 -ms /bin/bash build
 
 # TODO: would be nice to not need to copy .git since it invalidates the build frequently and takes more time
